@@ -57,7 +57,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SimpleBASIC.txt" />
+    <Content Include="SimpleBASIC.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="SimpleBASIC.tkng">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

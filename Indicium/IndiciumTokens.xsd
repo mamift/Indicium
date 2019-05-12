@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="https://github.com/mamift/Indicium/Tokens"
+    xmlns="https://github.com/mamift/Indicium/Tokens">
+    <xs:element name="TokenDefinitions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Token" maxOccurs="unbounded">
+                    <xs:annotation>
+                        <xs:documentation/>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Token" type="TToken">
+        <xs:annotation>
+            <xs:documentation>Evaluated as a regular expression.</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:attribute name="Identifier" type="xs:string"/>
+    <xs:complexType name="TToken">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute ref="Identifier"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>
