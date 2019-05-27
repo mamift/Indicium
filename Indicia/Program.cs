@@ -4,14 +4,17 @@ using Indicium.Tokens;
 
 namespace Indicia
 {
-    class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            var grammarFile = args.First();
+            var tokenDefinitionFile = args.First();
 
-            var grammar = Grammar.Load(grammarFile);
-            
+            var tokenProcessor = new TokenProcessor(File.ReadAllLines(tokenDefinitionFile));
+            var tokenDefinitions = tokenProcessor.Tokeniser.TokenDefinitions;
+
+            tokenProcessor.Tokeniser.InputString = File.ReadAllText(args[1]);
+            var tokensFromInput = tokenProcessor.Tokeniser.GetTokens().ToList();
         }
     }
 }

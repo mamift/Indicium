@@ -1,19 +1,18 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Indicium.Tokens
 {
+    [DebuggerDisplay("Id = {" + nameof(Identifier) + ("}, Regex = {" + nameof(Regex) + "}"))]
     public struct TokenDefinition
     {
-        public string RegexString { get; }
-
         public string Identifier { get; }
 
         public Regex Regex { get; }
 
-        public TokenDefinition(string identifer, string regexString)
+        public TokenDefinition(string identifier, string regexString)
         {
-            RegexString = regexString;
-            Identifier = identifer;
+            Identifier = identifier;
             Regex = new Regex(regexString);
         }
     }

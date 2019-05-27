@@ -1,10 +1,7 @@
 ﻿#
-# This grammar describes a very simple BASIC
-# interpreter.
-# After hitting the "Test Grammar" button,
-# you will see how TokenIcer will tokenize
-# the example BASIC program into tokens.
+# This describes a very simple BASIC interpreter.
 #
+
 "[Ll][Ee][Tt]" Let                   # Let keyword
 "[Pp][Rr][Ii][Nn][Tt]" Print         # Print keyword
 "[Cc][Ll][Ss]" Cls                   # Cls keyword

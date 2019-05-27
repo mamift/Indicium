@@ -6,6 +6,10 @@ using System.Text.RegularExpressions;
 
 namespace Indicium.Tokens
 {
+    /// <summary>
+    /// Instantiates a class that can process tokens from an <see cref="InputString"/>.
+    /// <para>Requires that tokens be defined first via <see cref="DefineToken"/>.</para>
+    /// </summary>
     public class Tokeniser
     {
         private readonly Dictionary<string, string> _tokensDefinitionsDict;
@@ -16,9 +20,15 @@ namespace Indicium.Tokens
         /// Returns a list of all <see cref="TokenDefinition"/> that were defined via <see cref="DefineToken"/>.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<TokenDefinition> TokenDefinitions => 
+        public List<TokenDefinition> TokenDefinitions => 
             _tokensDefinitionsDict.Select(kvp => new TokenDefinition(kvp.Key, kvp.Value)).ToList();
 
+        /// <summary>
+        /// Set to <c>true</c> to ignore spaces.
+        /// <para>This value can be switched on or off, after setting a value
+        /// for <see cref="InputString"/>. The value set is valid for the next invocation of <see cref="DefineToken"/>,
+        /// <see cref="GetToken"/> or <see cref="GetTokens"/>.</para>
+        /// </summary>
         public bool IgnoreSpaces { get; set; }
 
         public bool IsAtStart => _index == 0;
@@ -39,7 +49,10 @@ namespace Indicium.Tokens
             IgnoreSpaces = false;
         }
 
-        public void ResetProcessor()
+        /// <summary>
+        /// Reset this <see cref="Tokeniser"/> instance.
+        /// </summary>
+        public void Reset()
         {
             _tokensDefinitionsDict.Clear();
             _inputString = string.Empty;
@@ -49,6 +62,7 @@ namespace Indicium.Tokens
         /// <summary>
         /// Creates a new token definition using a given <paramref name="regEx"/> string and an
         /// <paramref name="identifier"/>.
+        /// <para>Returns an empty string if the attempt was successful, otherwise an error message.</para>
         /// </summary>
         /// <param name="regEx"></param>
         /// <param name="identifier"></param>
@@ -60,7 +74,7 @@ namespace Indicium.Tokens
                 return "";
 
             identifier = trimmedId;
-            if (!CheckValidity(regEx)) {
+            if (!IsValidRegex(regEx)) {
                 return GetInvalidMessage(regEx);
             }
             _tokensDefinitionsDict.Add(identifier, regEx);
@@ -68,11 +82,16 @@ namespace Indicium.Tokens
             return "";
         }
 
+        /// <summary>
+        /// Assuming a given <paramref name="regEx"/> string is invalid, returns the error message
+        /// that indicates why it is invalid. If it's valid, then it returns <see cref="string.Empty"/>.
+        /// </summary>
+        /// <param name="regEx"></param>
+        /// <returns></returns>
         private string GetInvalidMessage(string regEx)
         {
             try {
                 var r = new Regex(regEx);
-
                 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
                 r.Match("");
                 // ReSharper restore ReturnValueOfPureMethodIsNotUsed
@@ -80,14 +99,18 @@ namespace Indicium.Tokens
                 return e.Message;
             }
 
-            return "";
+            return string.Empty;
         }
 
-        private bool CheckValidity(string regEx)
+        /// <summary>
+        /// Checks that a given <paramref name="regEx"/> string is valid.
+        /// </summary>
+        /// <param name="regEx"></param>
+        /// <returns></returns>
+        private bool IsValidRegex(string regEx)
         {
             try {
                 var r = new Regex(regEx);
-
                 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
                 r.Match("");
                 // ReSharper restore ReturnValueOfPureMethodIsNotUsed
@@ -128,6 +151,11 @@ namespace Indicium.Tokens
             return new Token("Undefined", _inputString[_index - 1].ToString(CultureInfo.InvariantCulture));
         }
 
+        /// <summary>
+        /// Returns all tokens from the <see cref="InputString"/>.
+        /// <para>Invoke this method after setting a value for <see cref="InputString"/>.</para>
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Token> GetTokens()
         {
             var token = GetToken();

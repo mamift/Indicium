@@ -4,29 +4,37 @@ using System.Linq;
 
 namespace Indicium.Tokens
 {
-    public struct Grammar
+    public class TokenProcessor
     {
-        public Line[] Lines { get; }
+        public Tokeniser Tokeniser { get; } = new Tokeniser();
 
-        public Tokeniser Tokeniser { get; }
-
-        public Grammar(string[] lines) : this(lines.Select(str => new Line(str)).ToArray()) { }
-
-        private Grammar(Line[] lines)
+        /// <summary>
+        /// Instantiates a new instance using the limes read from a token definition file.
+        /// </summary>
+        /// <param name="tokenDefinitionLines"></param>
+        public TokenProcessor(string[] tokenDefinitionLines)
         {
-            Tokeniser = new Tokeniser();
-            Lines = lines;
-            Process(Lines);
+            Process(tokenDefinitionLines, Tokeniser);
         }
 
         /// <summary>
-        /// Process the grammar by parsing grammar text line by <see cref="Line"/>.
+        /// Instantiates a new instance using the file path to a token definition file.
         /// </summary>
-        /// <param name="tokenGrammarLines"></param>
-        public void Process(Line[] tokenGrammarLines)
+        /// <param name="tokenDefinitionFilePath"></param>
+        public TokenProcessor(string tokenDefinitionFilePath)
         {
-            foreach (var line in tokenGrammarLines) {
-                if (string.IsNullOrWhiteSpace(line.Text) || line.Text.StartsWith("#")) continue;
+            Process(File.ReadAllLines(tokenDefinitionFilePath), Tokeniser);
+        }
+
+        /// <summary>
+        /// Process a token definition file by reading the definition text line by.
+        /// </summary>
+        /// <param name="tokenDefinitionLines"></param>
+        /// <param name="tokeniser"></param>
+        internal static void Process(string[] tokenDefinitionLines, Tokeniser tokeniser)
+        {
+            foreach (var line in tokenDefinitionLines) {
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#")) continue;
 
                 var regex = string.Empty;
                 var prevChar = '\0';
@@ -35,7 +43,7 @@ namespace Indicium.Tokens
 
                 var ndx = 0;
 
-                foreach (var c in line.Text) {
+                foreach (var c in line) {
                     if (c == '\"') {
                         quoteNum++;
 
@@ -58,7 +66,7 @@ namespace Indicium.Tokens
                     prevChar = c;
                 }
 
-                var identifier = line.Text.Remove(0, ndx).Trim();
+                var identifier = line.Remove(0, ndx).Trim();
 
                 var ndxComment = identifier.Length - 1;
 
@@ -80,21 +88,23 @@ namespace Indicium.Tokens
                 if (regex.Equals(string.Empty))
                     continue;
 
-                var retval = Tokeniser.DefineToken(regex, identifier);
+                var retval = tokeniser.DefineToken(regex, identifier);
                 if (retval != string.Empty) throw new Exception("Error!");
             }
         }
 
         /// <summary>
-        /// Instantiates a new instance using a given <paramref name="filePath"/>.
+        /// Instantiates a new instance using a given <paramref name="filePath"/>, and ensures the file is
+        /// trimmed of excess whitespace.
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static Grammar Load(string filePath)
+        public static TokenProcessor Load(string filePath)
         {
             var fileLines = File.ReadAllLines(filePath);
+            var trimmedLines = fileLines.Select(line => line.Trim()).ToArray();
 
-            return new Grammar(fileLines);
+            return new TokenProcessor(trimmedLines);
         }
     }
 }
