@@ -1,9 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Indicium.Tokens
 {
     [DebuggerDisplay("Name = {" + nameof(Name) + ("}, Value = {" + nameof(Value) + "}"))]
-    public struct Token
+    public class Token
     {
         public string Name { get; }
 
@@ -17,8 +18,8 @@ namespace Indicium.Tokens
 
         public static bool operator ==(Token left, Token right)
         {
-            var sameName = left.Name == right.Name;
-            var sameValue = left.Value == right.Value;
+            var sameName = left?.Name == right?.Name;
+            var sameValue = left?.Value == right?.Value;
             return sameName && sameValue;
         }
 

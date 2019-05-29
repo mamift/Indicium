@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 namespace Indicium.Tokens
 {
     [DebuggerDisplay("Id = {" + nameof(Identifier) + ("}, Regex = {" + nameof(Regex) + "}"))]
-    public struct TokenDefinition
+    public class TokenDefinition
     {
         public string Identifier { get; }
 
