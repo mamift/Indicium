@@ -1,0 +1,8 @@
+﻿# Token definition file for Indicium Token Definitions 
+# - Muhammad Miftah
+
+"(\".*\")" RegularExpressionString
+"(\#.*)" Comment
+"(\w+)" Identifier
+"([\s\t])" Whitespace
+"[\r\n]+" Newline

@@ -1,0 +1,32 @@
+﻿# Token definition file for Excipient
+# - Muhammad Miftah
+
+"\".*?\"" String                     # Strings
+"[a-zA-Z_][a-zA-Z0-9_]*" Identifier  # Identifiers
+
+"[ \t]+" Whitespace                  # Whitespace
+"[\r\n]+" Newline                    # Newline
+"\:" Colon                           # Colon (:)
+"=" Equals                           # Equals (=)
+"[0-9]+\.+[0-9]+" Float              # Floating-point Number
+"[0-9]+" Integer                     # Integers
+"//.*" SingleLineComment             
+"\(" Lparen                          # Left Parenthesis
+"\)" Rparen                          # Right Parenthesis
+"\*" Asterisk                        # Asterisk
+"\/" Slash                           # Slash
+"\+" Plus                            # Plus sign
+"\-" Minus                           # Minus sign
+
+"(\@\w+)" TypeDeclaration
+
+"[Ll][Ee][Tt]" Let                   # Let keyword
+"[Pp][Rr][Ii][Nn][Tt]" Print         # Print keyword
+"[Cc][Ll][Ss]" Cls                   # Cls keyword
+"[Rr][Ee][Mm][^\r\n]*" Rem           # Rem keyword
+"[Ee][Nn][Dd]" End                   # End keyword
+"[Gg][Oo][Tt][Oo]" Goto              # Goto keyword
+"[Ff][Oo][Rr]" For                   # For keyword
+"[Ss][Tt][Ee][Pp]" Step              # Step keyword
+"[Nn][Ee][Xx][Tt]" Next              # Next keyword
+"[Tt][Oo]" To                        # To keyword

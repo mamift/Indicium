@@ -60,6 +60,12 @@
     <Content Include="SimpleBASIC.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="IndiciumTokenDefinition.tkng">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Excipient.tkng">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="SimpleBASIC.tkng">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
