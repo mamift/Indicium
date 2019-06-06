@@ -27,18 +27,19 @@ namespace Indicia
 
         private static void CodeDomCodeGen(IEnumerable<TokenDefinition> tokenDefinitions)
         {
-            var ccu = TypeGenerator.GenerateCodeUnits(tokenDefinitions);
+            var ccu = TypeGenerator.GenerateClassesForTokenDefinitions(tokenDefinitions);
 
             var cdProvider = CodeDomProvider.CreateProvider("CSharp");
             var cdOptions = new CodeGeneratorOptions {
                 BlankLinesBetweenMembers = true,
-                BracingStyle = "C",
+                BracingStyle = "Block",
                 VerbatimOrder = true
             };
             var codeDomSb = new StringBuilder();
             var sw = new StringWriter(codeDomSb);
             cdProvider.GenerateCodeFromCompileUnit(ccu, sw, cdOptions);
             var code = sw.ToString();
+            File.WriteAllText("CodeDom.cs", code, Encoding.UTF8);
         }
 
         private static void RoslynCodeGen(TokenProcessor tokenProcessor)
