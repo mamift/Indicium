@@ -13,23 +13,23 @@ namespace Indicium
     /// </summary>
     public class TokenReader
     {
-        private List<TokenBase> _tokens = new List<TokenBase>();
+        private readonly List<TokenBase> _tokens = new List<TokenBase>();
 
         public IReadOnlyCollection<TokenBase> Tokens => _tokens;
 
         protected StringReader Reader { get; }
 
-        public TokenReader(string theString)
+        public TokenReader(string theString, int bufferSize = 3)
         {
-            Reader = new StringReader(s: theString);
+            Reader = new StringReader(theString);
             var sb = new StringBuilder();
 
             while (true) {
-                var buffer = new char[3];
-                var count = Reader.ReadBlock(buffer: buffer, index: 0, count: buffer.Length);
-                if (count == 0) break;
+                var buffer = new char[bufferSize];
+                var count = Reader.ReadBlock(buffer, 0, buffer.Length);
+                if (count <= 0) break;
 
-                var whiteSpaceCount = buffer.Count(ch => char.IsWhiteSpace(ch));
+                var whiteSpaceCount = buffer.Count(char.IsWhiteSpace);
                 if (whiteSpaceCount == buffer.Length) continue;
 
                 sb.AppendNoConsecutiveWhitespace(buffer);

@@ -6,3 +6,5 @@
 "(\w+)" Identifier
 "([\s\t])" Whitespace
 "[\r\n]+" Newline
+
+"((?<!\\)\")" StartAndEndOfString #Does not match \", only matches quotation marks not prefixed by the escape char

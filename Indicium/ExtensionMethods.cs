@@ -34,20 +34,21 @@ namespace Indicium
 
         /// <summary>
         /// Append a sequence of <paramref name="chars"/>, but does not append multiple whitespace chars.
+        /// <para>Ensures that exactly one whitespace char is appended.</para>
         /// </summary>
         /// <param name="sb"></param>
         /// <param name="chars"></param>
         public static void AppendNoConsecutiveWhitespace(this StringBuilder sb, IEnumerable<char> chars)
         {
             var charArray = chars as char[] ?? chars.ToArray();
-            var hasAtleastOneWhitespace = false;
-            for (var i = 0; i < charArray.Count(); i++)
-            {
+            var hasAtLeastOneWhitespace = false;
+            for (var i = 0; i < charArray.Length; i++) {
+                if (charArray[i] == '\t') charArray[i] = ' '; // tabs to space! death to tabs! and people who prefer them!
                 var isWhitespace = char.IsWhiteSpace(charArray[i]);
-                if (isWhitespace && hasAtleastOneWhitespace) continue;
+                if (isWhitespace && hasAtLeastOneWhitespace) continue;
                 if (charArray[i] == default(char)) continue;
                 sb.Append(charArray[i]);
-                if (isWhitespace) hasAtleastOneWhitespace = true;
+                if (isWhitespace) hasAtLeastOneWhitespace = true;
             }
         }
     }

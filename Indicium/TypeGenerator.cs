@@ -72,7 +72,7 @@ namespace Indicium
         /// <returns></returns>
         private static CodeTypeDeclaration GenerateClassForTokenDef(TokenDefinition tokenDef)
         {
-            var tClass = new CodeTypeDeclaration($"{tokenDef.Identifier}Token") {
+            var tokenClass = new CodeTypeDeclaration($"{tokenDef.Identifier}Token") {
                 TypeAttributes = TypeAttributes.Sealed | TypeAttributes.Public,
                 BaseTypes = {new CodeTypeReference(new CodeTypeParameter(nameof(TokenBase)))}
             };
@@ -86,8 +86,8 @@ namespace Indicium
                 InitExpression = new CodePrimitiveExpression(tokenDef.Identifier)
             };
 
-            var privateRegexFieldInitialisation =
-                new CodeObjectCreateExpression(nameof(Regex), new CodePrimitiveExpression(tokenDef.Regex.ToString()));
+            var privateRegexFieldInitialisation = new CodeObjectCreateExpression(nameof(Regex), 
+                new CodePrimitiveExpression(tokenDef.Regex.ToString()));
             var privateRegexField = new CodeMemberField {
                 Attributes = MemberAttributes.Private | MemberAttributes.Static,
                 Name = nameof(Regex).Privatise(),
@@ -96,9 +96,9 @@ namespace Indicium
             };
 
             // public properties
-            var identifierPropertyReturnStatement =
-                new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(),
-                    privateIdentifierField.Name));
+            var identifierPropertyReturnStatement = new CodeMethodReturnStatement(
+                                                        new CodeFieldReferenceExpression(
+                                                            new CodeVariableReferenceExpression(tokenClass.Name), privateIdentifierField.Name));
             var identifierProperty = new CodeMemberProperty {
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
                 Name = nameof(tokenDef.Identifier),
@@ -109,9 +109,9 @@ namespace Indicium
                 Type = new CodeTypeReference(typeof(string)),
             };
 
-            var regexPropertyReturnStatement =
-                new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(),
-                    privateRegexField.Name));
+            var regexPropertyReturnStatement = new CodeMethodReturnStatement(
+                                                new CodeFieldReferenceExpression(
+                                                    new CodeVariableReferenceExpression(tokenClass.Name), privateRegexField.Name));
             var regexProperty = new CodeMemberProperty {
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
                 Name = nameof(tokenDef.Regex),
@@ -125,15 +125,15 @@ namespace Indicium
                 Attributes = MemberAttributes.Public
             };
 
-            tClass.Members.Add(privateIdentifierField);
-            tClass.Members.Add(privateRegexField);
+            tokenClass.Members.Add(privateIdentifierField);
+            tokenClass.Members.Add(privateRegexField);
 
-            tClass.Members.Add(identifierProperty);
-            tClass.Members.Add(regexProperty);
+            tokenClass.Members.Add(identifierProperty);
+            tokenClass.Members.Add(regexProperty);
 
-            tClass.Members.Add(constructor);
+            tokenClass.Members.Add(constructor);
 
-            return tClass;
+            return tokenClass;
         }
     }
 }
