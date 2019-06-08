@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TokenContext xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://github.com/mamift/Indicium TokenSchema.xsd"
+ xmlns="https://github.com/mamift/Indicium">
+  <Token Id="QuotationMark">\"</Token>
+  <Token Id="SingleQuotationMark">\'</Token>
+  <Token Id="Whitespace">\s\t</Token>
+  <Token Id="Newline">\r\n</Token>
+  <Token Id="Digit">\d</Token>
+  <Token Id="Dot">\.</Token>
+  <Token Id="Plus">\+</Token>
+  <Token Id="Equals">\=</Token>
+  <Token Id="Colon">\:</Token>
+  <Token Id="Semicolon">\;</Token>
+  <Token Id="Identifier">[a-zA-Z_][a-zA-Z0-9_]*</Token>
+  <TokenGroup Id="String">
+    <Token Ref="QuotationMark" />
+    <Token>.*</Token>
+    <Token Ref="QuotationMark" />
+  </TokenGroup>
+</TokenContext>

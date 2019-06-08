@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Indicium", "Indicium\Indicium.csproj", "{2E69ACBD-88B5-4989-9738-4261E0B23B62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Indicium", "Indicium\Indicium.csproj", "{2E69ACBD-88B5-4989-9738-4261E0B23B62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Indicia", "Indicia\Indicia.csproj", "{349B9AAB-73B4-43F6-A91F-E0B30600501A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndiciumSchema", "IndiciumSchema\IndiciumSchema.csproj", "{56712D1A-83A7-414D-AEF0-35B5157C4FFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndiciumTests", "IndiciumTests\IndiciumTests.csproj", "{89C42408-3CF5-4F9E-871C-9DCC854344EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{349B9AAB-73B4-43F6-A91F-E0B30600501A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{349B9AAB-73B4-43F6-A91F-E0B30600501A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{349B9AAB-73B4-43F6-A91F-E0B30600501A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56712D1A-83A7-414D-AEF0-35B5157C4FFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56712D1A-83A7-414D-AEF0-35B5157C4FFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56712D1A-83A7-414D-AEF0-35B5157C4FFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56712D1A-83A7-414D-AEF0-35B5157C4FFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89C42408-3CF5-4F9E-871C-9DCC854344EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89C42408-3CF5-4F9E-871C-9DCC854344EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89C42408-3CF5-4F9E-871C-9DCC854344EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89C42408-3CF5-4F9E-871C-9DCC854344EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

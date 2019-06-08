@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified"
+    targetNamespace="https://github.com/mamift/Indicium" xmlns="https://github.com/mamift/Indicium">
+
+    <xs:element name="TokenContext">
+        <xs:complexType>
+            <xs:sequence maxOccurs="1">
+                <xs:element ref="Token" maxOccurs="unbounded" minOccurs="1"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="TokenGroup"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="TokenGroup">
+        <xs:complexType>
+            <xs:choice>
+                <xs:sequence minOccurs="0">
+                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="Token"/>
+                </xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="TokenGroup"/>
+            </xs:choice>
+            <xs:attributeGroup ref="TokenAttrs"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Token" type="TToken">
+        <xs:key name="KeyIdentifier">
+            <xs:selector xpath="./Token"/>
+            <xs:field xpath="@Identifier"/>
+        </xs:key>
+    </xs:element>
+    <xs:simpleType final="" name="RegexString">
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="replace"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:attributeGroup name="TokenAttrs">
+        <xs:attribute name="Ref" type="xs:IDREF" use="optional">
+            <xs:annotation>
+                <xs:documentation>Refer to another already defined token definition. @Identifier and @Regex attributes will be ignored if they have values.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Id" type="xs:ID">
+            <xs:annotation>
+                <xs:documentation>The unique identifier for this token definition.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+
+    <xs:complexType name="TToken" mixed="false">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attributeGroup ref="TokenAttrs"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>
