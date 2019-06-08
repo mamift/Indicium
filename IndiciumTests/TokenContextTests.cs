@@ -78,11 +78,12 @@ namespace Tests
                          "Take this shirt right off my back.\n" +
                          "I don't mind.\n" +
                          "'Cause I'm gonna set this house on.\n\r" +
-                         "\"Fire\" by Peking Duck.";
+                         "\"Fire\" by Peking Duck.@";
             var reader = new StringReader(lyrics);
             var tokenList = Context.GetTokens(reader);
 
             Assert.IsNotEmpty(tokenList);
+            Assert.IsTrue(tokenList.Count == 458);
         }
     }
 }
