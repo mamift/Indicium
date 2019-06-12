@@ -19,6 +19,7 @@ namespace Indicia
             var tokenDefinitions = tokenProcessor.Tokeniser.TokenDefinitions;
 
             tokenProcessor.Tokeniser.InputString = File.ReadAllText(args[1]);
+            var tokens = tokenProcessor.Tokeniser.GetTokens().ToList();
 
             RoslynCodeGen(tokenProcessor);
 

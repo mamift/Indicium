@@ -135,7 +135,7 @@ namespace Indicium.Tokens
                 _index++;
                 if (_index >= _inputString.Length) return default(Token);
             }
-
+            
             foreach (var pair in TokenDefinitions) {
                 var regex = pair.Regex;
                 var match = regex.Match(_inputString, _index);

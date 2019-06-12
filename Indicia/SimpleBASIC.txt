@@ -7,3 +7,4 @@
 70 PRINT "Z = " + Z
 80 NEXT Z
 90 END
+WOOT!

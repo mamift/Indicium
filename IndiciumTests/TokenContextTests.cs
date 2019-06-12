@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Indicium.Schemas;
 using NUnit.Framework;
 
@@ -80,10 +82,25 @@ namespace Tests
                          "'Cause I'm gonna set this house on.\n\r" +
                          "\"Fire\" by Peking Duck.@";
             var reader = new StringReader(lyrics);
-            var tokenList = Context.GetTokens(reader);
 
-            Assert.IsNotEmpty(tokenList);
-            Assert.IsTrue(tokenList.Count == 458);
+            var fullTokenList = new List<Token>();
+
+            foreach (var line in lyrics.Split('\n')) {
+                Context.IgnoreSpaces = true;
+                Context.InputString = line;
+
+                var tokens = Context.GetTokens();
+
+                fullTokenList.AddRange(tokens);
+            }
+
+            var definedTokens = fullTokenList.Where(t => t.Id != "Undefined").ToList();
+            var undefinedTokens = fullTokenList.Except(definedTokens).ToList();
+
+            Assert.IsNotEmpty(fullTokenList);
+            Assert.IsTrue(fullTokenList.Count == 461);
+            Assert.IsTrue(undefinedTokens.Count == 3);
+            Assert.IsTrue(definedTokens.Count == 458);
         }
     }
 }

@@ -1,97 +1,86 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace Indicium.Schemas
 {
     public partial class TokenContext
     {
-        public List<Token> GetTokens(TextReader textReader, bool ignoreWhiteSpace = false)
+        private int _index = 0;
+
+        private string _inputString = string.Empty;
+
+        /// <summary>
+        /// Not part of the XML model.
+        /// <para>Setting this to false will result in lots of undefined tokens
+        /// if there is no token definition for whitespace characters.</para>
+        /// </summary>
+        public bool IgnoreSpaces { get; set; } = true;
+
+        /// <summary>
+        /// Determines if the tokeniser is processing at the start of the <see cref="InputString"/> or not.
+        /// </summary>
+        public bool IsAtStart => _index == 0;
+
+        /// <summary>
+        /// Set the input string to extract <see cref="Token"/>s from.
+        /// </summary>
+        public string InputString
         {
-            var tokenDefinitions = Token.ToList();
-            string line;
-
-            var stringBuilder = new StringBuilder();
-
-            var tokenList = new List<Token>();
-
-            while ((line = textReader.ReadLine()) != null) {
-                var index = 0;
-
-                if (string.IsNullOrWhiteSpace(line)) continue;
-                if (!ignoreWhiteSpace) {
-                    while (char.IsWhiteSpace(line[index])) {
-                        // ignore whitespace
-                        index++;
-                    }
-                }
-
-                while (index <= line.Length) {
-                    bool didMatch = false;
-                    foreach (var definedToken in tokenDefinitions) {
-                        var regex = definedToken.GetMatcher();
-                        var match = regex.Match(line, index);
-
-                        // because we're iterating over all the token defs,
-                        // a regex might match something but from the wrong starting index.
-                        var matchIndex = match.Index != index;
-                        if (!match.Success || matchIndex) {
-                            continue; // continue searching
-                        }
-
-                        var token = new Token {
-                            TypedValue = $"{{{definedToken.Id} = '{match.Value}'}}"
-                        };
-                        tokenList.Add(token);
-                        index += match.Length - 1;
-                        didMatch = true;
-                        Debug.WriteLine($"{token.TypedValue} @ {index}");
-                    }
-
-                    /*var token = GetToken(line, ref index);
-                    tokenList.Add(token);*/
-                    index++; // continue searching
-                }
-
-                stringBuilder.Append(line);
+            set {
+                _index = 0;
+                _inputString = value;
             }
-
-            Debug.WriteLine($"{tokenList.Count} tokens.");
-            return tokenList;
         }
 
-        public Token GetToken(ref int index, string inputString, bool ignoreSpaces)
+        /// <summary>
+        /// Get's the next <see cref="Token"/> for the current <see cref="InputString"/>.
+        /// </summary>
+        /// <returns></returns>
+        public Token GetToken()
         {
-            if (index >= inputString.Length) return default(Token);
+            if (_index >= _inputString.Length) return default(Token);
 
-            while ((inputString[index] == ' ' || inputString[index] == '\t') && ignoreSpaces) {
-                index++;
-                if (index >= inputString.Length) return default(Token);
+            while ((_inputString[_index] == ' ' || _inputString[_index] == '\t') && IgnoreSpaces) {
+                _index++;
+                if (_index >= _inputString.Length) return default(Token);
             }
 
-            foreach (var pair in Token) {
-                var regex = pair.GetMatcher();
-                var match = regex.Match(inputString, index);
+            foreach (var def in Token) {
+                var regex = def.GetMatcher();
+                var match = regex.Match(_inputString, _index);
 
-                if (!match.Success || match.Index != index) continue;
+                if (!match.Success || match.Index != _index) continue;
 
-                if (match.Length == 0)
-                    continue;
-                index += match.Length;
+                if (match.Length == 0) continue;
+                _index += match.Length;
+
                 return new Token {
-                    Id = pair.Id,
-                    TypedValue = match.Value
+                    Id = def.Id,
+                    TypedValue = match.Value,
+                    LineIndex = _index
                 };
             }
 
-            index++;
+            _index++;
             return new Token {
                 Id = "Undefined",
-                TypedValue = inputString[index - 1].ToString(CultureInfo.InvariantCulture)
+                TypedValue = _inputString[_index - 1].ToString(CultureInfo.InvariantCulture)
             };
+        }
+
+        /// <summary>
+        /// Get all <see cref="Token"/>s for the current <see cref="InputString"/>.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Token> GetTokens()
+        {
+            var token = GetToken();
+
+            while (token != default(Token))
+            {
+                yield return token;
+                token = GetToken();
+            }
         }
     }
 }
