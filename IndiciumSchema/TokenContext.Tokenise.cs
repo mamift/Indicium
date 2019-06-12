@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -49,6 +50,7 @@ namespace Indicium.Schemas
                         didMatch = true;
                         Debug.WriteLine($"{token.TypedValue} @ {index}");
                     }
+
                     /*var token = GetToken(line, ref index);
                     tokenList.Add(token);*/
                     index++; // continue searching
@@ -61,33 +63,35 @@ namespace Indicium.Schemas
             return tokenList;
         }
 
-        protected Token GetToken(string line, ref int index)
+        public Token GetToken(ref int index, string inputString, bool ignoreSpaces)
         {
-            var tokenDefinitions = Token.ToList();
-            Token theToken = null;
-            foreach (var definedToken in tokenDefinitions) {
-                var regex = definedToken.GetMatcher();
-                var substr = line.Substring(index);
-                var match = regex.Match(substr);
+            if (index >= inputString.Length) return default(Token);
 
-                // because we're iterating over all the token defs,
-                // a regex might match something but from the wrong starting index.
-                var matchIndex = match.Index != index;
-                if (!match.Success || matchIndex) {
-                    continue; // continue searching
-                }
-
-                var token = new Token {
-                    TypedValue = $"{{{definedToken.Id} = '{match.Value}'}}"
-                };
-
-                index += match.Length - 1;
-                Debug.WriteLine($"{token.TypedValue} @ {index}");
-                theToken = token;
-                break;
+            while ((inputString[index] == ' ' || inputString[index] == '\t') && ignoreSpaces) {
+                index++;
+                if (index >= inputString.Length) return default(Token);
             }
 
-            return theToken;
+            foreach (var pair in Token) {
+                var regex = pair.GetMatcher();
+                var match = regex.Match(inputString, index);
+
+                if (!match.Success || match.Index != index) continue;
+
+                if (match.Length == 0)
+                    continue;
+                index += match.Length;
+                return new Token {
+                    Id = pair.Id,
+                    TypedValue = match.Value
+                };
+            }
+
+            index++;
+            return new Token {
+                Id = "Undefined",
+                TypedValue = inputString[index - 1].ToString(CultureInfo.InvariantCulture)
+            };
         }
     }
 }
