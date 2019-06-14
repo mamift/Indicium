@@ -14,7 +14,7 @@ namespace Indicium.Schemas
         /// <para>Setting this to false will result in lots of undefined tokens
         /// if there is no token definition for whitespace characters.</para>
         /// </summary>
-        public bool IgnoreSpaces { get; set; } = true;
+        public bool IgnoreSpaces { get; set; }
 
         /// <summary>
         /// Determines if the tokeniser is processing at the start of the <see cref="InputString"/> or not.
