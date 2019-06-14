@@ -375,6 +375,131 @@ namespace Indicium.Schemas {
         }
     }
     
+    /// <summary>
+    /// <para>
+    /// Regular expression: ((Token+)*)
+    /// </para>
+    /// </summary>
+    public partial class Expression : XTypedElement, IXMetaData {
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private XTypedList<Token> TokenField;
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        static Dictionary<XName, System.Type> localElementDictionary = new Dictionary<XName, System.Type>();
+        
+         public static explicit operator Expression(XElement xe) { return XTypedServices.ToXTypedElement<Expression>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
+        
+        static Expression() {
+            BuildElementDictionary();
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Regular expression: ((Token+)*)
+        /// </para>
+        /// </summary>
+        public Expression() {
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Occurrence: required, repeating
+        /// </para>
+        /// <para>
+        /// Setter: Appends
+        /// </para>
+        /// <para>
+        /// Regular expression: ((Token+)*)
+        /// </para>
+        /// </summary>
+        public IList<Token> Token {
+            get {
+                if ((this.TokenField == null)) {
+                    this.TokenField = new XTypedList<Token>(this, LinqToXsdTypeManager.Instance, XName.Get("Token", "https://github.com/mamift/Indicium"));
+                }
+                return this.TokenField;
+            }
+            set {
+                if ((value == null)) {
+                    this.TokenField = null;
+                }
+                else {
+                    if ((this.TokenField == null)) {
+                        this.TokenField = XTypedList<Token>.Initialize(this, LinqToXsdTypeManager.Instance, value, XName.Get("Token", "https://github.com/mamift/Indicium"));
+                    }
+                    else {
+                        XTypedServices.SetList<Token>(this.TokenField, value);
+                    }
+                }
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        Dictionary<XName, System.Type> IXMetaData.LocalElementsDictionary {
+            get {
+                return localElementDictionary;
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        XName IXMetaData.SchemaName {
+            get {
+                return XName.Get("Expression", "https://github.com/mamift/Indicium");
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        SchemaOrigin IXMetaData.TypeOrigin {
+            get {
+                return SchemaOrigin.Element;
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ILinqToXsdTypeManager IXMetaData.TypeManager {
+            get {
+                return LinqToXsdTypeManager.Instance;
+            }
+        }
+        
+        public void Save(string xmlFile) {
+            XTypedServices.Save(xmlFile, Untyped);
+        }
+        
+        public void Save(System.IO.TextWriter tw) {
+            XTypedServices.Save(tw, Untyped);
+        }
+        
+        public void Save(System.Xml.XmlWriter xmlWriter) {
+            XTypedServices.Save(xmlWriter, Untyped);
+        }
+        
+        public static Expression Load(string xmlFile) {
+            return XTypedServices.Load<Expression>(xmlFile);
+        }
+        
+        public static Expression Load(System.IO.TextReader xmlFile) {
+            return XTypedServices.Load<Expression>(xmlFile);
+        }
+        
+        public static Expression Parse(string xml) {
+            return XTypedServices.Parse<Expression>(xml);
+        }
+        
+        public override XTypedElement Clone() {
+            return XTypedServices.CloneXTypedElement<Expression>(this);
+        }
+        
+        private static void BuildElementDictionary() {
+            localElementDictionary.Add(XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(Token));
+        }
+        
+        ContentModelEntity IXMetaData.GetContentModel() {
+            return ContentModelEntity.Default;
+        }
+    }
+    
     public sealed class RegexString {
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -676,6 +801,7 @@ namespace Indicium.Schemas {
         private static void BuildElementDictionary() {
             elementDictionary.Add(XName.Get("TokenContext", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.TokenContext));
             elementDictionary.Add(XName.Get("TokenGroup", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.TokenGroup));
+            elementDictionary.Add(XName.Get("Expression", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.Expression));
             elementDictionary.Add(XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.Token));
         }
         
@@ -705,6 +831,8 @@ namespace Indicium.Schemas {
 
     public TokenGroup TokenGroup {  get {return rootObject as TokenGroup; } }
 
+    public Expression Expression {  get {return rootObject as Expression; } }
+
     public Token Token {  get {return rootObject as Token; } }
         
         private XRootNamespace() {
@@ -716,6 +844,11 @@ namespace Indicium.Schemas {
         }
         
         public XRootNamespace(TokenGroup root) {
+            this.doc = new XDocument(root.Untyped);
+            this.rootObject = root;
+        }
+        
+        public XRootNamespace(Expression root) {
             this.doc = new XDocument(root.Untyped);
             this.rootObject = root;
         }
@@ -842,6 +975,8 @@ namespace Indicium.Schemas {
 
     public global::Indicium.Schemas.TokenGroup TokenGroup {  get {return rootObject as global::Indicium.Schemas.TokenGroup; } }
 
+    public global::Indicium.Schemas.Expression Expression {  get {return rootObject as global::Indicium.Schemas.Expression; } }
+
     public global::Indicium.Schemas.Token Token {  get {return rootObject as global::Indicium.Schemas.Token; } }
         
         private XRoot() {
@@ -853,6 +988,11 @@ namespace Indicium.Schemas {
         }
         
         public XRoot(global::Indicium.Schemas.TokenGroup root) {
+            this.doc = new XDocument(root.Untyped);
+            this.rootObject = root;
+        }
+        
+        public XRoot(global::Indicium.Schemas.Expression root) {
             this.doc = new XDocument(root.Untyped);
             this.rootObject = root;
         }

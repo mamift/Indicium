@@ -10,4 +10,8 @@
     <PackageReference Include="System.CodeDom" Version="4.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\IndiciumSchema\IndiciumSchema.csproj" />
+  </ItemGroup>
+
 </Project>

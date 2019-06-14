@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Indicium.Tokens;
+using Indicium.Schemas;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -11,11 +11,11 @@ namespace Indicium
 {
     public class TypeGenerator
     {
-        public static List<ClassDeclarationSyntax> GenerateTokenClasses(TokenProcessor tokenProcessor)
+        public static List<ClassDeclarationSyntax> GenerateTokenClasses(TokenContext tokenProcessor)
         {
-            var tokenDefinitions = tokenProcessor.Tokeniser.TokenDefinitions;
+            var tokenDefinitions = tokenProcessor.Token;
 
-            var classNames = tokenDefinitions.Select(td => td.Identifier).Distinct();
+            var classNames = tokenDefinitions.Select(td => td.Id).Distinct();
 
             var classDefinitions = classNames.Select(cn => {
                 var cd = SyntaxFactory.ClassDeclaration(cn);
@@ -47,7 +47,7 @@ namespace Indicium
         /// <param name="tokens"></param>
         /// <param name="namespace"></param>
         /// <returns></returns>
-        public static CodeCompileUnit GenerateClassesForTokenDefinitions(IEnumerable<TokenDefinition> tokens,
+        public static CodeCompileUnit GenerateClassesForTokenDefinitions(IEnumerable<Token> tokens,
             string @namespace = "Indicia")
         {
             var containingNamespace = new CodeNamespace(@namespace);
@@ -70,24 +70,24 @@ namespace Indicium
         /// </summary>
         /// <param name="tokenDef"></param>
         /// <returns></returns>
-        private static CodeTypeDeclaration GenerateClassForTokenDef(TokenDefinition tokenDef)
+        private static CodeTypeDeclaration GenerateClassForTokenDef(Token tokenDef)
         {
-            var tokenClass = new CodeTypeDeclaration($"{tokenDef.Identifier}Token") {
+            var tokenClass = new CodeTypeDeclaration($"{tokenDef.Id}Token") {
                 TypeAttributes = TypeAttributes.Sealed | TypeAttributes.Public,
                 BaseTypes = {new CodeTypeReference(new CodeTypeParameter(nameof(TokenBase)))}
             };
 
             // private member fields
-            var idString = $"{nameof(tokenDef.Identifier)}String";
+            var idString = $"{nameof(tokenDef.Id)}String";
             var privateIdentifierField = new CodeMemberField {
                 Attributes = MemberAttributes.Private | MemberAttributes.Const,
                 Name = idString.Privatise(),
                 Type = new CodeTypeReference(typeof(string)),
-                InitExpression = new CodePrimitiveExpression(tokenDef.Identifier)
+                InitExpression = new CodePrimitiveExpression(tokenDef.Id)
             };
 
             var privateRegexFieldInitialisation = new CodeObjectCreateExpression(nameof(Regex), 
-                new CodePrimitiveExpression(tokenDef.Regex.ToString()));
+                new CodePrimitiveExpression(tokenDef.GetMatcher().ToString()));
             var privateRegexField = new CodeMemberField {
                 Attributes = MemberAttributes.Private | MemberAttributes.Static,
                 Name = nameof(Regex).Privatise(),
@@ -101,7 +101,7 @@ namespace Indicium
                                                             new CodeVariableReferenceExpression(tokenClass.Name), privateIdentifierField.Name));
             var identifierProperty = new CodeMemberProperty {
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
-                Name = nameof(tokenDef.Identifier),
+                Name = nameof(tokenDef.Id),
                 HasGet = true,
                 HasSet = false,
                 ImplementationTypes = {new CodeTypeReference(typeof(string))},
@@ -114,7 +114,7 @@ namespace Indicium
                                                     new CodeVariableReferenceExpression(tokenClass.Name), privateRegexField.Name));
             var regexProperty = new CodeMemberProperty {
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
-                Name = nameof(tokenDef.Regex),
+                Name = nameof(Regex),
                 HasSet = false, HasGet = true,
                 ImplementationTypes = {new CodeTypeReference(typeof(Regex))},
                 GetStatements = {regexPropertyReturnStatement},

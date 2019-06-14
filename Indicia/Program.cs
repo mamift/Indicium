@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Indicium;
-using Indicium.Tokens;
+using Indicium.Schemas;
 using Microsoft.CodeAnalysis;
 
 namespace Indicia
@@ -15,18 +15,17 @@ namespace Indicia
         {
             var tokenDefinitionFile = args.First();
 
-            var tokenProcessor = new TokenProcessor(File.ReadAllLines(tokenDefinitionFile));
-            var tokenDefinitions = tokenProcessor.Tokeniser.TokenDefinitions;
+            var tokenProcessor = TokenContext.Load(tokenDefinitionFile);
 
-            tokenProcessor.Tokeniser.InputString = File.ReadAllText(args[1]);
-            var tokens = tokenProcessor.Tokeniser.GetTokens().ToList();
+            tokenProcessor.InputString = File.ReadAllText(args[1]);
+            var tokens = tokenProcessor.GetTokens().ToList();
 
             RoslynCodeGen(tokenProcessor);
 
-            CodeDomCodeGen(tokenDefinitions);
+            CodeDomCodeGen(tokens);
         }
 
-        private static void CodeDomCodeGen(IEnumerable<TokenDefinition> tokenDefinitions)
+        private static void CodeDomCodeGen(IEnumerable<Token> tokenDefinitions)
         {
             var ccu = TypeGenerator.GenerateClassesForTokenDefinitions(tokenDefinitions);
 
@@ -43,7 +42,7 @@ namespace Indicia
             File.WriteAllText("CodeDom.cs", code, Encoding.UTF8);
         }
 
-        private static void RoslynCodeGen(TokenProcessor tokenProcessor)
+        private static void RoslynCodeGen(TokenContext tokenProcessor)
         {
             var cn = TypeGenerator.GenerateTokenClasses(tokenProcessor);
             var roslynSb = new StringBuilder();

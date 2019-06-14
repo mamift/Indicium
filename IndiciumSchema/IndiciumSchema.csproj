@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="LinqToXsd gen .\TokenSchema.xsd -a" />
+    <Exec Command="LinqToXsd gen .\ExpressionSchema.xsd -c .\TokenSchema.xsd.config" />
   </Target>
 
 </Project>

@@ -8,6 +8,7 @@
   <Token Id="Newline">\r\n</Token>
   <Token Id="Digit">\d</Token>
   <Token Id="Dot">\.</Token>
+  <Token Id="Comma">\,</Token>
   <Token Id="Plus">\+</Token>
   <Token Id="Equals">\=</Token>
   <Token Id="Colon">\:</Token>

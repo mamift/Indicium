@@ -51,6 +51,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IndiciumSchema\IndiciumSchema.csproj">
+      <Project>{56712d1a-83a7-414d-aef0-35b5157c4ffa}</Project>
+      <Name>IndiciumSchema</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Indicium\Indicium.csproj">
       <Project>{2e69acbd-88b5-4989-9738-4261e0b23b62}</Project>
       <Name>Indicium</Name>
