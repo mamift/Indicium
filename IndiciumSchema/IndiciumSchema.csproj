@@ -9,6 +9,12 @@
     <PackageReference Include="XObjectsCore" Version="3.0.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Prototype1.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="LinqToXsd gen .\TokenSchema.xsd -a" />
   </Target>

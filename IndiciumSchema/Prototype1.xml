@@ -4,7 +4,7 @@
  xmlns="https://github.com/mamift/Indicium">
   <Token Id="QuotationMark">\"</Token>
   <Token Id="SingleQuotationMark">\'</Token>
-  <Token Id="Whitespace">\s\t</Token>
+  <Token Id="Whitespace">[\s\t]+</Token>
   <Token Id="Newline">\r\n</Token>
   <Token Id="Digit">\d</Token>
   <Token Id="Dot">\.</Token>
