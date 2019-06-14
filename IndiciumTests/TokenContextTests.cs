@@ -100,7 +100,7 @@ namespace Tests
 
             Assert.IsNotEmpty(fullTokenList);
             Assert.IsTrue(fullTokenList.Count == 461);
-            Assert.IsTrue(undefinedTokens.Count == 3);
+            Assert.IsTrue(undefinedTokens.Count == 1);
             Assert.IsTrue(definedTokens.Count == 458);
         }
 
@@ -123,7 +123,7 @@ namespace Tests
 
             Assert.IsNotEmpty(fullTokenList);
             Assert.IsTrue(fullTokenList.Count == 740);
-            Assert.IsTrue(undefinedTokens.Count == 2);
+            Assert.IsTrue(undefinedTokens.Count == 1);
             Assert.IsTrue(definedTokens.Count == 738);
         }
     }
