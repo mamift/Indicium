@@ -84,7 +84,7 @@ namespace Tests
         [Test]
         public void IgnoreWhitespaceTest()
         {
-            var fullTokenList = new List<TokenValue>();
+            var fullTokenList = new List<Lexeme>();
 
             foreach (var line in Lyrics.Split('\n')) {
                 Context.IgnoreSpaces = true;
@@ -107,7 +107,7 @@ namespace Tests
         [Test]
         public void IncludeWhitespaceTest()
         {
-            var fullTokenList = new List<TokenValue>();
+            var fullTokenList = new List<Lexeme>();
 
             foreach (var line in Lyrics.Split('\n')) {
                 Context.IgnoreSpaces = false;

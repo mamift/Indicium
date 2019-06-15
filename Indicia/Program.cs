@@ -3,6 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Alba.CsConsoleFormat.Fluent;
 using Indicium;
@@ -13,19 +14,32 @@ namespace Indicia
 {
     public static class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
+            if (args.Length != 2) {
+                Colors.WriteLine($"Usage: {Path.GetFileName(Assembly.GetExecutingAssembly().Location)} ".White(), 
+                    "<tokenSchema.xml> ".OnDarkBlue().White(),
+                    "<inputFileToBeTokenised.txt>".OnDarkRed().White());
+                Colors.WriteLine("Will then output tokenised output to:".White());
+                Colors.WriteLine("<inputFileToBeTokenised.txt>.output".Yellow());
+
+                return 0;
+            }
+
             var tokenDefinitionFile = args.First();
 
             var tokeniser = TokenContext.Load(tokenDefinitionFile);
 
-            var reader = new StreamReader(File.Open(args[1], FileMode.Open));
+            var inputTextFile = args[1];
+            var reader = new StreamReader(File.Open(inputTextFile, FileMode.Open));
 
             var tokens = tokeniser.ProcessTokens(reader).ToList();
 
-            foreach (var tokenValue in tokens) {
-                Colors.WriteLine(tokenValue.ToString().White());
-            }
+            var dirOfInputTextFile = Path.GetDirectoryName(inputTextFile);
+            var outputPath = Path.Combine(dirOfInputTextFile, $"{inputTextFile}.output");
+            File.WriteAllText(outputPath, tokens.ToDelimitedString());
+
+            return 0;
         }
 
         private static void CodeDomCodeGen(IEnumerable<Token> tokenDefinitions)

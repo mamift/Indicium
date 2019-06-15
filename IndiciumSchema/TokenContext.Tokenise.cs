@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 
@@ -28,7 +30,7 @@ namespace Indicium.Schemas
         /// Gets the current index of the <see cref="InputString"/>. If this is 0, then <see cref="IsAtStart"/>
         /// is <c>true</c>.
         /// </summary>
-        public int LineColumnIndex => _index;
+        public int LineIndex => _index;
 
         /// <summary>
         /// Set the input string to extract <see cref="Token"/>s from.
@@ -44,8 +46,8 @@ namespace Indicium.Schemas
         /// <summary>
         /// When processing input strings line by line, set this value to indicate which number line,
         /// so that tokenised output produced can refer to it. <para>Because this value is set by API
-        /// callers, the caller should communicate whether tokenised output (<see cref="TokenValue"/> objects)
-        /// have their <see cref="TokenValue.LineNumber"/> set as a 0-based or 1-based value.</para>
+        /// callers, the caller should communicate whether tokenised output (<see cref="Lexeme"/> objects)
+        /// have their <see cref="Lexeme.LineNumber"/> set as a 0-based or 1-based value.</para>
         /// </summary>
         public int LineNumber
         {
@@ -53,77 +55,86 @@ namespace Indicium.Schemas
         }
 
         /// <summary>
-        /// Resets the current <see cref="InputString"/> to null, and the default setting for <see cref="IgnoreSpaces"/>.
+        /// Resets the current <see cref="InputString"/> to null, internal line index (column) and line number
+        /// tracking values are also reset.
         /// </summary>
         public void Reset()
         {
             InputString = null;
-            IgnoreSpaces = false;
+            _index = 0;
+            _lineNumber = 0;
         }
 
         /// <summary>
         /// Get's the next <see cref="Token"/> for the current <see cref="InputString"/>.
         /// </summary>
         /// <returns></returns>
-        public TokenValue GetToken()
+        public Lexeme GetToken()
         {
-            if (_index >= _inputString.Length) return default(TokenValue);
+            var lexeme = Token.ExtractLexeme(_inputString, _index, IgnoreSpaces, out _index, out var matchLength);
+            if (lexeme == default(Lexeme)) return null;
 
-            while ((_inputString[_index] == ' ' || _inputString[_index] == '\t') && IgnoreSpaces) {
-                _index++;
-                if (_index >= _inputString.Length) return default(TokenValue);
-            }
+            lexeme.LineIndex = _index - matchLength;
+            lexeme.LineNumber = _lineNumber;
 
-            foreach (var def in Token) {
-                var regex = def.GetMatcher();
-                var match = regex.Match(_inputString, _index);
+            return lexeme;
+        }
 
-                if (!match.Success || match.Index != _index) continue;
+        /// <summary>
+        /// Returns the next <see cref="Lexeme"/> that would be next processed, without processing
+        /// <see cref="LineIndex"/>. Obeys <see cref="IgnoreSpaces"/>.
+        /// <para>Calling this method first, then calling <see cref="GetToken"/> should produce equal (but not identical)
+        /// instances of <see cref="Lexeme"/>s.</para>
+        /// </summary>
+        /// <returns></returns>
+        public Lexeme PeekToken()
+        {
+            var startIndexCopy = _index;
+            var subStr = _inputString.Substring(startIndexCopy);
 
-                if (match.Length == 0) continue;
-                _index += match.Length;
+            var lexeme = Token.ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out var indexPostExtract,
+                out var matchLength);
+            
+            lexeme.LineIndex = indexPostExtract - matchLength;
+            lexeme.LineNumber = _lineNumber;
 
-                return new TokenValue {
-                    Id = def.Id,
-                    Value = match.Value,
-                    LineIndex = _index,
-                    LineNumber = _lineNumber
-                };
-            }
-
-            _index++;
-            return new TokenValue {
-                Id = "Undefined",
-                Value = _inputString[_index - 1].ToString(CultureInfo.InvariantCulture),
-                LineIndex = _index,
-                LineNumber = _lineNumber
-            };
+            return lexeme;
         }
 
         /// <summary>
         /// Get all <see cref="Token"/>s for the current <see cref="InputString"/>.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<TokenValue> GetTokens()
+        public IEnumerable<Lexeme> GetTokens()
         {
             var token = GetToken();
 
-            while (token != default(TokenValue)) {
+            while (token != default(Lexeme)) {
                 yield return token;
                 token = GetToken();
             }
         }
 
-        public IEnumerable<TokenValue> ProcessTokens(TextReader reader)
+        /// <summary>
+        /// Process the text from a given <see cref="TextReader"/> <paramref name="reader"/>
+        /// and produce tokenised output. 
+        /// <para>This method usually suffices for processing arbitrary text. Finer control can be achieved using a combination of
+        /// <see cref="InputString"/>, <see cref="LineNumber"/>, <see cref="LineIndex"/>, <see cref="Reset"/>, <see cref="GetTokens"/> and <see cref="GetToken"/>.</para>
+        /// <para>This method calls <see cref="Reset"/>, but does not reset the value for <see cref="IgnoreSpaces"/>.</para>
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public IEnumerable<Lexeme> ProcessTokens(TextReader reader)
         {
+            Reset();
             string line;
-            int lineCount = 0;
+            int lineCount = 1;
             while ((line = reader.ReadLine()) != null) {
                 InputString = line;
                 LineNumber = lineCount;
 
                 var token = GetToken();
-                while (token != default(TokenValue)) {
+                while (token != default(Lexeme)) {
                     yield return token;
                     token = GetToken();
                 }

@@ -38,7 +38,7 @@
     </xs:element>
     <xs:simpleType final="" name="RegexString">
         <xs:annotation>
-            <xs:documentation>Before processing this regular expression string, this type will remove all whitespace chars from the string.</xs:documentation>
+            <xs:documentation>Whitespace is collapsed according to XSD schema type rules for the xs:string type.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
             <xs:whiteSpace value="collapse"/>
@@ -60,11 +60,16 @@
                 <xs:documentation>A description.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
+        <xs:attribute name="EvaluationOrder" type="xs:int">
+            <xs:annotation>
+                <xs:documentation>Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:attributeGroup>
 
     <xs:complexType name="TToken" mixed="true">
         <xs:annotation>
-            <xs:documentation>The base schema type for Tokens.</xs:documentation>
+            <xs:documentation>The base schema type for Tokens. Whitespace is collapsed.</xs:documentation>
         </xs:annotation>
         <xs:simpleContent>
             <xs:extension base="xs:string">

@@ -295,6 +295,27 @@ namespace Indicium.Schemas {
             }
         }
         
+        /// <summary>
+        /// <para>
+        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public System.Nullable<int> EvaluationOrder {
+            get {
+                XAttribute x = this.Attribute(XName.Get("EvaluationOrder", ""));
+                if ((x == null)) {
+                    return null;
+                }
+                return XTypedServices.ParseValue<int>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("EvaluationOrder", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
+            }
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         Dictionary<XName, System.Type> IXMetaData.LocalElementsDictionary {
             get {
@@ -487,7 +508,7 @@ namespace Indicium.Schemas {
     
     /// <summary>
     /// <para>
-    /// Before processing this regular expression string, this type will remove all whitespace chars from the string.
+    /// Whitespace is collapsed according to XSD schema type rules for the xs:string type.
     /// </para>
     /// </summary>
     public sealed class RegexString {
@@ -501,7 +522,7 @@ namespace Indicium.Schemas {
     
     /// <summary>
     /// <para>
-    /// The base schema type for Tokens.
+    /// The base schema type for Tokens. Whitespace is collapsed.
     /// </para>
     /// </summary>
     public partial class TToken : XTypedElement, IXMetaData {
@@ -510,7 +531,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// The base schema type for Tokens.
+        /// The base schema type for Tokens. Whitespace is collapsed.
         /// </para>
         /// </summary>
         public TToken() {
@@ -580,6 +601,27 @@ namespace Indicium.Schemas {
             }
         }
         
+        /// <summary>
+        /// <para>
+        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public System.Nullable<int> EvaluationOrder {
+            get {
+                XAttribute x = this.Attribute(XName.Get("EvaluationOrder", ""));
+                if ((x == null)) {
+                    return null;
+                }
+                return XTypedServices.ParseValue<int>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("EvaluationOrder", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
+            }
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         XName IXMetaData.SchemaName {
             get {
@@ -612,7 +654,7 @@ namespace Indicium.Schemas {
     
     /// <summary>
     /// <para>
-    /// The base schema type for Tokens.
+    /// The base schema type for Tokens. Whitespace is collapsed.
     /// </para>
     /// </summary>
     public partial class Token : XTypedElement, IXMetaData {
@@ -624,7 +666,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// The base schema type for Tokens.
+        /// The base schema type for Tokens. Whitespace is collapsed.
         /// </para>
         /// </summary>
         public Token() {
@@ -633,7 +675,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// The base schema type for Tokens.
+        /// The base schema type for Tokens. Whitespace is collapsed.
         /// </para>
         /// </summary>
         public Token(TToken content) {
@@ -713,6 +755,23 @@ namespace Indicium.Schemas {
             }
             set {
                 this.ContentField.Description = value;
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public System.Nullable<int> EvaluationOrder {
+            get {
+                return this.ContentField.EvaluationOrder;
+            }
+            set {
+                this.ContentField.EvaluationOrder = value;
             }
         }
         

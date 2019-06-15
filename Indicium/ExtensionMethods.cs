@@ -8,6 +8,19 @@ namespace Indicium
 {
     public static class ExtensionMethods
     {
+        public static string ToDelimitedString<TType>(this IEnumerable<TType> lexemes)
+        {
+            var sb = new StringBuilder();
+
+            var lexemesList = lexemes.ToList();
+            for (var i = 0; i < lexemesList.Count; i++) {
+                var comma = (i == lexemesList.Count - 1) ? string.Empty : ",";
+                sb.Append($"{lexemesList.ElementAt(i)}{comma}");
+            }
+
+            return sb.ToString();
+        }
+
         public static void AddMinimumNamespaces(this CodeNamespace cn)
         {
             var system = nameof(System);

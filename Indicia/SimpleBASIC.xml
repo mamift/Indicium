@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TokenContext xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://github.com/mamift/Indicium TokenSchema.xsd" xmlns="https://github.com/mamift/Indicium">
-  <!-- This can tokenise BASIC keywords, identifers and symbols. Whitespace inside XML elements is ignored when the regex is processed. -->
+  <!-- 
+    This can tokenise keywords, identifers and symbols for the BASIC language. 
+    Whitespace inside XML elements is ignored when the regex is processed. To tokenise whitespace chars, use \s or \t.
+  -->
   <Token Id="Let"        Description="Let keyword">           [Ll][Ee][Tt]</Token>
   <Token Id="Print"      Description="Print keyword">         [Pp][Rr][Ii][Nn][Tt]</Token>
   <Token Id="Cls"        Description="Cls keyword">           [Cc][Ll][Ss]</Token>
