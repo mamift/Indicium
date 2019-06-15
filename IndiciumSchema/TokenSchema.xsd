@@ -3,6 +3,9 @@
     targetNamespace="https://github.com/mamift/Indicium" xmlns="https://github.com/mamift/Indicium">
 
     <xs:element name="TokenContext">
+        <xs:annotation>
+            <xs:documentation>The root element for definition a list of Tokens or TokenGroups.</xs:documentation>
+        </xs:annotation>
         <xs:complexType>
             <xs:sequence maxOccurs="1">
                 <xs:element ref="Token" maxOccurs="unbounded" minOccurs="1"/>
@@ -11,41 +14,58 @@
         </xs:complexType>
     </xs:element>
     <xs:element name="TokenGroup">
+        <xs:annotation>
+            <xs:documentation>A TokenGroup defines a group of Token definitions; it is merely a way of grouping Tokens into categories. This is different from NestedTokens that compound multiple Token defintions and treats them as one.</xs:documentation>
+        </xs:annotation>
         <xs:complexType>
-            <xs:choice>
-                <xs:sequence minOccurs="0">
-                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="Token"/>
-                </xs:sequence>
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="TokenGroup"/>
-            </xs:choice>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="Token"/>
+            </xs:sequence>
             <xs:attributeGroup ref="TokenAttrs"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="Token" type="TToken">
+        <xs:annotation>
+            <xs:documentation>A token definition. The value for this element should be a C#  Regex-compliant string (System.Text.RegularExpressions).</xs:documentation>
+        </xs:annotation>
         <xs:key name="KeyIdentifier">
+            <xs:annotation>
+                <xs:documentation>The @Id attribute will alawys be unique.</xs:documentation>
+            </xs:annotation>
             <xs:selector xpath="./Token"/>
-            <xs:field xpath="@Identifier"/>
+            <xs:field xpath="@Id"/>
         </xs:key>
     </xs:element>
     <xs:simpleType final="" name="RegexString">
+        <xs:annotation>
+            <xs:documentation>Before processing this regular expression string, this type will remove all whitespace chars from the string.</xs:documentation>
+        </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:whiteSpace value="replace"/>
+            <xs:whiteSpace value="collapse"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:attributeGroup name="TokenAttrs">
         <xs:attribute name="Ref" type="xs:IDREF" use="optional">
             <xs:annotation>
-                <xs:documentation>Refer to another already defined token definition. @Identifier and @Regex attributes will be ignored if they have values.</xs:documentation>
+                <xs:documentation>Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
         <xs:attribute name="Id" type="xs:ID">
             <xs:annotation>
-                <xs:documentation>The unique identifier for this token definition.</xs:documentation>
+                <xs:documentation>The unique identifier for this element.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Description" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>A description.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
 
-    <xs:complexType name="TToken" mixed="false">
+    <xs:complexType name="TToken" mixed="true">
+        <xs:annotation>
+            <xs:documentation>The base schema type for Tokens.</xs:documentation>
+        </xs:annotation>
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attributeGroup ref="TokenAttrs"/>

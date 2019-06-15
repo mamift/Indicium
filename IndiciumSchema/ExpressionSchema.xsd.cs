@@ -182,7 +182,7 @@ namespace Indicium.Schemas {
     
     /// <summary>
     /// <para>
-    /// Regular expression: ((Token*)?|TokenGroup1*)
+    /// Regular expression: (Token+)
     /// </para>
     /// </summary>
     public partial class TokenGroup : XTypedElement, IXMetaData {
@@ -191,20 +191,21 @@ namespace Indicium.Schemas {
         private XTypedList<Token> TokenField;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private XTypedList<TokenGroup> TokenGroup1Field;
+        static Dictionary<XName, System.Type> localElementDictionary = new Dictionary<XName, System.Type>();
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        static Dictionary<XName, System.Type> localElementDictionary = new Dictionary<XName, System.Type>();
+        private static ContentModelEntity contentModel;
         
          public static explicit operator TokenGroup(XElement xe) { return XTypedServices.ToXTypedElement<TokenGroup>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
         
         static TokenGroup() {
             BuildElementDictionary();
+            contentModel = new SequenceContentModelEntity(new NamedContentModelEntity(XName.Get("Token", "https://github.com/mamift/Indicium")));
         }
         
         /// <summary>
         /// <para>
-        /// Regular expression: ((Token*)?|TokenGroup1*)
+        /// Regular expression: (Token+)
         /// </para>
         /// </summary>
         public TokenGroup() {
@@ -212,13 +213,10 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Occurrence: optional, repeating
+        /// Occurrence: required, repeating
         /// </para>
         /// <para>
-        /// Setter: Appends
-        /// </para>
-        /// <para>
-        /// Regular expression: ((Token*)?|TokenGroup1*)
+        /// Regular expression: (Token+)
         /// </para>
         /// </summary>
         public IList<Token> Token {
@@ -245,37 +243,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Occurrence: optional, repeating, choice
-        /// </para>
-        /// <para>
-        /// Regular expression: ((Token*)?|TokenGroup1*)
-        /// </para>
-        /// </summary>
-        public IList<TokenGroup> TokenGroup1 {
-            get {
-                if ((this.TokenGroup1Field == null)) {
-                    this.TokenGroup1Field = new XTypedList<TokenGroup>(this, LinqToXsdTypeManager.Instance, XName.Get("TokenGroup", "https://github.com/mamift/Indicium"));
-                }
-                return this.TokenGroup1Field;
-            }
-            set {
-                if ((value == null)) {
-                    this.TokenGroup1Field = null;
-                }
-                else {
-                    if ((this.TokenGroup1Field == null)) {
-                        this.TokenGroup1Field = XTypedList<TokenGroup>.Initialize(this, LinqToXsdTypeManager.Instance, value, XName.Get("TokenGroup", "https://github.com/mamift/Indicium"));
-                    }
-                    else {
-                        XTypedServices.SetList<TokenGroup>(this.TokenGroup1Field, value);
-                    }
-                }
-            }
-        }
-        
-        /// <summary>
-        /// <para>
-        /// Refer to another already defined token definition. @Identifier and @Regex attributes will be ignored if they have values.
+        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
         /// </para>
         /// <para>
         /// Occurrence: optional
@@ -293,7 +261,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// The unique identifier for this token definition.
+        /// The unique identifier for this element.
         /// </para>
         /// <para>
         /// Occurrence: optional
@@ -306,6 +274,24 @@ namespace Indicium.Schemas {
             }
             set {
                 this.SetAttribute(XName.Get("Id", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Id).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// A description.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string Description {
+            get {
+                XAttribute x = this.Attribute(XName.Get("Description", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("Description", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
@@ -367,11 +353,10 @@ namespace Indicium.Schemas {
         
         private static void BuildElementDictionary() {
             localElementDictionary.Add(XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(Token));
-            localElementDictionary.Add(XName.Get("TokenGroup", "https://github.com/mamift/Indicium"), typeof(TokenGroup));
         }
         
         ContentModelEntity IXMetaData.GetContentModel() {
-            return ContentModelEntity.Default;
+            return contentModel;
         }
     }
     
@@ -500,19 +485,34 @@ namespace Indicium.Schemas {
         }
     }
     
+    /// <summary>
+    /// <para>
+    /// Before processing this regular expression string, this type will remove all whitespace chars from the string.
+    /// </para>
+    /// </summary>
     public sealed class RegexString {
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static Xml.Schema.Linq.SimpleTypeValidator TypeDefinition = new Xml.Schema.Linq.AtomicSimpleTypeValidator(XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String), new Xml.Schema.Linq.RestrictionFacets(((Xml.Schema.Linq.RestrictionFlags)(32)), null, 0, 0, null, null, 0, null, null, 0, null, 0, XmlSchemaWhiteSpace.Replace));
+        public static Xml.Schema.Linq.SimpleTypeValidator TypeDefinition = new Xml.Schema.Linq.AtomicSimpleTypeValidator(XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String), new Xml.Schema.Linq.RestrictionFacets(((Xml.Schema.Linq.RestrictionFlags)(32)), null, 0, 0, null, null, 0, null, null, 0, null, 0, XmlSchemaWhiteSpace.Collapse));
         
         private RegexString() {
         }
     }
     
+    /// <summary>
+    /// <para>
+    /// The base schema type for Tokens.
+    /// </para>
+    /// </summary>
     public partial class TToken : XTypedElement, IXMetaData {
         
          public static explicit operator TToken(XElement xe) { return XTypedServices.ToXTypedElement<TToken>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
         
+        /// <summary>
+        /// <para>
+        /// The base schema type for Tokens.
+        /// </para>
+        /// </summary>
         public TToken() {
         }
         
@@ -528,7 +528,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Refer to another already defined token definition. @Identifier and @Regex attributes will be ignored if they have values.
+        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
         /// </para>
         /// <para>
         /// Occurrence: optional
@@ -546,7 +546,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// The unique identifier for this token definition.
+        /// The unique identifier for this element.
         /// </para>
         /// <para>
         /// Occurrence: optional
@@ -559,6 +559,24 @@ namespace Indicium.Schemas {
             }
             set {
                 this.SetAttribute(XName.Get("Id", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Id).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// A description.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string Description {
+            get {
+                XAttribute x = this.Attribute(XName.Get("Description", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("Description", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
@@ -592,6 +610,11 @@ namespace Indicium.Schemas {
         }
     }
     
+    /// <summary>
+    /// <para>
+    /// The base schema type for Tokens.
+    /// </para>
+    /// </summary>
     public partial class Token : XTypedElement, IXMetaData {
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -599,10 +622,20 @@ namespace Indicium.Schemas {
         
          public static explicit operator Token(XElement xe) { return XTypedServices.ToXTypedElement<Token, TToken>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
         
+        /// <summary>
+        /// <para>
+        /// The base schema type for Tokens.
+        /// </para>
+        /// </summary>
         public Token() {
             SetInnerType(new TToken());
         }
         
+        /// <summary>
+        /// <para>
+        /// The base schema type for Tokens.
+        /// </para>
+        /// </summary>
         public Token(TToken content) {
             SetInnerType(content);
         }
@@ -634,7 +667,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Refer to another already defined token definition. @Identifier and @Regex attributes will be ignored if they have values.
+        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
         /// </para>
         /// <para>
         /// Occurrence: optional
@@ -651,7 +684,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// The unique identifier for this token definition.
+        /// The unique identifier for this element.
         /// </para>
         /// <para>
         /// Occurrence: optional
@@ -663,6 +696,23 @@ namespace Indicium.Schemas {
             }
             set {
                 this.ContentField.Id = value;
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// A description.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string Description {
+            get {
+                return this.ContentField.Description;
+            }
+            set {
+                this.ContentField.Description = value;
             }
         }
         

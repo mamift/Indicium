@@ -1,8 +1,10 @@
-﻿using System.CodeDom.Compiler;
+﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Alba.CsConsoleFormat.Fluent;
 using Indicium;
 using Indicium.Schemas;
 using Microsoft.CodeAnalysis;
@@ -15,14 +17,15 @@ namespace Indicia
         {
             var tokenDefinitionFile = args.First();
 
-            var tokenProcessor = TokenContext.Load(tokenDefinitionFile);
+            var tokeniser = TokenContext.Load(tokenDefinitionFile);
 
-            tokenProcessor.InputString = File.ReadAllText(args[1]);
-            var tokens = tokenProcessor.GetTokens().ToList();
+            var reader = new StreamReader(File.Open(args[1], FileMode.Open));
 
-            RoslynCodeGen(tokenProcessor);
+            var tokens = tokeniser.ProcessTokens(reader).ToList();
 
-            CodeDomCodeGen(tokens);
+            foreach (var tokenValue in tokens) {
+                Colors.WriteLine(tokenValue.ToString().White());
+            }
         }
 
         private static void CodeDomCodeGen(IEnumerable<Token> tokenDefinitions)
