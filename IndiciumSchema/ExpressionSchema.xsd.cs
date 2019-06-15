@@ -243,24 +243,6 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public string @Ref {
-            get {
-                XAttribute x = this.Attribute(XName.Get("Ref", ""));
-                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
-            }
-            set {
-                this.SetAttribute(XName.Get("Ref", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
-            }
-        }
-        
-        /// <summary>
-        /// <para>
         /// The unique identifier for this element.
         /// </para>
         /// <para>
@@ -274,6 +256,24 @@ namespace Indicium.Schemas {
             }
             set {
                 this.SetAttribute(XName.Get("Id", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Id).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string @Ref {
+            get {
+                XAttribute x = this.Attribute(XName.Get("Ref", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("Ref", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
             }
         }
         
@@ -549,19 +549,22 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
+        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
         /// </para>
         /// <para>
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string @Ref {
+        public System.Nullable<int> EvaluationOrder {
             get {
-                XAttribute x = this.Attribute(XName.Get("Ref", ""));
-                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
+                XAttribute x = this.Attribute(XName.Get("EvaluationOrder", ""));
+                if ((x == null)) {
+                    return null;
+                }
+                return XTypedServices.ParseValue<int>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
             }
             set {
-                this.SetAttribute(XName.Get("Ref", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
+                this.SetAttribute(XName.Get("EvaluationOrder", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
             }
         }
         
@@ -585,6 +588,24 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
+        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string @Ref {
+            get {
+                XAttribute x = this.Attribute(XName.Get("Ref", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("Ref", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
         /// A description.
         /// </para>
         /// <para>
@@ -598,27 +619,6 @@ namespace Indicium.Schemas {
             }
             set {
                 this.SetAttribute(XName.Get("Description", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
-            }
-        }
-        
-        /// <summary>
-        /// <para>
-        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public System.Nullable<int> EvaluationOrder {
-            get {
-                XAttribute x = this.Attribute(XName.Get("EvaluationOrder", ""));
-                if ((x == null)) {
-                    return null;
-                }
-                return XTypedServices.ParseValue<int>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
-            }
-            set {
-                this.SetAttribute(XName.Get("EvaluationOrder", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
             }
         }
         
@@ -709,18 +709,18 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
+        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
         /// </para>
         /// <para>
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string @Ref {
+        public System.Nullable<int> EvaluationOrder {
             get {
-                return this.ContentField.@Ref;
+                return this.ContentField.EvaluationOrder;
             }
             set {
-                this.ContentField.@Ref = value;
+                this.ContentField.EvaluationOrder = value;
             }
         }
         
@@ -743,6 +743,23 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
+        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string @Ref {
+            get {
+                return this.ContentField.@Ref;
+            }
+            set {
+                this.ContentField.@Ref = value;
+            }
+        }
+        
+        /// <summary>
+        /// <para>
         /// A description.
         /// </para>
         /// <para>
@@ -755,23 +772,6 @@ namespace Indicium.Schemas {
             }
             set {
                 this.ContentField.Description = value;
-            }
-        }
-        
-        /// <summary>
-        /// <para>
-        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public System.Nullable<int> EvaluationOrder {
-            get {
-                return this.ContentField.EvaluationOrder;
-            }
-            set {
-                this.ContentField.EvaluationOrder = value;
             }
         }
         

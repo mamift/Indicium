@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace Indicium.Schemas
@@ -74,17 +71,16 @@ namespace Indicium.Schemas
             var lexeme = Token.ExtractLexeme(_inputString, _index, IgnoreSpaces, out _index, out var matchLength);
             if (lexeme == default(Lexeme)) return null;
 
-            lexeme.LineIndex = _index - matchLength;
             lexeme.LineNumber = _lineNumber;
 
             return lexeme;
         }
 
         /// <summary>
-        /// Returns the next <see cref="Lexeme"/> that would be next processed, without processing
+        /// Returns the next <see cref="Lexeme"/> that would be next, without incrementing values for
         /// <see cref="LineIndex"/>. Obeys <see cref="IgnoreSpaces"/>.
-        /// <para>Calling this method first, then calling <see cref="GetToken"/> should produce equal (but not identical)
-        /// instances of <see cref="Lexeme"/>s.</para>
+        /// <para>Calling this method first, then calling <see cref="GetToken"/> should produce equal 
+        /// instances of <see cref="Lexeme"/>s (but not identical).</para>
         /// </summary>
         /// <returns></returns>
         public Lexeme PeekToken()
@@ -92,10 +88,8 @@ namespace Indicium.Schemas
             var startIndexCopy = _index;
             var subStr = _inputString.Substring(startIndexCopy);
 
-            var lexeme = Token.ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out var indexPostExtract,
-                out var matchLength);
+            var lexeme = Token.ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _);
             
-            lexeme.LineIndex = indexPostExtract - matchLength;
             lexeme.LineNumber = _lineNumber;
 
             return lexeme;
@@ -128,7 +122,7 @@ namespace Indicium.Schemas
         {
             Reset();
             string line;
-            int lineCount = 1;
+            var lineCount = 1;
             while ((line = reader.ReadLine()) != null) {
                 InputString = line;
                 LineNumber = lineCount;

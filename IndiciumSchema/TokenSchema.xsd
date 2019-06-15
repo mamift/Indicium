@@ -21,6 +21,7 @@
             <xs:sequence>
                 <xs:element maxOccurs="unbounded" ref="Token"/>
             </xs:sequence>
+            <xs:attributeGroup ref="IdRefDescription"/>
             <xs:attributeGroup ref="TokenAttrs"/>
         </xs:complexType>
     </xs:element>
@@ -45,21 +46,6 @@
         </xs:restriction>
     </xs:simpleType>
     <xs:attributeGroup name="TokenAttrs">
-        <xs:attribute name="Ref" type="xs:IDREF" use="optional">
-            <xs:annotation>
-                <xs:documentation>Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="Id" type="xs:ID">
-            <xs:annotation>
-                <xs:documentation>The unique identifier for this element.</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
-        <xs:attribute name="Description" type="xs:string">
-            <xs:annotation>
-                <xs:documentation>A description.</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
         <xs:attribute name="EvaluationOrder" type="xs:int">
             <xs:annotation>
                 <xs:documentation>Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.</xs:documentation>
@@ -74,7 +60,25 @@
         <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:attributeGroup ref="TokenAttrs"/>
+                <xs:attributeGroup ref="IdRefDescription"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
+    <xs:attributeGroup name="IdRefDescription">
+        <xs:attribute name="Id" type="xs:ID">
+            <xs:annotation>
+                <xs:documentation>The unique identifier for this element.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Ref" type="xs:IDREF" use="optional">
+            <xs:annotation>
+                <xs:documentation>Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Description" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>A description.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
 </xs:schema>

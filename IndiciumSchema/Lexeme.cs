@@ -35,7 +35,7 @@ namespace Indicium.Schemas
             var escapeColonInValue = Value.StartsWith(":")
                 ? Regex.Replace(Value, @"^\:{1}", @"\:")
                 : Value;
-            // the same is also true for the semi colon; at the end of the value
+            // conversely at the end of the value, the same is also true for the semi colon
             var escapeSemicolonInValue = escapeColonInValue.EndsWith(";")
                 ? Regex.Replace(escapeColonInValue, @"\;{1}$", @"\;")
                 : escapeColonInValue;
