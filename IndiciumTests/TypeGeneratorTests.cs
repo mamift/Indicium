@@ -27,14 +27,17 @@ namespace Tests
         [Test]
         public void TestRoslynCodeGeneration()
         {
-            var cn = TypeGenerator.GenerateTokenClasses(Context);
-            var roslynSb = new StringBuilder();
-            foreach (var c in cn)
-            {
-                roslynSb.Append($"{c.NormalizeWhitespace().ToFullString()}");
-            }
+            var cns = TypeGenerator.GenerateTokenClasses(Context);
+            var stringBuilder = new StringBuilder();
 
-            var str = roslynSb.ToString();
+            stringBuilder.Append(cns.NormalizeWhitespace().ToFullString());
+            //foreach (var c in cns)
+            //{
+            //    roslynSb.Append($"{c.NormalizeWhitespace().ToFullString()}\r\n");
+            //}
+
+            var str = stringBuilder.ToString();
+            File.WriteAllText(@".\RoslynCode.cs", str);
         }
 
         [Test]

@@ -4,41 +4,71 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Indicium.Schemas;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Indicium
 {
+    using SF = SyntaxFactory;
+    
     public class TypeGenerator
     {
-        public static List<ClassDeclarationSyntax> GenerateTokenClasses(TokenContext tokenProcessor)
+        public static NamespaceDeclarationSyntax GenerateTokenClasses(TokenContext tokenProcessor)
         {
-            var tokenDefinitions = tokenProcessor.Token;
+            IList<Token> tokenDefinitions = tokenProcessor.Token;
+            NamespaceDeclarationSyntax namespaceDec = SF.NamespaceDeclaration(SF.ParseName("CustomTokens"));
+            UsingDirectiveSyntax sysUsingDirective = SF.UsingDirective(SF.ParseName(nameof(System)));
+            UsingDirectiveSyntax regexUsingDirective = SF.UsingDirective(SF.ParseName($"{nameof(System)}.{nameof(System.Text)}.{nameof(System.Text.RegularExpressions)}"));
 
-            var classNames = tokenDefinitions.Select(td => td.Id).Distinct();
+            namespaceDec = namespaceDec.AddUsings(sysUsingDirective, regexUsingDirective);
 
-            var classDefinitions = classNames.Select(cn => {
-                var cd = SyntaxFactory.ClassDeclaration(cn);
+            IEnumerable<string> classNames = tokenDefinitions.Select(td => td.Id).Distinct();
 
-                var stringType = SyntaxFactory.ParseTypeName("string");
-                var regexType = SyntaxFactory.ParseTypeName("System.Text.RegularExpressions.Regex");
+            SyntaxToken publicKeyword = SF.Token(SyntaxKind.PublicKeyword);
+            SyntaxToken privateKeyword = SF.Token(SyntaxKind.PrivateKeyword);
+            SyntaxToken staticKeyword = SF.Token(SyntaxKind.StaticKeyword);
+            SyntaxToken readonlyKeyword = SF.Token(SyntaxKind.ReadOnlyKeyword);
 
-                var publicKeywordSyntax = SyntaxFactory.Token(SyntaxKind.PublicKeyword);
+            SyntaxToken returnKeyword = SF.Token(SyntaxKind.ReturnKeyword);
+            SyntaxToken semicolonToken = SF.Token(SyntaxKind.SemicolonToken);
+            ClassDeclarationSyntax[] classDefinitions = classNames.Select(className => {
+                SyntaxToken classId = SF.Identifier(className);
 
-                var idFieldDeclaration = SyntaxFactory.VariableDeclaration(stringType)
-                                                      .AddVariables(SyntaxFactory.VariableDeclarator("Identifier"));
-                var idField = SyntaxFactory.FieldDeclaration(idFieldDeclaration).AddModifiers(publicKeywordSyntax);
+                ClassDeclarationSyntax classDeclaration = SF.ClassDeclaration(classId);
+                SimpleBaseTypeSyntax tokenBaseType = SF.SimpleBaseType(SF.ParseTypeName(nameof(TokenBase)));
+                classDeclaration = classDeclaration.AddModifiers(publicKeyword).AddBaseListTypes(tokenBaseType);
 
-                var regexFieldDecl = SyntaxFactory.VariableDeclaration(regexType)
-                                                  .AddVariables(SyntaxFactory.VariableDeclarator("Regex"));
-                var regexField = SyntaxFactory.FieldDeclaration(regexFieldDecl).AddModifiers(publicKeywordSyntax);
+                TypeSyntax stringType = SF.ParseTypeName(nameof(System.String));
+                TypeSyntax regexType = SF.ParseTypeName(nameof(Regex));
 
-                cd = cd.AddMembers(idField, regexField);
+                VariableDeclarationSyntax idFieldDeclaration = SF.VariableDeclaration(stringType)
+                                                      .AddVariables(SF.VariableDeclarator("_identifier"));
+                FieldDeclarationSyntax idField = SF.FieldDeclaration(idFieldDeclaration).AddModifiers(privateKeyword, staticKeyword);
 
-                return cd;
-            });
+                ReturnStatementSyntax idPropGetterBlockStatement = SF.ReturnStatement(returnKeyword,
+                    SF.IdentifierName("_identifier"), semicolonToken);
+                BlockSyntax idPropGetterBlock = SF.Block(idPropGetterBlockStatement);
+                AccessorDeclarationSyntax idPropGetter = SF.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, idPropGetterBlock);
+                PropertyDeclarationSyntax idProp = SF.PropertyDeclaration(stringType, "Identifier").AddModifiers(publicKeyword).AddAccessorListAccessors(idPropGetter);
 
-            return classDefinitions.ToList();
+                VariableDeclarationSyntax regexFieldDecl = SF.VariableDeclaration(regexType)
+                                                  .AddVariables(SF.VariableDeclarator("_regex"));
+                FieldDeclarationSyntax regexField = SF.FieldDeclaration(regexFieldDecl).AddModifiers(privateKeyword, staticKeyword);
+
+                ReturnStatementSyntax regexPropGetterBlockStatement = SF.ReturnStatement(returnKeyword, SF.IdentifierName("_regex"), semicolonToken);
+                BlockSyntax regexPropGetterBlock = SF.Block(regexPropGetterBlockStatement);
+                AccessorDeclarationSyntax regexPropGetter = SF.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, regexPropGetterBlock);
+                PropertyDeclarationSyntax regexProp = SF.PropertyDeclaration(regexType, "Regex").AddModifiers(publicKeyword).AddAccessorListAccessors(regexPropGetter);
+
+                classDeclaration = classDeclaration.AddMembers(idField.WithTrailingTrivia(SF.EndOfLine("\r\n")), regexField, idProp, regexProp);
+
+                return classDeclaration;
+            }).ToArray();
+
+            namespaceDec = namespaceDec.AddMembers(classDefinitions);
+
+            return namespaceDec;
         }
 
         /// <summary>
