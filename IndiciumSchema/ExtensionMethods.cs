@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Indicium.Schemas
 {
@@ -16,9 +17,10 @@ namespace Indicium.Schemas
         /// <param name="index">After extracting a <see cref="Lexeme"/>, save the 0-based index of it from the <see cref="input"/>. If it's
         /// not an undefined Lexeme it should be higher than <paramref name="inputIndex"/>.</param>
         /// <param name="matchLength">After extracting a <see cref="Lexeme"/>, save the length of the part of the string that forms it.</param>
+        /// <param name="obeyEvalOrder">Obeys a <see cref="Token.EvaluationOrder"/> property.</param>
         /// <returns></returns>
         public static Lexeme ExtractLexeme(this IEnumerable<Token> tokens, string input,
-            int inputIndex, bool ignoreSpaces, out int index, out int matchLength)
+            int inputIndex, bool ignoreSpaces, out int index, out int matchLength, bool obeyEvalOrder = true)
         {
             index = inputIndex;
             matchLength = 0;
@@ -29,7 +31,11 @@ namespace Indicium.Schemas
                 if (index >= input.Length) return default(Lexeme);
             }
 
-            foreach (var def in tokens) {
+            var tokenList = obeyEvalOrder
+                ? tokens.OrderBy(t => t.EvaluationOrder ?? 0).ToList()
+                : tokens.ToList();
+
+            foreach (var def in tokenList) {
                 var regex = def.GetMatcher();
                 var match = regex.Match(input, index);
 

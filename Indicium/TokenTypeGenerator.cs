@@ -12,18 +12,17 @@ namespace Indicium
 {
     using SF = SyntaxFactory;
     
-    public class TypeGenerator
+    public class TokenTypeGenerator
     {
-        public static NamespaceDeclarationSyntax GenerateTokenClasses(TokenContext tokenProcessor)
+        public static NamespaceDeclarationSyntax GenerateTokenClasses(TokenContext tokenProcessor, string nsName = "CustomTokens")
         {
-            IList<Token> tokenDefinitions = tokenProcessor.Token;
-            NamespaceDeclarationSyntax namespaceDec = SF.NamespaceDeclaration(SF.ParseName("CustomTokens"));
+            NamespaceDeclarationSyntax namespaceDec = SF.NamespaceDeclaration(SF.ParseName(nsName));
             UsingDirectiveSyntax sysUsingDirective = SF.UsingDirective(SF.ParseName(nameof(System)));
             UsingDirectiveSyntax regexUsingDirective = SF.UsingDirective(SF.ParseName($"{nameof(System)}.{nameof(System.Text)}.{nameof(System.Text.RegularExpressions)}"));
 
             namespaceDec = namespaceDec.AddUsings(sysUsingDirective, regexUsingDirective);
 
-            IEnumerable<string> classNames = tokenDefinitions.Select(td => td.Id).Distinct();
+            IEnumerable<string> classNames = tokenProcessor.Token.Select(td => td.Id).Distinct();
 
             SyntaxToken publicKeyword = SF.Token(SyntaxKind.PublicKeyword);
             SyntaxToken privateKeyword = SF.Token(SyntaxKind.PrivateKeyword);
@@ -46,8 +45,7 @@ namespace Indicium
                                                       .AddVariables(SF.VariableDeclarator("_identifier"));
                 FieldDeclarationSyntax idField = SF.FieldDeclaration(idFieldDeclaration).AddModifiers(privateKeyword, staticKeyword);
 
-                ReturnStatementSyntax idPropGetterBlockStatement = SF.ReturnStatement(returnKeyword,
-                    SF.IdentifierName("_identifier"), semicolonToken);
+                ReturnStatementSyntax idPropGetterBlockStatement = SF.ReturnStatement(returnKeyword, SF.IdentifierName("_identifier"), semicolonToken);
                 BlockSyntax idPropGetterBlock = SF.Block(idPropGetterBlockStatement);
                 AccessorDeclarationSyntax idPropGetter = SF.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, idPropGetterBlock);
                 PropertyDeclarationSyntax idProp = SF.PropertyDeclaration(stringType, "Identifier").AddModifiers(publicKeyword).AddAccessorListAccessors(idPropGetter);
@@ -96,7 +94,7 @@ namespace Indicium
         }
 
         /// <summary>
-        /// Generates the class (fields and properties) for a given <see cref="TokenDefinition"/>.
+        /// Generates the class (fields and properties) for a given <paramref name="tokenDef"/>.
         /// </summary>
         /// <param name="tokenDef"></param>
         /// <returns></returns>

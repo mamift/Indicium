@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -19,6 +19,10 @@
   <ItemGroup>
     <ProjectReference Include="..\IndiciumSchema\IndiciumSchema.csproj" />
     <ProjectReference Include="..\Indicium\Indicium.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ExemplarTargetCode\" />
   </ItemGroup>
 
 </Project>

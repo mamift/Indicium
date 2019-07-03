@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using Indicium.Schemas;
 
 namespace Indicium
 {
@@ -10,5 +12,10 @@ namespace Indicium
         public virtual string Identifier { get; }
 
         public virtual Regex Regex { get; }
+
+        public IEnumerable<Lexeme> Match(string input)
+        {
+            return default;
+        }
     }
 }

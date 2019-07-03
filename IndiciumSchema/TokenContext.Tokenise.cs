@@ -12,11 +12,17 @@ namespace Indicium.Schemas
         private string _inputString = string.Empty;
 
         /// <summary>
-        /// Not part of the XML model.
+        /// Not serialised.
+        /// <para>Set to ignore or obey a Token's <see cref="Schemas.Token.EvaluationOrder"/> setting.</para>
+        /// </summary>
+        public bool ObeyEvaluationOrder = true;
+
+        /// <summary>
+        /// Not serialised.
         /// <para>Setting this to false will result in lots of undefined tokens
         /// if there is no token definition for whitespace characters.</para>
         /// </summary>
-        public bool IgnoreSpaces { get; set; }
+        public bool IgnoreSpaces;
 
         /// <summary>
         /// Determines if the tokeniser is processing at the start of the <see cref="InputString"/> or not.
@@ -30,7 +36,8 @@ namespace Indicium.Schemas
         public int LineIndex => _index;
 
         /// <summary>
-        /// Set the input string to extract <see cref="Token"/>s from.
+        /// Not serialised.
+        /// <para>Set the input string to extract <see cref="Token"/>s from.</para>
         /// </summary>
         public string InputString
         {
@@ -79,8 +86,8 @@ namespace Indicium.Schemas
         /// <summary>
         /// Returns the next <see cref="Lexeme"/> that would be next, without incrementing values for
         /// <see cref="LineIndex"/>. Obeys <see cref="IgnoreSpaces"/>.
-        /// <para>Calling this method first, then calling <see cref="GetToken"/> should produce equal 
-        /// instances of <see cref="Lexeme"/>s (but not identical).</para>
+        /// <para>Calling this method first, then calling <see cref="GetToken"/> should produce equal, but not identical 
+        /// instances of <see cref="Lexeme"/>s (as in they will not be references to the same instance).</para>
         /// </summary>
         /// <returns></returns>
         public Lexeme PeekToken()
@@ -88,7 +95,7 @@ namespace Indicium.Schemas
             var startIndexCopy = _index;
             var subStr = _inputString.Substring(startIndexCopy);
 
-            var lexeme = Token.ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _);
+            var lexeme = Token.ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _, ObeyEvaluationOrder);
             
             lexeme.LineNumber = _lineNumber;
 

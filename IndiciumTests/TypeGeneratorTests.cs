@@ -2,12 +2,11 @@
 using System.CodeDom.Compiler;
 using System.IO;
 using System.Text;
-using Indicium;
 using Indicium.Schemas;
 using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 
-namespace Tests
+namespace Indicium.Tests
 {
     public class TypeGeneratorTests
     {
@@ -27,7 +26,7 @@ namespace Tests
         [Test]
         public void TestRoslynCodeGeneration()
         {
-            var cns = TypeGenerator.GenerateTokenClasses(Context);
+            var cns = TokenTypeGenerator.GenerateTokenClasses(Context);
             var stringBuilder = new StringBuilder();
 
             stringBuilder.Append(cns.NormalizeWhitespace().ToFullString());
@@ -43,7 +42,7 @@ namespace Tests
         [Test]
         public void TestCodeDomGeneration()
         {
-            var ccu = TypeGenerator.GenerateClassesForTokenDefinitions(Context.Token);
+            var ccu = TokenTypeGenerator.GenerateClassesForTokenDefinitions(Context.Token);
 
             var cdProvider = CodeDomProvider.CreateProvider("CSharp");
             var cdOptions = new CodeGeneratorOptions

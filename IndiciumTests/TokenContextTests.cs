@@ -5,7 +5,7 @@ using System.Linq;
 using Indicium.Schemas;
 using NUnit.Framework;
 
-namespace Tests
+namespace Indicium.Tests
 {
     public class TokenContextTests
     {
@@ -68,7 +68,9 @@ namespace Tests
                                        "'Cause I'm gonna set this house on.\n\r" +
                                        "\"Fire\" by Peking Duck.@";
 
-        private TokenContext Context { get; set; }
+        private TokenContext _defaultContext;
+
+        private TokenContext _context; 
 
         [SetUp]
         public void Setup()
@@ -76,9 +78,81 @@ namespace Tests
             var cwd = Environment.CurrentDirectory;
             var file = Path.Combine(cwd, @"Prototype1.xml");
 
-            Context = TokenContext.Load(file);
+            _context = TokenContext.Load(file);
 
-            Assert.IsNotNull(Context);
+            _defaultContext = new TokenContext
+            {
+                Token = new List<Token> {
+                    new Token {
+                        Id = "Identifier", TypedValue = @"[\w]+", EvaluationOrder = 1
+                    },
+                    new Token {
+                        Id = "Non-Identifier", TypedValue = @"[\W]+", EvaluationOrder = 3
+                    },
+                    new Token {
+                        Id = "Whitespace", TypedValue = @"[\s]+", EvaluationOrder = 2
+                    }
+                }
+            };
+
+            Assert.IsNotNull(_context);
+        }
+
+        [Test]
+        public void TestProgrammaticallyDefinedContext()
+        {
+            var newContext = new TokenContext {
+                Token = new List<Token> {
+                    new Token {
+                        Id = "Identifier", TypedValue = @"[\w]+"
+                    },
+                    new Token {
+                        Id = "Non-Identifier", TypedValue = @"[\W]+"
+                    }
+                }
+            };
+
+            var tokensFromLyrics = Lyrics.Split('\n').SelectMany((line, i) => {
+                newContext.LineNumber = i;
+                newContext.InputString = line;
+
+                return newContext.GetTokens();
+            }).ToList();
+
+            Assert.IsNotEmpty(tokensFromLyrics);
+            Assert.IsTrue(tokensFromLyrics.Count == 736);
+        }
+
+        [Test]
+        public void TestEvaluationOrder1()
+        {
+            _defaultContext.Reset();
+
+            var tokensFromLyrics = Lyrics.Split('\n').SelectMany((line, i) => {
+                _defaultContext.LineNumber = i;
+                _defaultContext.InputString = line;
+
+                return _defaultContext.GetTokens();
+            }).ToList();
+
+            Assert.IsNotEmpty(tokensFromLyrics);
+            Assert.IsTrue(tokensFromLyrics.Count == 737);
+        }
+
+        [Test]
+        public void TestEvaluationOrder2()
+        {
+            _defaultContext.Reset();
+            _defaultContext.IgnoreSpaces = false;
+            _defaultContext.ObeyEvaluationOrder = true;
+
+            var unsorted = _defaultContext.Token.ToList();
+
+            Assert.IsTrue(unsorted.Last().Id == "Whitespace");
+
+            var sorted = _defaultContext.Token.OrderBy(t => t.EvaluationOrder).ToList();
+
+            Assert.IsTrue(sorted.Last().Id == "Non-Identifier");
         }
 
         [Test]
@@ -86,11 +160,13 @@ namespace Tests
         {
             var fullTokenList = new List<Lexeme>();
 
-            foreach (var line in Lyrics.Split('\n')) {
-                Context.IgnoreSpaces = true;
-                Context.InputString = line;
+            var lyricLines = Lyrics.Split('\n');
+            for (var lineNumber = 0; lineNumber < lyricLines.Length; lineNumber++) {
+                _context.LineNumber = lineNumber;
+                _context.IgnoreSpaces = true;
+                _context.InputString = lyricLines[lineNumber];
 
-                var tokens = Context.GetTokens().ToList();
+                var tokens = _context.GetTokens().ToList();
 
                 fullTokenList.AddRange(tokens);
             }
@@ -101,7 +177,7 @@ namespace Tests
             Assert.IsNotEmpty(fullTokenList);
             Assert.IsTrue(fullTokenList.Count == 461);
             Assert.IsTrue(undefinedTokens.Count == 1);
-            Assert.IsTrue(definedTokens.Count == 458);
+            Assert.IsTrue(definedTokens.Count == 460);
         }
 
         [Test]
@@ -110,10 +186,10 @@ namespace Tests
             var fullTokenList = new List<Lexeme>();
 
             foreach (var line in Lyrics.Split('\n')) {
-                Context.IgnoreSpaces = false;
-                Context.InputString = line;
+                _context.IgnoreSpaces = false;
+                _context.InputString = line;
 
-                var tokens = Context.GetTokens().ToList();
+                var tokens = _context.GetTokens().ToList();
 
                 fullTokenList.AddRange(tokens);
             }
@@ -124,7 +200,7 @@ namespace Tests
             Assert.IsNotEmpty(fullTokenList);
             Assert.IsTrue(fullTokenList.Count == 740);
             Assert.IsTrue(undefinedTokens.Count == 1);
-            Assert.IsTrue(definedTokens.Count == 738);
+            Assert.IsTrue(definedTokens.Count == 739);
         }
     }
 }
