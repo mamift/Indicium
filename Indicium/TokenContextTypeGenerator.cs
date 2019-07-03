@@ -22,7 +22,7 @@ namespace Indicium
 
         public static NamespaceDeclarationSyntax Namespace(TokenContext context)
         {
-            return default;
+            return default(NamespaceDeclarationSyntax);
         }
 
         public static ClassDeclarationSyntax Class(TokenContext context, string identifier)

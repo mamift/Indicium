@@ -15,7 +15,7 @@ namespace Indicium
 
         public virtual IEnumerable<Lexeme> Match(string input)
         {
-            return default;
+            return default(IEnumerable<Lexeme>);
         }
     }
 }

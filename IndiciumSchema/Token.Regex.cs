@@ -6,6 +6,9 @@ namespace Indicium.Schemas
     {
         private Text.Regex _regex;
 
-        public Text.Regex GetMatcher() => _regex ?? (_regex = new Text.Regex(TypedValue.Trim()));
+        public Text.Regex GetMatcher()
+        {
+            return _regex ?? (_regex = new Text.Regex(TypedValue.Trim()));
+        }
     }
 }
