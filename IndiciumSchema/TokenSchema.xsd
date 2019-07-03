@@ -11,6 +11,7 @@
                 <xs:element ref="Token" maxOccurs="unbounded" minOccurs="1"/>
                 <xs:element maxOccurs="unbounded" minOccurs="0" ref="TokenGroup"/>
             </xs:sequence>
+            <xs:attributeGroup ref="CodeGenAttrs"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="TokenGroup">
@@ -25,10 +26,17 @@
             <xs:attributeGroup ref="TokenAttrs"/>
         </xs:complexType>
     </xs:element>
-    <xs:element name="Token" type="TToken">
+    <xs:element name="Token">
         <xs:annotation>
             <xs:documentation>A token definition. The value for this element should be a C#  Regex-compliant string (System.Text.RegularExpressions).</xs:documentation>
         </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="TToken">
+                    <xs:attributeGroup ref="CodeGenAttrs"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
         <xs:key name="KeyIdentifier">
             <xs:annotation>
                 <xs:documentation>The @Id attribute will alawys be unique.</xs:documentation>
@@ -78,6 +86,18 @@
         <xs:attribute name="Description" type="xs:string">
             <xs:annotation>
                 <xs:documentation>A description.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="CodeGenAttrs">
+        <xs:attribute name="Class" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Used only for code generation; specifies the class name.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Namespace" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Used only for code generation; specify a namespace to use when generating code.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>

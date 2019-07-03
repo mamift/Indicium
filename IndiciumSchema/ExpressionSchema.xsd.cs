@@ -114,6 +114,42 @@ namespace Indicium.Schemas {
             }
         }
         
+        /// <summary>
+        /// <para>
+        /// Used only for code generation; specifies the class name.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string @Class {
+            get {
+                XAttribute x = this.Attribute(XName.Get("Class", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("Class", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Used only for code generation; specify a namespace to use when generating code.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string @Namespace {
+            get {
+                XAttribute x = this.Attribute(XName.Get("Namespace", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("Namespace", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         Dictionary<XName, System.Type> IXMetaData.LocalElementsDictionary {
             get {
@@ -378,6 +414,178 @@ namespace Indicium.Schemas {
         
         ContentModelEntity IXMetaData.GetContentModel() {
             return contentModel;
+        }
+    }
+    
+    public partial class Token : XTypedElement, IXMetaData {
+        
+         public static explicit operator Token(XElement xe) { return XTypedServices.ToXTypedElement<Token>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
+        
+        public Token() {
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Used only for code generation; specifies the class name.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string @Class {
+            get {
+                XAttribute x = this.Attribute(XName.Get("Class", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("Class", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Used only for code generation; specify a namespace to use when generating code.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string @Namespace {
+            get {
+                XAttribute x = this.Attribute(XName.Get("Namespace", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("Namespace", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public System.Nullable<int> EvaluationOrder {
+            get {
+                XAttribute x = this.Attribute(XName.Get("EvaluationOrder", ""));
+                if ((x == null)) {
+                    return null;
+                }
+                return XTypedServices.ParseValue<int>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("EvaluationOrder", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// The unique identifier for this element.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string Id {
+            get {
+                XAttribute x = this.Attribute(XName.Get("Id", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Id).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("Id", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Id).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string @Ref {
+            get {
+                XAttribute x = this.Attribute(XName.Get("Ref", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("Ref", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// A description.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public string Description {
+            get {
+                XAttribute x = this.Attribute(XName.Get("Description", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+            set {
+                this.SetAttribute(XName.Get("Description", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        XName IXMetaData.SchemaName {
+            get {
+                return XName.Get("Token", "https://github.com/mamift/Indicium");
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        SchemaOrigin IXMetaData.TypeOrigin {
+            get {
+                return SchemaOrigin.Element;
+            }
+        }
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        ILinqToXsdTypeManager IXMetaData.TypeManager {
+            get {
+                return LinqToXsdTypeManager.Instance;
+            }
+        }
+        
+        public void Save(string xmlFile) {
+            XTypedServices.Save(xmlFile, Untyped);
+        }
+        
+        public void Save(System.IO.TextWriter tw) {
+            XTypedServices.Save(tw, Untyped);
+        }
+        
+        public void Save(System.Xml.XmlWriter xmlWriter) {
+            XTypedServices.Save(xmlWriter, Untyped);
+        }
+        
+        public static Token Load(string xmlFile) {
+            return XTypedServices.Load<Token>(xmlFile);
+        }
+        
+        public static Token Load(System.IO.TextReader xmlFile) {
+            return XTypedServices.Load<Token>(xmlFile);
+        }
+        
+        public static Token Parse(string xml) {
+            return XTypedServices.Parse<Token>(xml);
+        }
+        
+        public override XTypedElement Clone() {
+            return XTypedServices.CloneXTypedElement<Token>(this);
+        }
+        
+        ContentModelEntity IXMetaData.GetContentModel() {
+            return ContentModelEntity.Default;
         }
     }
     
@@ -652,208 +860,11 @@ namespace Indicium.Schemas {
         }
     }
     
-    /// <summary>
-    /// <para>
-    /// The base schema type for Tokens. Whitespace is collapsed.
-    /// </para>
-    /// </summary>
-    public partial class Token : XTypedElement, IXMetaData {
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private TToken ContentField;
-        
-         public static explicit operator Token(XElement xe) { return XTypedServices.ToXTypedElement<Token, TToken>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
-        
-        /// <summary>
-        /// <para>
-        /// The base schema type for Tokens. Whitespace is collapsed.
-        /// </para>
-        /// </summary>
-        public Token() {
-            SetInnerType(new TToken());
-        }
-        
-        /// <summary>
-        /// <para>
-        /// The base schema type for Tokens. Whitespace is collapsed.
-        /// </para>
-        /// </summary>
-        public Token(TToken content) {
-            SetInnerType(content);
-        }
-        
-        public override XElement Untyped {
-            get {
-                return base.Untyped;
-            }
-            set {
-                base.Untyped = value;
-                this.ContentField.Untyped = value;
-            }
-        }
-        
-        public TToken Content {
-            get {
-                return ContentField;
-            }
-        }
-        
-        public string TypedValue {
-            get {
-                return this.ContentField.TypedValue;
-            }
-            set {
-                this.ContentField.TypedValue = value;
-            }
-        }
-        
-        /// <summary>
-        /// <para>
-        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public System.Nullable<int> EvaluationOrder {
-            get {
-                return this.ContentField.EvaluationOrder;
-            }
-            set {
-                this.ContentField.EvaluationOrder = value;
-            }
-        }
-        
-        /// <summary>
-        /// <para>
-        /// The unique identifier for this element.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public string Id {
-            get {
-                return this.ContentField.Id;
-            }
-            set {
-                this.ContentField.Id = value;
-            }
-        }
-        
-        /// <summary>
-        /// <para>
-        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public string @Ref {
-            get {
-                return this.ContentField.@Ref;
-            }
-            set {
-                this.ContentField.@Ref = value;
-            }
-        }
-        
-        /// <summary>
-        /// <para>
-        /// A description.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public string Description {
-            get {
-                return this.ContentField.Description;
-            }
-            set {
-                this.ContentField.Description = value;
-            }
-        }
-        
-        Dictionary<XName, System.Type> IXMetaData.LocalElementsDictionary {
-            get {
-                IXMetaData schemaMetaData = ((IXMetaData)(this.Content));
-                return schemaMetaData.LocalElementsDictionary;
-            }
-        }
-        
-        XTypedElement IXMetaData.Content {
-            get {
-                return this.Content;
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        XName IXMetaData.SchemaName {
-            get {
-                return XName.Get("Token", "https://github.com/mamift/Indicium");
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        SchemaOrigin IXMetaData.TypeOrigin {
-            get {
-                return SchemaOrigin.Element;
-            }
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        ILinqToXsdTypeManager IXMetaData.TypeManager {
-            get {
-                return LinqToXsdTypeManager.Instance;
-            }
-        }
-        
-        public void Save(string xmlFile) {
-            XTypedServices.Save(xmlFile, Untyped);
-        }
-        
-        public void Save(System.IO.TextWriter tw) {
-            XTypedServices.Save(tw, Untyped);
-        }
-        
-        public void Save(System.Xml.XmlWriter xmlWriter) {
-            XTypedServices.Save(xmlWriter, Untyped);
-        }
-        
-        public static Token Load(string xmlFile) {
-            return XTypedServices.Load<Token, TToken>(xmlFile, LinqToXsdTypeManager.Instance);
-        }
-        
-        public static Token Load(System.IO.TextReader xmlFile) {
-            return XTypedServices.Load<Token, TToken>(xmlFile, LinqToXsdTypeManager.Instance);
-        }
-        
-        public static Token Parse(string xml) {
-            return XTypedServices.Parse<Token, TToken>(xml, LinqToXsdTypeManager.Instance);
-        }
-        
-        public override XTypedElement Clone() {
-            return new Token(((TToken)(this.Content.Clone())));
-        }
-        
-        private void SetInnerType(TToken ContentField) {
-            this.ContentField = ((TToken)(XTypedServices.GetCloneIfRooted(ContentField)));
-            XTypedServices.SetName(this, this.ContentField);
-        }
-        
-        ContentModelEntity IXMetaData.GetContentModel() {
-            return ContentModelEntity.Default;
-        }
-    }
-    
     public class LinqToXsdTypeManager : ILinqToXsdTypeManager {
         
         static Dictionary<XName, System.Type> typeDictionary = new Dictionary<XName, System.Type>();
         
         static Dictionary<XName, System.Type> elementDictionary = new Dictionary<XName, System.Type>();
-        
-        static Dictionary<System.Type, System.Type> wrapperDictionary = new Dictionary<System.Type, System.Type>();
         
         private static XmlSchemaSet schemaSet;
         
@@ -863,7 +874,6 @@ namespace Indicium.Schemas {
         static LinqToXsdTypeManager() {
             BuildTypeDictionary();
             BuildElementDictionary();
-            BuildWrapperDictionary();
         }
         
         XmlSchemaSet ILinqToXsdTypeManager.Schemas {
@@ -893,7 +903,7 @@ namespace Indicium.Schemas {
         
         Dictionary<System.Type, System.Type> ILinqToXsdTypeManager.RootContentTypeMapping {
             get {
-                return wrapperDictionary;
+                return XTypedServices.EmptyTypeMappingDictionary;
             }
         }
         
@@ -910,12 +920,8 @@ namespace Indicium.Schemas {
         private static void BuildElementDictionary() {
             elementDictionary.Add(XName.Get("TokenContext", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.TokenContext));
             elementDictionary.Add(XName.Get("TokenGroup", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.TokenGroup));
-            elementDictionary.Add(XName.Get("Expression", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.Expression));
             elementDictionary.Add(XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.Token));
-        }
-        
-        private static void BuildWrapperDictionary() {
-            wrapperDictionary.Add(typeof(Indicium.Schemas.Token), typeof(global::Indicium.Schemas.TToken));
+            elementDictionary.Add(XName.Get("Expression", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.Expression));
         }
         
         protected internal static void AddSchemas(XmlSchemaSet schemas) {
@@ -940,9 +946,9 @@ namespace Indicium.Schemas {
 
     public TokenGroup TokenGroup {  get {return rootObject as TokenGroup; } }
 
-    public Expression Expression {  get {return rootObject as Expression; } }
-
     public Token Token {  get {return rootObject as Token; } }
+
+    public Expression Expression {  get {return rootObject as Expression; } }
         
         private XRootNamespace() {
         }
@@ -957,12 +963,12 @@ namespace Indicium.Schemas {
             this.rootObject = root;
         }
         
-        public XRootNamespace(Expression root) {
+        public XRootNamespace(Token root) {
             this.doc = new XDocument(root.Untyped);
             this.rootObject = root;
         }
         
-        public XRootNamespace(Token root) {
+        public XRootNamespace(Expression root) {
             this.doc = new XDocument(root.Untyped);
             this.rootObject = root;
         }
@@ -1084,9 +1090,9 @@ namespace Indicium.Schemas {
 
     public global::Indicium.Schemas.TokenGroup TokenGroup {  get {return rootObject as global::Indicium.Schemas.TokenGroup; } }
 
-    public global::Indicium.Schemas.Expression Expression {  get {return rootObject as global::Indicium.Schemas.Expression; } }
-
     public global::Indicium.Schemas.Token Token {  get {return rootObject as global::Indicium.Schemas.Token; } }
+
+    public global::Indicium.Schemas.Expression Expression {  get {return rootObject as global::Indicium.Schemas.Expression; } }
         
         private XRoot() {
         }
@@ -1101,12 +1107,12 @@ namespace Indicium.Schemas {
             this.rootObject = root;
         }
         
-        public XRoot(global::Indicium.Schemas.Expression root) {
+        public XRoot(global::Indicium.Schemas.Token root) {
             this.doc = new XDocument(root.Untyped);
             this.rootObject = root;
         }
         
-        public XRoot(global::Indicium.Schemas.Token root) {
+        public XRoot(global::Indicium.Schemas.Expression root) {
             this.doc = new XDocument(root.Untyped);
             this.rootObject = root;
         }
