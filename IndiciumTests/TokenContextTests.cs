@@ -68,7 +68,20 @@ namespace Indicium.Tests
                                        "'Cause I'm gonna set this house on.\n\r" +
                                        "\"Fire\" by Peking Duck.@";
 
-        private TokenContext _defaultContext;
+        public static TokenContext GetDefaultContext() => new TokenContext
+        {
+            Token = new List<Token> {
+                new Token {
+                    Id = "Identifier", TypedValue = @"[\w]+", EvaluationOrder = 1
+                },
+                new Token {
+                    Id = "Non-Identifier", TypedValue = @"[\W]+", EvaluationOrder = 3
+                },
+                new Token {
+                    Id = "Whitespace", TypedValue = @"[\s]+", EvaluationOrder = 2
+                }
+            }
+        };
 
         private TokenContext _context; 
 
@@ -79,21 +92,6 @@ namespace Indicium.Tests
             var file = Path.Combine(cwd, @"Prototype1.xml");
 
             _context = TokenContext.Load(file);
-
-            _defaultContext = new TokenContext
-            {
-                Token = new List<Token> {
-                    new Token {
-                        Id = "Identifier", TypedValue = @"[\w]+", EvaluationOrder = 1
-                    },
-                    new Token {
-                        Id = "Non-Identifier", TypedValue = @"[\W]+", EvaluationOrder = 3
-                    },
-                    new Token {
-                        Id = "Whitespace", TypedValue = @"[\s]+", EvaluationOrder = 2
-                    }
-                }
-            };
 
             Assert.IsNotNull(_context);
         }
@@ -126,13 +124,13 @@ namespace Indicium.Tests
         [Test]
         public void TestEvaluationOrder1()
         {
-            _defaultContext.Reset();
+            var context = GetDefaultContext();
 
             var tokensFromLyrics = Lyrics.Split('\n').SelectMany((line, i) => {
-                _defaultContext.LineNumber = i;
-                _defaultContext.InputString = line;
+                context.LineNumber = i;
+                context.InputString = line;
 
-                return _defaultContext.GetTokens();
+                return context.GetTokens();
             }).ToList();
 
             Assert.IsNotEmpty(tokensFromLyrics);
@@ -142,15 +140,15 @@ namespace Indicium.Tests
         [Test]
         public void TestEvaluationOrder2()
         {
-            _defaultContext.Reset();
-            _defaultContext.IgnoreSpaces = false;
-            _defaultContext.ObeyEvaluationOrder = true;
+            var context = GetDefaultContext();
+            context.IgnoreSpaces = false;
+            context.ObeyEvaluationOrder = true;
 
-            var unsorted = _defaultContext.Token.ToList();
+            var unsorted = context.Token.ToList();
 
             Assert.IsTrue(unsorted.Last().Id == "Whitespace");
 
-            var sorted = _defaultContext.Token.OrderBy(t => t.EvaluationOrder).ToList();
+            var sorted = context.Token.OrderBy(t => t.EvaluationOrder).ToList();
 
             Assert.IsTrue(sorted.Last().Id == "Non-Identifier");
         }

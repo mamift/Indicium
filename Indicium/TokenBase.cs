@@ -13,7 +13,7 @@ namespace Indicium
 
         public virtual Regex Regex { get; }
 
-        public IEnumerable<Lexeme> Match(string input)
+        public virtual IEnumerable<Lexeme> Match(string input)
         {
             return default;
         }
