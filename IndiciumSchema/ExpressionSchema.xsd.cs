@@ -279,76 +279,37 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// The unique identifier for this element.
+        /// Used only for code generation; specifies the class name.
         /// </para>
         /// <para>
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string Id {
+        public string ClassName {
             get {
-                XAttribute x = this.Attribute(XName.Get("Id", ""));
-                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Id).Datatype);
-            }
-            set {
-                this.SetAttribute(XName.Get("Id", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Id).Datatype);
-            }
-        }
-        
-        /// <summary>
-        /// <para>
-        /// Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public string @Ref {
-            get {
-                XAttribute x = this.Attribute(XName.Get("Ref", ""));
-                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
-            }
-            set {
-                this.SetAttribute(XName.Get("Ref", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
-            }
-        }
-        
-        /// <summary>
-        /// <para>
-        /// A description.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public string Description {
-            get {
-                XAttribute x = this.Attribute(XName.Get("Description", ""));
+                XAttribute x = this.Attribute(XName.Get("ClassName", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
             set {
-                this.SetAttribute(XName.Get("Description", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+                this.SetAttribute(XName.Get("ClassName", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
         /// <summary>
         /// <para>
-        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
+        /// Used only for code generation; specify a namespace to use when generating code.
         /// </para>
         /// <para>
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public System.Nullable<int> EvaluationOrder {
+        public string NamespaceName {
             get {
-                XAttribute x = this.Attribute(XName.Get("EvaluationOrder", ""));
-                if ((x == null)) {
-                    return null;
-                }
-                return XTypedServices.ParseValue<int>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
+                XAttribute x = this.Attribute(XName.Get("NamespaceName", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
             set {
-                this.SetAttribute(XName.Get("EvaluationOrder", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
+                this.SetAttribute(XName.Get("NamespaceName", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
@@ -550,7 +511,7 @@ namespace Indicium.Schemas {
     public sealed class RegexString {
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static Xml.Schema.Linq.SimpleTypeValidator TypeDefinition = new Xml.Schema.Linq.AtomicSimpleTypeValidator(XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String), new Xml.Schema.Linq.RestrictionFacets(((Xml.Schema.Linq.RestrictionFlags)(32)), null, 0, 0, null, null, 0, null, null, 0, null, 0, XmlSchemaWhiteSpace.Collapse));
+        public static Xml.Schema.Linq.SimpleTypeValidator TypeDefinition = new Xml.Schema.Linq.AtomicSimpleTypeValidator(XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.NormalizedString), new Xml.Schema.Linq.RestrictionFacets(((Xml.Schema.Linq.RestrictionFlags)(32)), null, 0, 0, null, null, 0, null, null, 0, null, 0, XmlSchemaWhiteSpace.Collapse));
         
         private RegexString() {
         }
@@ -576,7 +537,7 @@ namespace Indicium.Schemas {
         public string TypedValue {
             get {
                 XElement x = this.Untyped;
-                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.NormalizedString).Datatype);
             }
             set {
                 this.SetValueWithValidation(value, "TypedValue", global::Indicium.Schemas.RegexString.TypeDefinition);

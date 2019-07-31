@@ -22,8 +22,7 @@
             <xs:sequence>
                 <xs:element maxOccurs="unbounded" ref="Token"/>
             </xs:sequence>
-            <xs:attributeGroup ref="IdRefDescription"/>
-            <xs:attributeGroup ref="TokenAttrs"/>
+            <xs:attributeGroup ref="CodeGenAttrs"/>
         </xs:complexType>
     </xs:element>
     <xs:element name="Token" type="TToken">
@@ -38,11 +37,11 @@
             <xs:field xpath="@Id"/>
         </xs:key>
     </xs:element>
-    <xs:simpleType final="" name="RegexString">
+    <xs:simpleType name="RegexString">
         <xs:annotation>
             <xs:documentation>Whitespace is collapsed according to XSD schema type rules for the xs:string type.</xs:documentation>
         </xs:annotation>
-        <xs:restriction base="xs:string">
+        <xs:restriction base="xs:normalizedString">
             <xs:whiteSpace value="collapse"/>
         </xs:restriction>
     </xs:simpleType>
@@ -93,5 +92,8 @@
                 <xs:documentation>Used only for code generation; specify a namespace to use when generating code.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="TokenGroupAttrs">
+        <xs:attribute name="GroupName" type="xs:string"/>
     </xs:attributeGroup>
 </xs:schema>
