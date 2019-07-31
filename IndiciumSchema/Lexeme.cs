@@ -48,5 +48,10 @@ namespace Indicium.Schemas
         /// </summary>
         /// <returns></returns>
         public string ToCompactString() => $"{{{Id}:{Value}}}";
+
+        /// <summary>
+        /// Represents an undefined <see cref="Lexeme"/>.
+        /// </summary>
+        public static Lexeme Undefined => new Lexeme {Id = "Undefined"};
     }
 }

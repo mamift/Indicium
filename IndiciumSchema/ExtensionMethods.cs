@@ -7,7 +7,7 @@ namespace Indicium.Schemas
     public static class ExtensionMethods
     {
         /// <summary>
-        /// Stateless extraction of a <see cref="Lexeme"/> from a given <paramref name="input"/> string.
+        /// Returns a <see cref="Lexeme"/> from a given <paramref name="input"/> string. 
         /// <para>This is an extension method to guarantee it does not modify state of the <see cref="TokenContext"/> class.</para>
         /// </summary>
         /// <param name="tokens"></param>
@@ -18,7 +18,8 @@ namespace Indicium.Schemas
         /// not an undefined Lexeme it should be higher than <paramref name="inputIndex"/>.</param>
         /// <param name="matchLength">After extracting a <see cref="Lexeme"/>, save the length of the part of the string that forms it.</param>
         /// <param name="obeyEvalOrder">Obeys a <see cref="Token.EvaluationOrder"/> property.</param>
-        /// <returns></returns>
+        /// <returns>The returned <see cref="Lexeme"/> will not include a <see cref="Lexeme.LineNumber"/> value. This value should be set after
+        /// the method returns.</returns>
         public static Lexeme ExtractLexeme(this IEnumerable<Token> tokens, string input,
             int inputIndex, bool ignoreSpaces, out int index, out int matchLength, bool obeyEvalOrder = true)
         {
@@ -54,7 +55,7 @@ namespace Indicium.Schemas
 
             index++;
             return new Lexeme {
-                Id = "Undefined",
+                Id = Lexeme.Undefined.Id,
                 Value = input[index - 1].ToString(CultureInfo.InvariantCulture),
                 LineIndex = index - matchLength
             };

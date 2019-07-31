@@ -7,7 +7,7 @@ namespace Indicium.Schemas
     {
         private int _index = 0;
 
-        private int _lineNumber = 0;
+        private int _lineNumber = 1;
 
         private string _inputString = string.Empty;
 
@@ -48,10 +48,12 @@ namespace Indicium.Schemas
         }
 
         /// <summary>
-        /// When processing input strings line by line, set this value to indicate which number line,
-        /// so that tokenised output produced can refer to it. <para>Because this value is set by API
+        /// When processing input strings line by line, set this value to indicate which line number we are
+        /// currently processing, so that tokenised output can refer to it. <para>Because this value is set by API
         /// callers, the caller should communicate whether tokenised output (<see cref="Lexeme"/> objects)
         /// have their <see cref="Lexeme.LineNumber"/> set as a 0-based or 1-based value.</para>
+        /// <para>This value is ignored for <see cref="ProcessTokens(TextReader)"/> and for <see cref="ProcessTokens(string,char)"/> methods,
+        /// as the line number is determined by the input.</para>
         /// </summary>
         public int LineNumber
         {
@@ -66,7 +68,7 @@ namespace Indicium.Schemas
         {
             InputString = null;
             _index = 0;
-            _lineNumber = 0;
+            _lineNumber = 1;
         }
 
         /// <summary>
@@ -117,7 +119,27 @@ namespace Indicium.Schemas
         }
 
         /// <summary>
-        /// Process the text from a given <see cref="TextReader"/> <paramref name="reader"/>
+        /// Process a single line of text. If the string contains a return carriage or new line character,
+        /// then anything after that is ignored.
+        /// </summary>
+        /// <param name="line"></param>
+        /// <param name="lineNumber"></param>
+        /// <returns></returns>
+        public IEnumerable<Lexeme> ProcessLine(string line, int lineNumber)
+        {
+            InputString = line;
+            LineNumber = lineNumber;
+
+            var token = GetToken();
+            while (token != default(Lexeme))
+            {
+                yield return token;
+                token = GetToken();
+            }
+        }
+
+        /// <summary>
+        /// Process the text from a given <see cref="TextReader"/> (<paramref name="reader"/>)
         /// and produce tokenised output. 
         /// <para>This method usually suffices for processing arbitrary text. Finer control can be achieved using a combination of
         /// <see cref="InputString"/>, <see cref="LineNumber"/>, <see cref="LineIndex"/>, <see cref="Reset"/>, <see cref="GetTokens"/> and <see cref="GetToken"/>.</para>
@@ -131,14 +153,29 @@ namespace Indicium.Schemas
             string line;
             var lineCount = 1;
             while ((line = reader.ReadLine()) != null) {
-                InputString = line;
-                LineNumber = lineCount;
-
-                var token = GetToken();
-                while (token != default(Lexeme)) {
+                foreach (var token in ProcessLine(line, lineCount))
                     yield return token;
-                    token = GetToken();
-                }
+
+                lineCount++;
+            }
+        }
+
+        /// <summary>
+        /// Process the text from a given <see cref="string"/>, with an optional line <paramref name="delimiter"/>
+        /// and produce tokenised output.
+        /// <para>This method behaves identically to <see cref="ProcessTokens(TextReader)"/>, but accepts a <see cref="string"/>
+        /// instead of a <see cref="TextReader"/>.</para>
+        /// </summary>
+        /// <param name="string"></param>
+        /// <param name="delimiter">Defaults to new line.</param>
+        /// <returns></returns>
+        public IEnumerable<Lexeme> ProcessTokens(string @string, char delimiter = '\n')
+        {
+            Reset();
+            var lineCount = 1;
+            foreach (var line in @string.Split(delimiter)) {
+                foreach (var token in ProcessLine(line, lineCount))
+                    yield return token;
 
                 lineCount++;
             }

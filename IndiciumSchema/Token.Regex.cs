@@ -10,5 +10,11 @@ namespace Indicium.Schemas
         {
             return _regex ?? (_regex = new Text.Regex(TypedValue.Trim()));
         }
+
+        /// <summary>
+        /// Returns a new <see cref="Token"/> instance representing an undefined token, and a given <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value"></param>
+        public static Token GetUndefined(string value) => new Token { Id = "Undefined", TypedValue = value };
     }
 }
