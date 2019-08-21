@@ -13,7 +13,7 @@ namespace Indicium.Schemas
         /// <param name="tokens"></param>
         /// <param name="input">Extract a <see cref="Lexeme"/> from the given string.</param>
         /// <param name="inputIndex">The starting index to begin extracting a <see cref="Lexeme"/> from the <paramref name="input"/>.</param>
-        /// <param name="ignoreSpaces">Ignores whitespaces when attempting to extract.</param>
+        /// <param name="ignoreSpaces">Ignores whitespace chars (space and tab) when attempting to extract.</param>
         /// <param name="index">After extracting a <see cref="Lexeme"/>, save the 0-based index of it from the <see cref="input"/>. If it's
         /// not an undefined Lexeme it should be higher than <paramref name="inputIndex"/>.</param>
         /// <param name="matchLength">After extracting a <see cref="Lexeme"/>, save the length of the part of the string that forms it.</param>

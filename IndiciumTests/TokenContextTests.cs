@@ -54,7 +54,7 @@ namespace Indicium.Tests
                 }
             };
 
-            var tokensFromLyrics = Lyrics.Split('\n').SelectMany((line, i) => {
+            var tokensFromLyrics = Lyrics.Split("\r\n").SelectMany((line, i) => {
                 newContext.LineNumber = i;
                 newContext.InputString = line;
 
@@ -70,7 +70,7 @@ namespace Indicium.Tests
         {
             var context = GetDefaultContext();
 
-            var tokensFromLyrics = Lyrics.Split('\n').SelectMany((line, i) => {
+            var tokensFromLyrics = Lyrics.Split("\r\n").SelectMany((line, i) => {
                 context.LineNumber = i;
                 context.InputString = line;
 
@@ -78,7 +78,7 @@ namespace Indicium.Tests
             }).ToList();
 
             Assert.IsNotEmpty(tokensFromLyrics);
-            Assert.IsTrue(tokensFromLyrics.Count == 737);
+            Assert.IsTrue(tokensFromLyrics.Count == 736);
         }
 
         [Test]
@@ -102,11 +102,11 @@ namespace Indicium.Tests
         {
             var fullTokenList = new List<Lexeme>();
 
-            var lyricLines = Lyrics.Split('\n');
-            for (var lineNumber = 0; lineNumber < lyricLines.Length; lineNumber++) {
+            var lyricLines = Lyrics.Split("\r\n");
+            for (var lineNumber = 1; lineNumber <= lyricLines.Length; lineNumber++) {
                 _context.LineNumber = lineNumber;
                 _context.IgnoreSpaces = true;
-                _context.InputString = lyricLines[lineNumber];
+                _context.InputString = lyricLines[lineNumber-1];
 
                 var tokens = _context.GetTokens().ToList();
 
@@ -117,9 +117,9 @@ namespace Indicium.Tests
             var undefinedTokens = fullTokenList.Except(definedTokens).ToList();
 
             Assert.IsNotEmpty(fullTokenList);
-            Assert.IsTrue(fullTokenList.Count == 461);
+            Assert.IsTrue(fullTokenList.Count == 460);
             Assert.IsTrue(undefinedTokens.Count == 1);
-            Assert.IsTrue(definedTokens.Count == 460);
+            Assert.IsTrue(definedTokens.Count == 459);
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace Indicium.Tests
         {
             var fullTokenList = new List<Lexeme>();
 
-            foreach (var line in Lyrics.Split('\n')) {
+            foreach (var line in Lyrics.Split("\r\n")) {
                 _context.IgnoreSpaces = false;
                 _context.InputString = line;
 

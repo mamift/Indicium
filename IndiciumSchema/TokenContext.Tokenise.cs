@@ -21,6 +21,9 @@ namespace Indicium.Schemas
         /// Not serialised.
         /// <para>Setting this to false will result in lots of undefined tokens
         /// if there is no token definition for whitespace characters.</para>
+        /// <para>Conversely, setting this to true while there are token definitions for whitespace characters
+        /// may result in the lexeme count being much less than expected.</para>
+        /// <para>This is always <c>false</c> by default and the setting is not saved.</para>
         /// </summary>
         public bool IgnoreSpaces;
 
