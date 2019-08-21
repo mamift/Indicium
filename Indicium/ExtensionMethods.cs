@@ -21,13 +21,13 @@ namespace Indicium
             return sb.ToString();
         }
 
-        public static void AddMinimumNamespaces(this CodeNamespace cn)
+        public static void AddMinimumNamespaces(this CodeNamespace cn, bool addIndciumRef = false)
         {
             var system = nameof(System);
             var text = nameof(System.Text);
             var regularExpressions = nameof(System.Text.RegularExpressions);
             cn.Imports.Add(new CodeNamespaceImport(system));
-            cn.Imports.Add(new CodeNamespaceImport(nameof(Indicium)));
+            if (addIndciumRef) cn.Imports.Add(new CodeNamespaceImport(nameof(Indicium)));
             cn.Imports.Add(new CodeNamespaceImport($"{system}.{text}"));
             cn.Imports.Add(new CodeNamespaceImport($"{system}.{text}.{regularExpressions}"));
         }

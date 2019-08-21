@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 namespace Indicium.Tests
 {
+    [TestFixture]
     public class TokenContextTypeGeneratorTests
     {
         [Test]
@@ -11,13 +12,15 @@ namespace Indicium.Tests
         {
             var context = TokenContextTests.GetDefaultContext();
 
-            var classDeclaration = TokenContextTypeGenerator.Class(context, "CustomContext");
+            var classDeclaration = TokenContextTypeGenerator.TokenDefinitionClasses(context, "CustomContext");
 
             var textWriter = new StringWriter();
             var printer = new SyntaxPrinter(new SyntaxWriter(textWriter));
             printer.Visit(classDeclaration);
             
             var code = textWriter.GetStringBuilder().ToString();
+
+            File.WriteAllText(@".\RoslynCode.cs", code);
         }
     }
 }

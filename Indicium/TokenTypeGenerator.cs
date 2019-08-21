@@ -1,76 +1,33 @@
-﻿using System.CodeDom;
+﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Indicium.Schemas;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Indicium
 {
-    using SF = SyntaxFactory;
-    
-    public class TokenTypeGenerator
+    public partial class TokenTypeGenerator
     {
-        public static NamespaceDeclarationSyntax GenerateTokenClasses(TokenContext tokenProcessor, string nsName = "CustomTokens")
+        /// <summary>
+        /// Generates the TokenContext class that processes input strings and outputs Tokens found (in the order that they are found..
+        /// </summary>
+        /// <returns></returns>
+        public static CodeTypeDeclaration GenerateTokenContextClass()
         {
-            NamespaceDeclarationSyntax namespaceDec = SF.NamespaceDeclaration(SF.ParseName(nsName));
-            UsingDirectiveSyntax sysUsingDirective = SF.UsingDirective(SF.ParseName(nameof(System)));
-            UsingDirectiveSyntax regexUsingDirective = SF.UsingDirective(SF.ParseName($"{nameof(System)}.{nameof(System.Text)}.{nameof(System.Text.RegularExpressions)}"));
+            var type = new CodeTypeDeclaration(CodeGen.TokenContextClassName) {
+                TypeAttributes = TypeAttributes.Public,
+                IsPartial = true
+            };
 
-            namespaceDec = namespaceDec.AddUsings(sysUsingDirective, regexUsingDirective);
+            throw new NotImplementedException();
 
-            IEnumerable<string> classNames = tokenProcessor.Token.Select(td => td.Id).Distinct();
-
-            SyntaxToken publicKeyword = SF.Token(SyntaxKind.PublicKeyword);
-            SyntaxToken privateKeyword = SF.Token(SyntaxKind.PrivateKeyword);
-            SyntaxToken staticKeyword = SF.Token(SyntaxKind.StaticKeyword);
-            SyntaxToken readonlyKeyword = SF.Token(SyntaxKind.ReadOnlyKeyword);
-
-            SyntaxToken returnKeyword = SF.Token(SyntaxKind.ReturnKeyword);
-            SyntaxToken semicolonToken = SF.Token(SyntaxKind.SemicolonToken);
-            ClassDeclarationSyntax[] classDefinitions = classNames.Select(className => {
-                SyntaxToken classId = SF.Identifier(className);
-
-                ClassDeclarationSyntax classDeclaration = SF.ClassDeclaration(classId);
-                SimpleBaseTypeSyntax tokenBaseType = SF.SimpleBaseType(SF.ParseTypeName(nameof(TokenBase)));
-                classDeclaration = classDeclaration.AddModifiers(publicKeyword).AddBaseListTypes(tokenBaseType);
-
-                TypeSyntax stringType = SF.ParseTypeName(nameof(System.String));
-                TypeSyntax regexType = SF.ParseTypeName(nameof(Regex));
-
-                VariableDeclarationSyntax idFieldDeclaration = SF.VariableDeclaration(stringType)
-                                                      .AddVariables(SF.VariableDeclarator("_identifier"));
-                FieldDeclarationSyntax idField = SF.FieldDeclaration(idFieldDeclaration).AddModifiers(privateKeyword, staticKeyword);
-
-                ReturnStatementSyntax idPropGetterBlockStatement = SF.ReturnStatement(returnKeyword, SF.IdentifierName("_identifier"), semicolonToken);
-                BlockSyntax idPropGetterBlock = SF.Block(idPropGetterBlockStatement);
-                AccessorDeclarationSyntax idPropGetter = SF.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, idPropGetterBlock);
-                PropertyDeclarationSyntax idProp = SF.PropertyDeclaration(stringType, "Identifier").AddModifiers(publicKeyword).AddAccessorListAccessors(idPropGetter);
-
-                VariableDeclarationSyntax regexFieldDecl = SF.VariableDeclaration(regexType)
-                                                  .AddVariables(SF.VariableDeclarator("_regex"));
-                FieldDeclarationSyntax regexField = SF.FieldDeclaration(regexFieldDecl).AddModifiers(privateKeyword, staticKeyword);
-
-                ReturnStatementSyntax regexPropGetterBlockStatement = SF.ReturnStatement(returnKeyword, SF.IdentifierName("_regex"), semicolonToken);
-                BlockSyntax regexPropGetterBlock = SF.Block(regexPropGetterBlockStatement);
-                AccessorDeclarationSyntax regexPropGetter = SF.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration, regexPropGetterBlock);
-                PropertyDeclarationSyntax regexProp = SF.PropertyDeclaration(regexType, "Regex").AddModifiers(publicKeyword).AddAccessorListAccessors(regexPropGetter);
-
-                classDeclaration = classDeclaration.AddMembers(idField.WithTrailingTrivia(SF.EndOfLine("\r\n")), regexField, idProp, regexProp);
-
-                return classDeclaration;
-            }).ToArray();
-
-            namespaceDec = namespaceDec.AddMembers(classDefinitions);
-
-            return namespaceDec;
+            return type;
         }
 
         /// <summary>
-        /// Outputs, under a single <paramref name="namespace"/>, code for classes, that correspond to each given <see cref="TokenDefinition"/>.
+        /// Outputs, under a single <paramref name="namespace"/>, code for classes, that correspond to each given <see cref="Token"/>.
         /// </summary>
         /// <param name="tokens"></param>
         /// <param name="namespace"></param>
@@ -80,13 +37,19 @@ namespace Indicium
         {
             var containingNamespace = new CodeNamespace(@namespace);
             containingNamespace.AddMinimumNamespaces();
+            containingNamespace.Types.Add(GenerateTokenBaseClass());
+            containingNamespace.Types.Add(GenerateLexemeAbstractBaseClass());
+
             var tokenList = tokens.ToList();
 
             var ccu = new CodeCompileUnit();
-            foreach (var tokenDef in tokenList) {
-                var typeClass = GenerateClassForTokenDef(tokenDef);
 
-                containingNamespace.Types.Add(typeClass);
+            foreach (var tokenDef in tokenList) {
+                var tokenType = GenerateTokenClassForTokenDef(tokenDef);
+                var lexemeType = GenerateLexemeClassForTokenDef(tokenDef, tokenType);
+
+                containingNamespace.Types.Add(tokenType);
+                containingNamespace.Types.Add(lexemeType);
             }
 
             ccu.Namespaces.Add(containingNamespace);
@@ -94,15 +57,154 @@ namespace Indicium
         }
 
         /// <summary>
+        /// Generates the base type that Token classes inherit from.
+        /// </summary>
+        /// <returns></returns>
+        public static CodeTypeDeclaration GenerateTokenBaseClass()
+        {
+            var tokenBaseClass = new CodeTypeDeclaration(CodeGen.AbstractTokenBaseClassName) {
+                TypeAttributes = TypeAttributes.Abstract | TypeAttributes.Public,
+                IsPartial = true
+            };
+
+            var publicAbstract = MemberAttributes.Public | MemberAttributes.Abstract;
+            tokenBaseClass.AddDefaultGetter("string", "Id", publicAbstract);
+            tokenBaseClass.AddDefaultGetter(nameof(Regex), nameof(Regex), publicAbstract);
+
+            return tokenBaseClass;
+        }
+
+        /// <summary>
+        /// Generates the base type that Lexeme classes inherit from.
+        /// </summary>
+        /// <returns></returns>
+        public static CodeTypeDeclaration GenerateLexemeAbstractBaseClass()
+        {
+            const string valueVarName = "value";
+            var privateValueFieldName = $"_{valueVarName}";
+
+            var genericTTokenType = new CodeTypeParameter(CodeGen.GenericTTokenTypeName) {
+                HasConstructorConstraint = true,
+                Constraints = { CodeGen.TokenBaseCodeTypeReference }
+            };
+            var lexemeBaseClass = new CodeTypeDeclaration(CodeGen.AbstractLexemeBaseClassName) {
+                TypeAttributes = TypeAttributes.Public | TypeAttributes.Abstract,
+                IsPartial = true,
+                TypeParameters = { genericTTokenType}
+            };
+
+            lexemeBaseClass.AddDefaultGetter(CodeGen.GenericTTokenTypeName, "Token", MemberAttributes.Public | MemberAttributes.Abstract);
+
+            var valueField = new CodeMemberField {
+                Name = privateValueFieldName,
+                Type = new CodeTypeReference(typeof(string)),
+                Attributes = MemberAttributes.Family | MemberAttributes.Final,
+            };
+            var valueProp = new CodeMemberProperty {
+                Type = new CodeTypeReference(typeof(string)),
+                Name = "Value",
+                Attributes = MemberAttributes.Public | MemberAttributes.Final,
+                HasGet = true,
+                GetStatements = {
+                    new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), privateValueFieldName))
+                }
+            };
+            
+            var throwArgNullExceptionStmt = new CodeThrowExceptionStatement(
+                new CodeObjectCreateExpression(
+                    new CodeTypeReference(nameof(ArgumentNullException)), new CodeSnippetExpression($"nameof({valueVarName})")));
+            
+            var stringIsNullOrWhitespaceInvocation = new CodeMethodInvokeExpression(
+                new CodeTypeReferenceExpression(
+                    new CodeTypeReference(typeof(string))), 
+                nameof(string.IsNullOrEmpty), 
+                new CodeVariableReferenceExpression(valueVarName));
+
+            var ifValueIsNullStmt = new CodeConditionStatement(
+                stringIsNullOrWhitespaceInvocation, throwArgNullExceptionStmt);
+            
+            var constructor = new CodeConstructor() {
+                Parameters = {
+                    new CodeParameterDeclarationExpression(typeof(string), valueVarName)
+                },
+                Name = lexemeBaseClass.Name,
+                Attributes = MemberAttributes.Family,
+                Statements = {
+                    ifValueIsNullStmt,
+                    new CodeAssignStatement(
+                        new CodePropertyReferenceExpression(
+                            new CodeThisReferenceExpression(), 
+                            privateValueFieldName), 
+                        new CodeVariableReferenceExpression(valueVarName))
+                }
+            };
+            
+            lexemeBaseClass.Members.Add(valueField);
+            lexemeBaseClass.Members.Add(valueProp);
+
+            lexemeBaseClass.Members.Add(constructor);
+
+            return lexemeBaseClass;
+        }
+
+        /// <summary>
+        /// Generates the Lexeme classes accompanies each Token class.
+        /// </summary>
+        /// <param name="tokenDef"></param>
+        /// <param name="tokenType"></param>
+        /// <returns></returns>
+        public static CodeTypeDeclaration GenerateLexemeClassForTokenDef(Token tokenDef, CodeTypeDeclaration tokenType)
+        {
+            const string valueFieldName = "value";
+
+            var lexemeTypeName = $"{tokenDef.Id}Lexeme";
+
+            var lexemeType = new CodeTypeDeclaration(lexemeTypeName) {
+                TypeAttributes = TypeAttributes.Public,
+                IsPartial = true,
+                BaseTypes = { new CodeTypeReference(new CodeTypeParameter(CodeGen.AbstractLexemeBaseClassName)) {
+                    TypeArguments = {
+                        new CodeTypeReference(tokenType.Name)
+                    }
+                }}
+            };
+
+            var overriddenTokenProp = new CodeMemberProperty {
+                Name = "Token",
+                Type = new CodeTypeReference(new CodeTypeParameter($"{tokenDef.Id}Token")),
+                Attributes = MemberAttributes.Public | MemberAttributes.Override,
+                HasGet = true,
+                GetStatements = {
+                    new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(tokenType.Name), "Default"))
+                },
+            };
+            
+            var constructor = new CodeConstructor() {
+                Parameters = {
+                    new CodeParameterDeclarationExpression(typeof(string), valueFieldName)
+                },
+                Name = lexemeType.Name,
+                Attributes = MemberAttributes.Public,
+                BaseConstructorArgs = { new CodeVariableReferenceExpression(valueFieldName) },
+            };
+
+            lexemeType.Members.Add(overriddenTokenProp);
+            lexemeType.Members.Add(constructor);
+
+            return lexemeType;
+        }
+
+        /// <summary>
         /// Generates the class (fields and properties) for a given <paramref name="tokenDef"/>.
         /// </summary>
         /// <param name="tokenDef"></param>
         /// <returns></returns>
-        private static CodeTypeDeclaration GenerateClassForTokenDef(Token tokenDef)
+        public static CodeTypeDeclaration GenerateTokenClassForTokenDef(Token tokenDef)
         {
             var tokenClass = new CodeTypeDeclaration($"{tokenDef.Id}Token") {
-                TypeAttributes = TypeAttributes.Sealed | TypeAttributes.Public,
-                BaseTypes = {new CodeTypeReference(new CodeTypeParameter(nameof(TokenBase)))}
+                TypeAttributes = TypeAttributes.Public,
+                BaseTypes = {new CodeTypeReference(new CodeTypeParameter(CodeGen.AbstractTokenBaseClassName))},
+                IsPartial = true
             };
 
             // private member fields
@@ -119,16 +221,19 @@ namespace Indicium
             var privateRegexField = new CodeMemberField {
                 Attributes = MemberAttributes.Private | MemberAttributes.Static,
                 Name = nameof(Regex).Privatise(),
-                Type = new CodeTypeReference(nameof(Regex)),
+                Type = CodeGen.RegexCodeTypeReferenceByName,
                 InitExpression = privateRegexFieldInitialisation
             };
 
             // public properties
             var identifierPropertyReturnStatement = new CodeMethodReturnStatement(
                                                         new CodeFieldReferenceExpression(
-                                                            new CodeVariableReferenceExpression(tokenClass.Name), privateIdentifierField.Name));
+                                                            new CodeTypeReferenceExpression(tokenClass.Name), privateIdentifierField.Name));
+
+            var propertyAttrs = MemberAttributes.Public | MemberAttributes.Override;
+
             var identifierProperty = new CodeMemberProperty {
-                Attributes = MemberAttributes.Public | MemberAttributes.Final,
+                Attributes = propertyAttrs,
                 Name = nameof(tokenDef.Id),
                 HasGet = true,
                 HasSet = false,
@@ -139,14 +244,30 @@ namespace Indicium
 
             var regexPropertyReturnStatement = new CodeMethodReturnStatement(
                                                 new CodeFieldReferenceExpression(
-                                                    new CodeVariableReferenceExpression(tokenClass.Name), privateRegexField.Name));
+                                                    new CodeTypeReferenceExpression(tokenClass.Name), privateRegexField.Name));
             var regexProperty = new CodeMemberProperty {
-                Attributes = MemberAttributes.Public | MemberAttributes.Final,
+                Attributes = propertyAttrs,
                 Name = nameof(Regex),
                 HasSet = false, HasGet = true,
                 ImplementationTypes = {new CodeTypeReference(typeof(Regex))},
                 GetStatements = {regexPropertyReturnStatement},
-                Type = new CodeTypeReference(nameof(Regex))
+                Type = CodeGen.RegexCodeTypeReferenceByName
+            };
+
+            //default value
+            var defaultFieldName = "_default";
+            var privateStaticDefaultToken = new CodeMemberField(tokenClass.Name, defaultFieldName) {
+                Attributes = MemberAttributes.Private | MemberAttributes.Static,
+                InitExpression = new CodeObjectCreateExpression(new CodeTypeReference(new CodeTypeParameter(tokenClass.Name)))
+            };
+            var publicStaticDefaultGetter = new CodeMemberProperty() {
+                Name = "Default",
+                Attributes = MemberAttributes.Public | MemberAttributes.Static,
+                Type = new CodeTypeReference(new CodeTypeParameter(tokenClass.Name)),
+                HasGet = true,
+                GetStatements = {
+                    new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(tokenClass.Name), defaultFieldName))
+                }
             };
 
             var constructor = new CodeConstructor {
@@ -155,9 +276,11 @@ namespace Indicium
 
             tokenClass.Members.Add(privateIdentifierField);
             tokenClass.Members.Add(privateRegexField);
-
+            tokenClass.Members.Add(privateStaticDefaultToken);
+            
             tokenClass.Members.Add(identifierProperty);
             tokenClass.Members.Add(regexProperty);
+            tokenClass.Members.Add(publicStaticDefaultGetter);
 
             tokenClass.Members.Add(constructor);
 

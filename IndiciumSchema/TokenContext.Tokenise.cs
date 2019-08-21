@@ -54,6 +54,7 @@ namespace Indicium.Schemas
         /// have their <see cref="Lexeme.LineNumber"/> set as a 0-based or 1-based value.</para>
         /// <para>This value is ignored for <see cref="ProcessTokens(TextReader)"/> and for <see cref="ProcessTokens(string,char)"/> methods,
         /// as the line number is determined by the input.</para>
+        /// <para>Defaults to 1.</para>
         /// </summary>
         public int LineNumber
         {

@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 namespace Indicium.Tests
 {
+    [TestFixture]
     public class TypeGeneratorTests
     {
         public TokenContext Context { get; set; }

@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 namespace Indicium.Tests
 {
+    [TestFixture]
     public class TokenTypeGeneratorTests
     {
         public TokenContext Context { get; set; }
@@ -49,7 +50,8 @@ namespace Indicium.Tests
             {
                 BlankLinesBetweenMembers = true,
                 BracingStyle = "Block",
-                VerbatimOrder = true
+                VerbatimOrder = true,
+                IndentString = "\t"
             };
             var codeDomSb = new StringBuilder();
             var sw = new StringWriter(codeDomSb);

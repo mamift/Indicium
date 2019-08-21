@@ -6,7 +6,7 @@ using Xml.Schema.Linq.Extensions;
 
 namespace Indicium
 {
-    public class TokenContextTypeGenerator
+    public static class TokenContextTypeGenerator
     {
         private static TypeSyntax NewGenericTypeName(string genericType, string genericArg1)
         {
@@ -25,7 +25,13 @@ namespace Indicium
             return default(NamespaceDeclarationSyntax);
         }
 
-        public static ClassDeclarationSyntax Class(TokenContext context, string identifier)
+        /// <summary>
+        /// Generates the source code for token definitions.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="identifier"></param>
+        /// <returns></returns>
+        public static ClassDeclarationSyntax TokenDefinitionClasses(TokenContext context, string identifier)
         {
             if (identifier.IsEmpty()) throw new ArgumentNullException(nameof(identifier));
 
@@ -62,7 +68,8 @@ namespace Indicium
                                     Expression = new MemberAccessExpressionSyntax {
                                         Name = new IdentifierNameSyntax {
                                             Identifier = tokensIdentifier
-                                        }
+                                        },
+                                        Expression = new ThisExpressionSyntax()
                                     }
                                 }
                             }

@@ -34,16 +34,16 @@ namespace Indicium.Schemas {
         private XTypedList<TokenGroup> TokenGroupField;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        static Dictionary<XName, System.Type> localElementDictionary = new Dictionary<XName, System.Type>();
+        private static Dictionary<System.Xml.Linq.XName, System.Type> localElementDictionary = new Dictionary<System.Xml.Linq.XName, System.Type>();
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private static ContentModelEntity contentModel;
         
-         public static explicit operator TokenContext(XElement xe) { return XTypedServices.ToXTypedElement<TokenContext>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
+		public static explicit operator TokenContext(XElement xe) { return XTypedServices.ToXTypedElement<TokenContext>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
         
         static TokenContext() {
             BuildElementDictionary();
-            contentModel = new SequenceContentModelEntity(new NamedContentModelEntity(XName.Get("Token", "https://github.com/mamift/Indicium")), new NamedContentModelEntity(XName.Get("TokenGroup", "https://github.com/mamift/Indicium")));
+            contentModel = new SequenceContentModelEntity(new NamedContentModelEntity(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium")), new NamedContentModelEntity(System.Xml.Linq.XName.Get("TokenGroup", "https://github.com/mamift/Indicium")));
         }
         
         /// <summary>
@@ -62,10 +62,10 @@ namespace Indicium.Schemas {
         /// Regular expression: (Token+, TokenGroup*)
         /// </para>
         /// </summary>
-        public IList<Token> Token {
+        public virtual IList<Token> Token {
             get {
                 if ((this.TokenField == null)) {
-                    this.TokenField = new XTypedList<Token>(this, LinqToXsdTypeManager.Instance, XName.Get("Token", "https://github.com/mamift/Indicium"));
+                    this.TokenField = new XTypedList<Token>(this, LinqToXsdTypeManager.Instance, System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"));
                 }
                 return this.TokenField;
             }
@@ -75,7 +75,7 @@ namespace Indicium.Schemas {
                 }
                 else {
                     if ((this.TokenField == null)) {
-                        this.TokenField = XTypedList<Token>.Initialize(this, LinqToXsdTypeManager.Instance, value, XName.Get("Token", "https://github.com/mamift/Indicium"));
+                        this.TokenField = XTypedList<Token>.Initialize(this, LinqToXsdTypeManager.Instance, value, System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"));
                     }
                     else {
                         XTypedServices.SetList<Token>(this.TokenField, value);
@@ -92,10 +92,10 @@ namespace Indicium.Schemas {
         /// Regular expression: (Token+, TokenGroup*)
         /// </para>
         /// </summary>
-        public IList<TokenGroup> TokenGroup {
+        public virtual IList<TokenGroup> TokenGroup {
             get {
                 if ((this.TokenGroupField == null)) {
-                    this.TokenGroupField = new XTypedList<TokenGroup>(this, LinqToXsdTypeManager.Instance, XName.Get("TokenGroup", "https://github.com/mamift/Indicium"));
+                    this.TokenGroupField = new XTypedList<TokenGroup>(this, LinqToXsdTypeManager.Instance, System.Xml.Linq.XName.Get("TokenGroup", "https://github.com/mamift/Indicium"));
                 }
                 return this.TokenGroupField;
             }
@@ -105,7 +105,7 @@ namespace Indicium.Schemas {
                 }
                 else {
                     if ((this.TokenGroupField == null)) {
-                        this.TokenGroupField = XTypedList<TokenGroup>.Initialize(this, LinqToXsdTypeManager.Instance, value, XName.Get("TokenGroup", "https://github.com/mamift/Indicium"));
+                        this.TokenGroupField = XTypedList<TokenGroup>.Initialize(this, LinqToXsdTypeManager.Instance, value, System.Xml.Linq.XName.Get("TokenGroup", "https://github.com/mamift/Indicium"));
                     }
                     else {
                         XTypedServices.SetList<TokenGroup>(this.TokenGroupField, value);
@@ -122,13 +122,13 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string ClassName {
+        public virtual string ClassName {
             get {
-                XAttribute x = this.Attribute(XName.Get("ClassName", ""));
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("ClassName", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
             set {
-                this.SetAttribute(XName.Get("ClassName", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+                this.SetAttribute(System.Xml.Linq.XName.Get("ClassName", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
@@ -140,27 +140,27 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string NamespaceName {
+        public virtual string NamespaceName {
             get {
-                XAttribute x = this.Attribute(XName.Get("NamespaceName", ""));
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("NamespaceName", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
             set {
-                this.SetAttribute(XName.Get("NamespaceName", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+                this.SetAttribute(System.Xml.Linq.XName.Get("NamespaceName", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        Dictionary<XName, System.Type> IXMetaData.LocalElementsDictionary {
+        Dictionary<System.Xml.Linq.XName, System.Type> IXMetaData.LocalElementsDictionary {
             get {
                 return localElementDictionary;
             }
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        XName IXMetaData.SchemaName {
+        System.Xml.Linq.XName IXMetaData.SchemaName {
             get {
-                return XName.Get("TokenContext", "https://github.com/mamift/Indicium");
+                return System.Xml.Linq.XName.Get("TokenContext", "https://github.com/mamift/Indicium");
             }
         }
         
@@ -207,8 +207,8 @@ namespace Indicium.Schemas {
         }
         
         private static void BuildElementDictionary() {
-            localElementDictionary.Add(XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(Token));
-            localElementDictionary.Add(XName.Get("TokenGroup", "https://github.com/mamift/Indicium"), typeof(TokenGroup));
+            localElementDictionary.Add(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(Token));
+            localElementDictionary.Add(System.Xml.Linq.XName.Get("TokenGroup", "https://github.com/mamift/Indicium"), typeof(TokenGroup));
         }
         
         ContentModelEntity IXMetaData.GetContentModel() {
@@ -227,16 +227,16 @@ namespace Indicium.Schemas {
         private XTypedList<Token> TokenField;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        static Dictionary<XName, System.Type> localElementDictionary = new Dictionary<XName, System.Type>();
+        private static Dictionary<System.Xml.Linq.XName, System.Type> localElementDictionary = new Dictionary<System.Xml.Linq.XName, System.Type>();
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private static ContentModelEntity contentModel;
         
-         public static explicit operator TokenGroup(XElement xe) { return XTypedServices.ToXTypedElement<TokenGroup>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
+		public static explicit operator TokenGroup(XElement xe) { return XTypedServices.ToXTypedElement<TokenGroup>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
         
         static TokenGroup() {
             BuildElementDictionary();
-            contentModel = new SequenceContentModelEntity(new NamedContentModelEntity(XName.Get("Token", "https://github.com/mamift/Indicium")));
+            contentModel = new SequenceContentModelEntity(new NamedContentModelEntity(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium")));
         }
         
         /// <summary>
@@ -255,10 +255,10 @@ namespace Indicium.Schemas {
         /// Regular expression: (Token+)
         /// </para>
         /// </summary>
-        public IList<Token> Token {
+        public virtual IList<Token> Token {
             get {
                 if ((this.TokenField == null)) {
-                    this.TokenField = new XTypedList<Token>(this, LinqToXsdTypeManager.Instance, XName.Get("Token", "https://github.com/mamift/Indicium"));
+                    this.TokenField = new XTypedList<Token>(this, LinqToXsdTypeManager.Instance, System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"));
                 }
                 return this.TokenField;
             }
@@ -268,7 +268,7 @@ namespace Indicium.Schemas {
                 }
                 else {
                     if ((this.TokenField == null)) {
-                        this.TokenField = XTypedList<Token>.Initialize(this, LinqToXsdTypeManager.Instance, value, XName.Get("Token", "https://github.com/mamift/Indicium"));
+                        this.TokenField = XTypedList<Token>.Initialize(this, LinqToXsdTypeManager.Instance, value, System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"));
                     }
                     else {
                         XTypedServices.SetList<Token>(this.TokenField, value);
@@ -285,13 +285,13 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string ClassName {
+        public virtual string ClassName {
             get {
-                XAttribute x = this.Attribute(XName.Get("ClassName", ""));
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("ClassName", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
             set {
-                this.SetAttribute(XName.Get("ClassName", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+                this.SetAttribute(System.Xml.Linq.XName.Get("ClassName", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
@@ -303,27 +303,27 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string NamespaceName {
+        public virtual string NamespaceName {
             get {
-                XAttribute x = this.Attribute(XName.Get("NamespaceName", ""));
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("NamespaceName", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
             set {
-                this.SetAttribute(XName.Get("NamespaceName", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+                this.SetAttribute(System.Xml.Linq.XName.Get("NamespaceName", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        Dictionary<XName, System.Type> IXMetaData.LocalElementsDictionary {
+        Dictionary<System.Xml.Linq.XName, System.Type> IXMetaData.LocalElementsDictionary {
             get {
                 return localElementDictionary;
             }
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        XName IXMetaData.SchemaName {
+        System.Xml.Linq.XName IXMetaData.SchemaName {
             get {
-                return XName.Get("TokenGroup", "https://github.com/mamift/Indicium");
+                return System.Xml.Linq.XName.Get("TokenGroup", "https://github.com/mamift/Indicium");
             }
         }
         
@@ -370,7 +370,7 @@ namespace Indicium.Schemas {
         }
         
         private static void BuildElementDictionary() {
-            localElementDictionary.Add(XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(Token));
+            localElementDictionary.Add(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(Token));
         }
         
         ContentModelEntity IXMetaData.GetContentModel() {
@@ -389,9 +389,9 @@ namespace Indicium.Schemas {
         private XTypedList<Token> TokenField;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        static Dictionary<XName, System.Type> localElementDictionary = new Dictionary<XName, System.Type>();
+        private static Dictionary<System.Xml.Linq.XName, System.Type> localElementDictionary = new Dictionary<System.Xml.Linq.XName, System.Type>();
         
-         public static explicit operator Expression(XElement xe) { return XTypedServices.ToXTypedElement<Expression>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
+		public static explicit operator Expression(XElement xe) { return XTypedServices.ToXTypedElement<Expression>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
         
         static Expression() {
             BuildElementDictionary();
@@ -416,10 +416,10 @@ namespace Indicium.Schemas {
         /// Regular expression: ((Token+)*)
         /// </para>
         /// </summary>
-        public IList<Token> Token {
+        public virtual IList<Token> Token {
             get {
                 if ((this.TokenField == null)) {
-                    this.TokenField = new XTypedList<Token>(this, LinqToXsdTypeManager.Instance, XName.Get("Token", "https://github.com/mamift/Indicium"));
+                    this.TokenField = new XTypedList<Token>(this, LinqToXsdTypeManager.Instance, System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"));
                 }
                 return this.TokenField;
             }
@@ -429,7 +429,7 @@ namespace Indicium.Schemas {
                 }
                 else {
                     if ((this.TokenField == null)) {
-                        this.TokenField = XTypedList<Token>.Initialize(this, LinqToXsdTypeManager.Instance, value, XName.Get("Token", "https://github.com/mamift/Indicium"));
+                        this.TokenField = XTypedList<Token>.Initialize(this, LinqToXsdTypeManager.Instance, value, System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"));
                     }
                     else {
                         XTypedServices.SetList<Token>(this.TokenField, value);
@@ -439,16 +439,16 @@ namespace Indicium.Schemas {
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        Dictionary<XName, System.Type> IXMetaData.LocalElementsDictionary {
+        Dictionary<System.Xml.Linq.XName, System.Type> IXMetaData.LocalElementsDictionary {
             get {
                 return localElementDictionary;
             }
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        XName IXMetaData.SchemaName {
+        System.Xml.Linq.XName IXMetaData.SchemaName {
             get {
-                return XName.Get("Expression", "https://github.com/mamift/Indicium");
+                return System.Xml.Linq.XName.Get("Expression", "https://github.com/mamift/Indicium");
             }
         }
         
@@ -495,7 +495,7 @@ namespace Indicium.Schemas {
         }
         
         private static void BuildElementDictionary() {
-            localElementDictionary.Add(XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(Token));
+            localElementDictionary.Add(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(Token));
         }
         
         ContentModelEntity IXMetaData.GetContentModel() {
@@ -524,7 +524,7 @@ namespace Indicium.Schemas {
     /// </summary>
     public partial class TToken : XTypedElement, IXMetaData {
         
-         public static explicit operator TToken(XElement xe) { return XTypedServices.ToXTypedElement<TToken>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
+		public static explicit operator TToken(XElement xe) { return XTypedServices.ToXTypedElement<TToken>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
         
         /// <summary>
         /// <para>
@@ -534,7 +534,7 @@ namespace Indicium.Schemas {
         public TToken() {
         }
         
-        public string TypedValue {
+        public virtual string TypedValue {
             get {
                 XElement x = this.Untyped;
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.NormalizedString).Datatype);
@@ -552,16 +552,16 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public System.Nullable<int> EvaluationOrder {
+        public virtual System.Nullable<int> EvaluationOrder {
             get {
-                XAttribute x = this.Attribute(XName.Get("EvaluationOrder", ""));
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("EvaluationOrder", ""));
                 if ((x == null)) {
                     return null;
                 }
                 return XTypedServices.ParseValue<int>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
             }
             set {
-                this.SetAttribute(XName.Get("EvaluationOrder", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
+                this.SetAttribute(System.Xml.Linq.XName.Get("EvaluationOrder", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
             }
         }
         
@@ -573,13 +573,13 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string Id {
+        public virtual string Id {
             get {
-                XAttribute x = this.Attribute(XName.Get("Id", ""));
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Id", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Id).Datatype);
             }
             set {
-                this.SetAttribute(XName.Get("Id", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Id).Datatype);
+                this.SetAttribute(System.Xml.Linq.XName.Get("Id", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Id).Datatype);
             }
         }
         
@@ -591,13 +591,13 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string @Ref {
+        public virtual string @Ref {
             get {
-                XAttribute x = this.Attribute(XName.Get("Ref", ""));
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Ref", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
             }
             set {
-                this.SetAttribute(XName.Get("Ref", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
+                this.SetAttribute(System.Xml.Linq.XName.Get("Ref", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
             }
         }
         
@@ -609,20 +609,20 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string Description {
+        public virtual string Description {
             get {
-                XAttribute x = this.Attribute(XName.Get("Description", ""));
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Description", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
             set {
-                this.SetAttribute(XName.Get("Description", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+                this.SetAttribute(System.Xml.Linq.XName.Get("Description", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        XName IXMetaData.SchemaName {
+        System.Xml.Linq.XName IXMetaData.SchemaName {
             get {
-                return XName.Get("TToken", "https://github.com/mamift/Indicium");
+                return System.Xml.Linq.XName.Get("TToken", "https://github.com/mamift/Indicium");
             }
         }
         
@@ -659,7 +659,7 @@ namespace Indicium.Schemas {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private TToken ContentField;
         
-         public static explicit operator Token(XElement xe) { return XTypedServices.ToXTypedElement<Token, TToken>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
+		public static explicit operator Token(XElement xe) { return XTypedServices.ToXTypedElement<Token, TToken>(xe,LinqToXsdTypeManager.Instance as ILinqToXsdTypeManager); }
         
         /// <summary>
         /// <para>
@@ -689,13 +689,13 @@ namespace Indicium.Schemas {
             }
         }
         
-        public TToken Content {
+        public virtual TToken Content {
             get {
                 return ContentField;
             }
         }
         
-        public string TypedValue {
+        public virtual string TypedValue {
             get {
                 return this.ContentField.TypedValue;
             }
@@ -712,7 +712,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public System.Nullable<int> EvaluationOrder {
+        public virtual System.Nullable<int> EvaluationOrder {
             get {
                 return this.ContentField.EvaluationOrder;
             }
@@ -729,7 +729,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string Id {
+        public virtual string Id {
             get {
                 return this.ContentField.Id;
             }
@@ -746,7 +746,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string @Ref {
+        public virtual string @Ref {
             get {
                 return this.ContentField.@Ref;
             }
@@ -763,7 +763,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public string Description {
+        public virtual string Description {
             get {
                 return this.ContentField.Description;
             }
@@ -772,7 +772,7 @@ namespace Indicium.Schemas {
             }
         }
         
-        Dictionary<XName, System.Type> IXMetaData.LocalElementsDictionary {
+        Dictionary<System.Xml.Linq.XName, System.Type> IXMetaData.LocalElementsDictionary {
             get {
                 IXMetaData schemaMetaData = ((IXMetaData)(this.Content));
                 return schemaMetaData.LocalElementsDictionary;
@@ -786,9 +786,9 @@ namespace Indicium.Schemas {
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        XName IXMetaData.SchemaName {
+        System.Xml.Linq.XName IXMetaData.SchemaName {
             get {
-                return XName.Get("Token", "https://github.com/mamift/Indicium");
+                return System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium");
             }
         }
         
@@ -846,16 +846,16 @@ namespace Indicium.Schemas {
     
     public class LinqToXsdTypeManager : ILinqToXsdTypeManager {
         
-        static Dictionary<XName, System.Type> typeDictionary = new Dictionary<XName, System.Type>();
+        private static Dictionary<System.Xml.Linq.XName, System.Type> typeDictionary = new Dictionary<System.Xml.Linq.XName, System.Type>();
         
-        static Dictionary<XName, System.Type> elementDictionary = new Dictionary<XName, System.Type>();
+        private static Dictionary<System.Xml.Linq.XName, System.Type> elementDictionary = new Dictionary<System.Xml.Linq.XName, System.Type>();
         
-        static Dictionary<System.Type, System.Type> wrapperDictionary = new Dictionary<System.Type, System.Type>();
+        private static Dictionary<System.Type, System.Type> wrapperDictionary = new Dictionary<System.Type, System.Type>();
         
         private static XmlSchemaSet schemaSet;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        static LinqToXsdTypeManager typeManagerSingleton = new LinqToXsdTypeManager();
+        private static LinqToXsdTypeManager typeManagerSingleton = new LinqToXsdTypeManager();
         
         static LinqToXsdTypeManager() {
             BuildTypeDictionary();
@@ -876,13 +876,13 @@ namespace Indicium.Schemas {
             }
         }
         
-        Dictionary<XName, System.Type> ILinqToXsdTypeManager.GlobalTypeDictionary {
+        Dictionary<System.Xml.Linq.XName, System.Type> ILinqToXsdTypeManager.GlobalTypeDictionary {
             get {
                 return typeDictionary;
             }
         }
         
-        Dictionary<XName, System.Type> ILinqToXsdTypeManager.GlobalElementDictionary {
+        Dictionary<System.Xml.Linq.XName, System.Type> ILinqToXsdTypeManager.GlobalElementDictionary {
             get {
                 return elementDictionary;
             }
@@ -901,14 +901,14 @@ namespace Indicium.Schemas {
         }
         
         private static void BuildTypeDictionary() {
-            typeDictionary.Add(XName.Get("TToken", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.TToken));
+            typeDictionary.Add(System.Xml.Linq.XName.Get("TToken", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.TToken));
         }
         
         private static void BuildElementDictionary() {
-            elementDictionary.Add(XName.Get("TokenContext", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.TokenContext));
-            elementDictionary.Add(XName.Get("TokenGroup", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.TokenGroup));
-            elementDictionary.Add(XName.Get("Expression", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.Expression));
-            elementDictionary.Add(XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.Token));
+            elementDictionary.Add(System.Xml.Linq.XName.Get("TokenContext", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.TokenContext));
+            elementDictionary.Add(System.Xml.Linq.XName.Get("TokenGroup", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.TokenGroup));
+            elementDictionary.Add(System.Xml.Linq.XName.Get("Expression", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.Expression));
+            elementDictionary.Add(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(global::Indicium.Schemas.Token));
         }
         
         private static void BuildWrapperDictionary() {
@@ -920,7 +920,7 @@ namespace Indicium.Schemas {
         }
         
         public static System.Type GetRootType() {
-            return elementDictionary[XName.Get("TokenContext", "https://github.com/mamift/Indicium")];
+            return elementDictionary[System.Xml.Linq.XName.Get("TokenContext", "https://github.com/mamift/Indicium")];
         }
     }
     
@@ -933,13 +933,13 @@ namespace Indicium.Schemas {
         private XTypedElement rootObject;
         
 
-    public TokenContext TokenContext {  get {return rootObject as TokenContext; } }
+		public TokenContext TokenContext {  get {return rootObject as TokenContext; } }
 
-    public TokenGroup TokenGroup {  get {return rootObject as TokenGroup; } }
+		public TokenGroup TokenGroup {  get {return rootObject as TokenGroup; } }
 
-    public Expression Expression {  get {return rootObject as Expression; } }
+		public Expression Expression {  get {return rootObject as Expression; } }
 
-    public Token Token {  get {return rootObject as Token; } }
+		public Token Token {  get {return rootObject as Token; } }
         
         private XRootNamespace() {
         }
@@ -964,7 +964,7 @@ namespace Indicium.Schemas {
             this.rootObject = root;
         }
         
-        public XDocument XDocument {
+        public virtual XDocument XDocument {
             get {
                 return doc;
             }
@@ -1077,13 +1077,13 @@ namespace Indicium.Schemas {
         private XTypedElement rootObject;
         
 
-    public global::Indicium.Schemas.TokenContext TokenContext {  get {return rootObject as global::Indicium.Schemas.TokenContext; } }
+		public global::Indicium.Schemas.TokenContext TokenContext {  get {return rootObject as global::Indicium.Schemas.TokenContext; } }
 
-    public global::Indicium.Schemas.TokenGroup TokenGroup {  get {return rootObject as global::Indicium.Schemas.TokenGroup; } }
+		public global::Indicium.Schemas.TokenGroup TokenGroup {  get {return rootObject as global::Indicium.Schemas.TokenGroup; } }
 
-    public global::Indicium.Schemas.Expression Expression {  get {return rootObject as global::Indicium.Schemas.Expression; } }
+		public global::Indicium.Schemas.Expression Expression {  get {return rootObject as global::Indicium.Schemas.Expression; } }
 
-    public global::Indicium.Schemas.Token Token {  get {return rootObject as global::Indicium.Schemas.Token; } }
+		public global::Indicium.Schemas.Token Token {  get {return rootObject as global::Indicium.Schemas.Token; } }
         
         private XRoot() {
         }
@@ -1108,7 +1108,7 @@ namespace Indicium.Schemas {
             this.rootObject = root;
         }
         
-        public XDocument XDocument {
+        public virtual XDocument XDocument {
             get {
                 return doc;
             }

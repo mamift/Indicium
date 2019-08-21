@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 namespace Indicium.Tests
 {
+    [TestFixture]
     public class TokenContextTests
     {
         public static readonly string Lyrics = File.ReadAllText("lyrics.txt");
