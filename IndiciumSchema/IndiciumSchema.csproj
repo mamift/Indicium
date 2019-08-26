@@ -6,6 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="SimpleBASIC.txt" />
+    <None Remove="SimpleBASIC.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="SimpleBASIC.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SimpleBASIC.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="XObjectsCore" Version="3.0.0.2" />
   </ItemGroup>
 
