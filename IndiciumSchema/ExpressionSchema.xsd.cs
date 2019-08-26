@@ -150,6 +150,45 @@ namespace Indicium.Schemas {
             }
         }
         
+        /// <summary>
+        /// <para>
+        /// Generate a public Enum type that enumerates the Tokens defined.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public virtual System.Nullable<bool> GenerateEnums {
+            get {
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("GenerateEnums", ""));
+                if ((x == null)) {
+                    return null;
+                }
+                return XTypedServices.ParseValue<bool>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Boolean).Datatype);
+            }
+            set {
+                this.SetAttribute(System.Xml.Linq.XName.Get("GenerateEnums", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Boolean).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Determines the generated types visiblity: public or internal. Unrecognised values default to public.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public virtual string Visibility {
+            get {
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Visibility", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+            set {
+                this.SetAttribute(System.Xml.Linq.XName.Get("Visibility", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         Dictionary<System.Xml.Linq.XName, System.Type> IXMetaData.LocalElementsDictionary {
             get {
@@ -310,6 +349,45 @@ namespace Indicium.Schemas {
             }
             set {
                 this.SetAttribute(System.Xml.Linq.XName.Get("NamespaceName", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Generate a public Enum type that enumerates the Tokens defined.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public virtual System.Nullable<bool> GenerateEnums {
+            get {
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("GenerateEnums", ""));
+                if ((x == null)) {
+                    return null;
+                }
+                return XTypedServices.ParseValue<bool>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Boolean).Datatype);
+            }
+            set {
+                this.SetAttribute(System.Xml.Linq.XName.Get("GenerateEnums", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Boolean).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Determines the generated types visiblity: public or internal. Unrecognised values default to public.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public virtual string Visibility {
+            get {
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Visibility", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+            set {
+                this.SetAttribute(System.Xml.Linq.XName.Get("Visibility", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
@@ -567,7 +645,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// The unique identifier for this element.
+        /// The unique identifier for this element. This is optional, as a Token element may actually refer to one already defined.
         /// </para>
         /// <para>
         /// Occurrence: optional
@@ -723,7 +801,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// The unique identifier for this element.
+        /// The unique identifier for this element. This is optional, as a Token element may actually refer to one already defined.
         /// </para>
         /// <para>
         /// Occurrence: optional

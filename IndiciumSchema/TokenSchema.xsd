@@ -67,10 +67,10 @@
     <xs:attributeGroup name="IdRefDescription">
         <xs:attribute name="Id" type="xs:ID">
             <xs:annotation>
-                <xs:documentation>The unique identifier for this element.</xs:documentation>
+                <xs:documentation>The unique identifier for this element. This is optional, as a Token element may actually refer to one already defined.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="Ref" type="xs:IDREF" use="optional">
+        <xs:attribute name="Ref" type="xs:IDREF">
             <xs:annotation>
                 <xs:documentation>Refer to another already defined element. Other attributes on this element will be ignored if this attribute has a value.</xs:documentation>
             </xs:annotation>
@@ -90,6 +90,16 @@
         <xs:attribute name="NamespaceName" type="xs:string">
             <xs:annotation>
                 <xs:documentation>Used only for code generation; specify a namespace to use when generating code.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="GenerateEnums" type="xs:boolean">
+            <xs:annotation>
+                <xs:documentation>Generate a public Enum type that enumerates the Tokens defined.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="Visibility" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Determines the generated types visiblity: public or internal. Unrecognised values default to public.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>

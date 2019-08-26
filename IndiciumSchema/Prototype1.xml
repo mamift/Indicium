@@ -13,9 +13,4 @@
   <Token Id="Colon">\:</Token>
   <Token Id="Semicolon">\;</Token>
   <Token Id="Identifier">[a-zA-Z_][a-zA-Z0-9_]*</Token>
-  <TokenGroup Id="String">
-    <Token Ref="QuotationMark" />
-    <Token>.*</Token>
-    <Token Ref="QuotationMark" />
-  </TokenGroup>
 </TokenContext>
