@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using Indicium.Schemas;
+﻿using System.Text.RegularExpressions;
 
 namespace Indicium
 {
@@ -9,13 +7,16 @@ namespace Indicium
     /// </summary>
     public abstract class TokenBase
     {
-        public virtual string Identifier { get; }
+        public virtual string Id { get; }
 
         public virtual Regex Regex { get; }
 
-        public virtual IEnumerable<Lexeme> Match(string input)
+        public virtual TLexeme GetLexeme<TLexeme, TTokenBase>(string value)
+            where TTokenBase: TokenBase, new()
+            where TLexeme: LexemeBase<TTokenBase>, new()
         {
-            return default(IEnumerable<Lexeme>);
+            var lexeme = new TLexeme();
+            return lexeme;
         }
     }
 }

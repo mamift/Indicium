@@ -21,8 +21,13 @@ namespace Indicium
                 IsPartial = true
             };
 
-            throw new NotImplementedException();
-
+            var codeConstructor = new CodeConstructor {
+                Name = CodeGen.TokenContextClassName,
+                Attributes = MemberAttributes.Public
+            };
+            
+            type.Members.Add(codeConstructor);
+                        
             return type;
         }
 
@@ -37,9 +42,12 @@ namespace Indicium
         {
             var containingNamespace = new CodeNamespace(@namespace);
             containingNamespace.AddMinimumNamespaces();
-            containingNamespace.Types.Add(GenerateTokenBaseClass());
-            containingNamespace.Types.Add(GenerateLexemeAbstractBaseClass());
+            var tokenContextClass = GenerateTokenContextClass();
 
+            containingNamespace.Types.Add(tokenContextClass);
+            containingNamespace.Types.Add(GenerateTokenAbstractBaseClass());
+            containingNamespace.Types.Add(GenerateLexemeAbstractBaseClass());
+            
             var tokenList = tokens.ToList();
 
             var ccu = new CodeCompileUnit();
@@ -51,7 +59,7 @@ namespace Indicium
                 containingNamespace.Types.Add(tokenType);
                 containingNamespace.Types.Add(lexemeType);
             }
-
+            
             ccu.Namespaces.Add(containingNamespace);
             return ccu;
         }
@@ -60,7 +68,7 @@ namespace Indicium
         /// Generates the base type that Token classes inherit from.
         /// </summary>
         /// <returns></returns>
-        public static CodeTypeDeclaration GenerateTokenBaseClass()
+        public static CodeTypeDeclaration GenerateTokenAbstractBaseClass()
         {
             var tokenBaseClass = new CodeTypeDeclaration(CodeGen.AbstractTokenBaseClassName) {
                 TypeAttributes = TypeAttributes.Abstract | TypeAttributes.Public,
@@ -70,6 +78,13 @@ namespace Indicium
             var publicAbstract = MemberAttributes.Public | MemberAttributes.Abstract;
             tokenBaseClass.AddDefaultGetter("string", "Id", publicAbstract);
             tokenBaseClass.AddDefaultGetter(nameof(Regex), nameof(Regex), publicAbstract);
+
+            var constructor = new CodeConstructor {
+                Name = CodeGen.AbstractLexemeBaseClassName,
+                Attributes = MemberAttributes.Family
+            };
+
+            tokenBaseClass.Members.Add(constructor);
 
             return tokenBaseClass;
         }
@@ -90,7 +105,7 @@ namespace Indicium
             var lexemeBaseClass = new CodeTypeDeclaration(CodeGen.AbstractLexemeBaseClassName) {
                 TypeAttributes = TypeAttributes.Public | TypeAttributes.Abstract,
                 IsPartial = true,
-                TypeParameters = { genericTTokenType}
+                TypeParameters = { genericTTokenType }
             };
 
             lexemeBaseClass.AddDefaultGetter(CodeGen.GenericTTokenTypeName, "Token", MemberAttributes.Public | MemberAttributes.Abstract);
@@ -98,7 +113,7 @@ namespace Indicium
             var valueField = new CodeMemberField {
                 Name = privateValueFieldName,
                 Type = new CodeTypeReference(typeof(string)),
-                Attributes = MemberAttributes.Family | MemberAttributes.Final,
+                Attributes = MemberAttributes.Family | MemberAttributes.Final
             };
             var valueProp = new CodeMemberProperty {
                 Type = new CodeTypeReference(typeof(string)),
@@ -106,7 +121,8 @@ namespace Indicium
                 Attributes = MemberAttributes.Public | MemberAttributes.Final,
                 HasGet = true,
                 GetStatements = {
-                    new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), privateValueFieldName))
+                    new CodeMethodReturnStatement(new CodeFieldReferenceExpression(
+                        new CodeThisReferenceExpression(), privateValueFieldName))
                 }
             };
             
@@ -123,7 +139,7 @@ namespace Indicium
             var ifValueIsNullStmt = new CodeConditionStatement(
                 stringIsNullOrWhitespaceInvocation, throwArgNullExceptionStmt);
             
-            var constructor = new CodeConstructor() {
+            var constructor = new CodeConstructor {
                 Parameters = {
                     new CodeParameterDeclarationExpression(typeof(string), valueVarName)
                 },
@@ -162,11 +178,11 @@ namespace Indicium
             var lexemeType = new CodeTypeDeclaration(lexemeTypeName) {
                 TypeAttributes = TypeAttributes.Public,
                 IsPartial = true,
-                BaseTypes = { new CodeTypeReference(new CodeTypeParameter(CodeGen.AbstractLexemeBaseClassName)) {
-                    TypeArguments = {
-                        new CodeTypeReference(tokenType.Name)
+                BaseTypes = {
+                    new CodeTypeReference(new CodeTypeParameter(CodeGen.AbstractLexemeBaseClassName)) {
+                        TypeArguments = { new CodeTypeReference(tokenType.Name) }
                     }
-                }}
+                }
             };
 
             var overriddenTokenProp = new CodeMemberProperty {
@@ -175,17 +191,16 @@ namespace Indicium
                 Attributes = MemberAttributes.Public | MemberAttributes.Override,
                 HasGet = true,
                 GetStatements = {
-                    new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(tokenType.Name), "Default"))
-                },
+                    new CodeMethodReturnStatement(new CodeFieldReferenceExpression(
+                        new CodeTypeReferenceExpression(tokenType.Name), "Default"))
+                }
             };
             
-            var constructor = new CodeConstructor() {
-                Parameters = {
-                    new CodeParameterDeclarationExpression(typeof(string), valueFieldName)
-                },
+            var constructor = new CodeConstructor {
+                Parameters = { new CodeParameterDeclarationExpression(typeof(string), valueFieldName) },
                 Name = lexemeType.Name,
                 Attributes = MemberAttributes.Public,
-                BaseConstructorArgs = { new CodeVariableReferenceExpression(valueFieldName) },
+                BaseConstructorArgs = { new CodeVariableReferenceExpression(valueFieldName) }
             };
 
             lexemeType.Members.Add(overriddenTokenProp);
@@ -203,7 +218,9 @@ namespace Indicium
         {
             var tokenClass = new CodeTypeDeclaration($"{tokenDef.Id}Token") {
                 TypeAttributes = TypeAttributes.Public,
-                BaseTypes = {new CodeTypeReference(new CodeTypeParameter(CodeGen.AbstractTokenBaseClassName))},
+                BaseTypes = {
+                    new CodeTypeReference(new CodeTypeParameter(CodeGen.AbstractTokenBaseClassName))
+                },
                 IsPartial = true
             };
 
@@ -239,7 +256,7 @@ namespace Indicium
                 HasSet = false,
                 ImplementationTypes = {new CodeTypeReference(typeof(string))},
                 GetStatements = {identifierPropertyReturnStatement},
-                Type = new CodeTypeReference(typeof(string)),
+                Type = new CodeTypeReference(typeof(string))
             };
 
             var regexPropertyReturnStatement = new CodeMethodReturnStatement(
@@ -260,13 +277,14 @@ namespace Indicium
                 Attributes = MemberAttributes.Private | MemberAttributes.Static,
                 InitExpression = new CodeObjectCreateExpression(new CodeTypeReference(new CodeTypeParameter(tokenClass.Name)))
             };
-            var publicStaticDefaultGetter = new CodeMemberProperty() {
+            var publicStaticDefaultGetter = new CodeMemberProperty {
                 Name = "Default",
                 Attributes = MemberAttributes.Public | MemberAttributes.Static,
                 Type = new CodeTypeReference(new CodeTypeParameter(tokenClass.Name)),
                 HasGet = true,
                 GetStatements = {
-                    new CodeMethodReturnStatement(new CodeFieldReferenceExpression(new CodeTypeReferenceExpression(tokenClass.Name), defaultFieldName))
+                    new CodeMethodReturnStatement(new CodeFieldReferenceExpression(
+                        new CodeTypeReferenceExpression(tokenClass.Name), defaultFieldName))
                 }
             };
 

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Indicium.Schemas;
 using Microsoft.CodeAnalysis;
 using NUnit.Framework;
+using Xml.Schema.Linq.Extensions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Indicium.Tests
 {
@@ -45,19 +48,27 @@ namespace Indicium.Tests
         {
             var ccu = TokenTypeGenerator.GenerateClassesForTokenDefinitions(Context.Token);
 
-            var cdProvider = CodeDomProvider.CreateProvider("CSharp");
-            var cdOptions = new CodeGeneratorOptions
-            {
-                BlankLinesBetweenMembers = true,
-                BracingStyle = "Block",
-                VerbatimOrder = true,
-                IndentString = "\t"
-            };
-            var codeDomSb = new StringBuilder();
-            var sw = new StringWriter(codeDomSb);
-            cdProvider.GenerateCodeFromCompileUnit(ccu, sw, cdOptions);
-            var code = sw.ToString();
+            var code = ccu.ToCSharpString();
+
             File.WriteAllText("CodeDom.cs", code, Encoding.UTF8);
+        }
+
+        [Test]
+        public void TestRoslynTransformationOfCodeDomCode()
+        {
+            var ccu = TokenTypeGenerator.GenerateClassesForTokenDefinitions(Context.Token);
+
+            var tree = ccu.ToSyntaxTree();
+
+            var nds = tree.GetRoot().DescendantNodes()?.OfType<NamespaceDeclarationSyntax>().FirstOrDefault();
+
+            nds = nds.AddExtractLexemeExtensionMethod();
+
+            Assert.IsNotNull(nds);
+
+            var fullString = nds.NormalizeWhitespace(elasticTrivia: true).ToFullString();
+
+            File.WriteAllText("CodeDom_transformByRoslyn.cs", fullString, Encoding.UTF8);
         }
     }
 }

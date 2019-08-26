@@ -102,7 +102,7 @@ namespace Indicium
         private static CodeTypeDeclaration GenerateClassForTokenDef(Token tokenDef)
         {
             var tokenClass = new CodeTypeDeclaration($"{tokenDef.Id}Token") {
-                TypeAttributes = TypeAttributes.Sealed | TypeAttributes.Public,
+                TypeAttributes = TypeAttributes.Public,
                 BaseTypes = {new CodeTypeReference(new CodeTypeParameter(nameof(TokenBase)))}
             };
 
