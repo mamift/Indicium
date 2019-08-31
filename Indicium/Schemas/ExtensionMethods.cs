@@ -48,7 +48,7 @@ namespace Indicium.Schemas
 
                 return new Lexeme {
                     Id = def.Id,
-                    Value = match.Value,
+                    TypedValue = match.Value,
                     LineIndex = index - matchLength
                 };
             }
@@ -56,7 +56,7 @@ namespace Indicium.Schemas
             index++;
             return new Lexeme {
                 Id = Lexeme.Undefined.Id,
-                Value = input[index - 1].ToString(CultureInfo.InvariantCulture),
+                TypedValue = input[index - 1].ToString(CultureInfo.InvariantCulture),
                 LineIndex = index - matchLength
             };
         }

@@ -6,19 +6,14 @@ namespace Indicium.Schemas
     /// <summary>
     /// Represents a part of string or text that has been recognised according to a <see cref="Token"/> definition.
     /// </summary>
-    public class Lexeme
+    public partial class Lexeme
     {
-        public string Id { get; set; }
-        public string Value { get; set; }
-        public int LineIndex { get; set; }
-        public int LineNumber { get; set; }
-
         [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
         public override int GetHashCode()
         {
             unchecked {
                 var hashCode = (Id != null ? Id.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Value != null ? Value.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (TypedValue != null ? TypedValue.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ LineIndex;
                 hashCode = (hashCode * 397) ^ LineNumber;
                 return hashCode;
@@ -32,9 +27,9 @@ namespace Indicium.Schemas
         public override string ToString()
         {
             // because the delimiter is a colon, if the lexeme value begins with one, we escape it with a \
-            var escapeColonInValue = Value.StartsWith(":")
-                ? Regex.Replace(Value, @"^\:{1}", @"\:")
-                : Value;
+            var escapeColonInValue = TypedValue.StartsWith(":")
+                ? Regex.Replace(TypedValue, @"^\:{1}", @"\:")
+                : TypedValue;
             // conversely at the end of the value, the same is also true for the semi colon
             var escapeSemicolonInValue = escapeColonInValue.EndsWith(";")
                 ? Regex.Replace(escapeColonInValue, @"\;{1}$", @"\;")
@@ -47,7 +42,7 @@ namespace Indicium.Schemas
         /// Returns a compact string representation of the current instance.
         /// </summary>
         /// <returns></returns>
-        public string ToCompactString() => $"{{{Id}:{Value}}}";
+        public string ToCompactString() => $"{{{Id}:{TypedValue}}}";
 
         /// <summary>
         /// Represents an undefined <see cref="Lexeme"/>.

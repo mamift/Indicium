@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified"
     targetNamespace="https://github.com/mamift/Indicium" xmlns="https://github.com/mamift/Indicium">
-
     <xs:element name="TokenContext">
         <xs:annotation>
             <xs:documentation>The root element for definition a list of Tokens or TokenGroups.</xs:documentation>
@@ -36,6 +35,18 @@
             <xs:selector xpath="./Token"/>
             <xs:field xpath="@Id"/>
         </xs:key>
+    </xs:element>
+    <xs:element name="Lexeme">
+        <xs:annotation>
+            <xs:documentation>Represents a specific instance of processed characters that were matched against a Token definition.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attributeGroup ref="LexemeAttrs"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
     </xs:element>
     <xs:simpleType name="RegexString">
         <xs:annotation>
@@ -105,5 +116,10 @@
     </xs:attributeGroup>
     <xs:attributeGroup name="TokenGroupAttrs">
         <xs:attribute name="GroupName" type="xs:string"/>
+    </xs:attributeGroup>
+    <xs:attributeGroup name="LexemeAttrs">
+        <xs:attribute name="Id" type="xs:string" use="required"/>
+        <xs:attribute name="LineNumber" type="xs:int" use="required"/>
+        <xs:attribute name="LineIndex" type="xs:int" use="required"/>
     </xs:attributeGroup>
 </xs:schema>
