@@ -8,18 +8,6 @@
         <xs:complexType>
             <xs:sequence maxOccurs="1">
                 <xs:element ref="Token" maxOccurs="unbounded" minOccurs="1"/>
-                <xs:element maxOccurs="unbounded" minOccurs="0" ref="TokenGroup"/>
-            </xs:sequence>
-            <xs:attributeGroup ref="CodeGenAttrs"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="TokenGroup">
-        <xs:annotation>
-            <xs:documentation>A TokenGroup defines a group of Token definitions; it is merely a way of grouping Tokens into categories. This is different from NestedTokens that compound multiple Token defintions and treats them as one.</xs:documentation>
-        </xs:annotation>
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element maxOccurs="unbounded" ref="Token"/>
             </xs:sequence>
             <xs:attributeGroup ref="CodeGenAttrs"/>
         </xs:complexType>

@@ -11,12 +11,8 @@ namespace Indicium
 
         public virtual Regex Regex { get; }
 
-        public virtual TLexeme GetLexeme<TLexeme, TTokenBase>(string value)
+        public abstract TLexeme GetLexeme<TLexeme, TTokenBase>(string value)
             where TTokenBase: TokenBase, new()
-            where TLexeme: LexemeBase<TTokenBase>, new()
-        {
-            var lexeme = new TLexeme();
-            return lexeme;
-        }
+            where TLexeme: LexemeBase<TTokenBase>, new();
     }
 }
