@@ -5,14 +5,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Schemas\SimpleBASIC.txt" />
+    <None Remove="Schemas\SimpleBASIC.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Schemas\SimpleBASIC.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Schemas\SimpleBASIC.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CSharpSyntax" Version="0.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.CodeDom" Version="4.5.0" />
+    <PackageReference Include="XObjectsCore" Version="3.0.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IndiciumSchema\IndiciumSchema.csproj" />
+    <None Update="Schemas\Prototype1.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IndiciumSchema\IndiciumSchema.csproj" />
     <ProjectReference Include="..\Indicium\Indicium.csproj" />
   </ItemGroup>
 
