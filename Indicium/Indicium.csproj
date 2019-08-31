@@ -32,4 +32,8 @@
     </None>
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="LinqToXsd gen &quot;$(ProjectDir)Schemas\TokenSchema.xsd&quot; -c &quot;$(ProjectDir)Schemas\TokenSchema.xsd.config&quot; -o &quot;$(ProjectDir)Schemas\TokenSchema.xsd.cs&quot;" />
+  </Target>
+
 </Project>
