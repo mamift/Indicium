@@ -20,7 +20,7 @@ namespace Indicium.Tests
         public void Setup()
         {
             var cwd = Environment.CurrentDirectory;
-            var file = Path.Combine(cwd, @"Prototype1.xml");
+            var file = Path.Combine(cwd, @"Schemas\Prototype1.xml");
 
             Context = TokenContext.Load(file);
 

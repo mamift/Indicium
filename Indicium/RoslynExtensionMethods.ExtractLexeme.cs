@@ -83,6 +83,7 @@ namespace Indicium
 
             return returnNewLexemeStatement;
         }
+
         public static ForEachStatementSyntax GenerateForEachStatementCode()
         {
             TypeSyntax varType = SF.ParseTypeName("var");
