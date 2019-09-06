@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Indicium.Schemas;
 using NUnit.Framework;
 
@@ -29,7 +30,7 @@ namespace Indicium.Tests
 
             var last = outputLexemes.Last();
             Assert.IsTrue(last.LineIndex == 27);
-            Assert.IsTrue(last.Value == "}");
+            Assert.IsTrue(last.TypedValue == "}");
         }
     }
 }

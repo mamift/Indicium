@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Indicium.Schemas
 {
@@ -16,6 +17,13 @@ namespace Indicium.Schemas
         /// <para>Set to ignore or obey a Token's <see cref="Schemas.Token.EvaluationOrder"/> setting.</para>
         /// </summary>
         public bool ObeyEvaluationOrder = true;
+
+        /// <summary>
+        /// <para>Default <see cref="System.Text.RegularExpressions.RegexOptions"/> when creating <see cref="Schemas.Token"/>
+        /// instances.</para>
+        /// <para>This is a static field instance and for now cannot be serialised to XML.</para>
+        /// </summary>
+        public static RegexOptions RegexOptions = RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline;
 
         /// <summary>
         /// Not serialised.
@@ -171,13 +179,14 @@ namespace Indicium.Schemas
         /// instead of a <see cref="TextReader"/>.</para>
         /// </summary>
         /// <param name="string"></param>
-        /// <param name="delimiter">Defaults to new line.</param>
+        /// <param name="delimiter">Defaults to new line. To not split the string by anything, pass <c>default(char)</c></param>
         /// <returns></returns>
         public IEnumerable<Lexeme> ProcessTokens(string @string, char delimiter = '\n')
         {
             Reset();
             var lineCount = 1;
-            foreach (var line in @string.Split(delimiter)) {
+            var splitStrings = delimiter != default(char) ? @string.Split(delimiter) : new [] { @string };
+            foreach (var line in splitStrings) {
                 foreach (var token in ProcessLine(line, lineCount))
                     yield return token;
 

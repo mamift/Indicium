@@ -6,9 +6,14 @@ namespace Indicium.Schemas
     {
         private Text.Regex _regex;
 
+        /// <summary>
+        /// Returns the <see cref="Text.Regex"/> instance for this Token. Uses options specified in the
+        /// static field: <see cref="TokenContext.RegexOptions"/>.
+        /// </summary>
+        /// <returns></returns>
         public Text.Regex GetMatcher()
         {
-            return _regex ?? (_regex = new Text.Regex(TypedValue.Trim()));
+            return _regex ?? (_regex = new Text.Regex(TypedValue.Trim(), TokenContext.RegexOptions));
         }
 
         /// <summary>
