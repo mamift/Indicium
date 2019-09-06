@@ -453,6 +453,27 @@ namespace Indicium.Schemas {
             }
         }
         
+        /// <summary>
+        /// <para>
+        /// This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public virtual System.Nullable<short> @Enum {
+            get {
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Enum", ""));
+                if ((x == null)) {
+                    return null;
+                }
+                return XTypedServices.ParseValue<short>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Short).Datatype);
+            }
+            set {
+                this.SetAttribute(System.Xml.Linq.XName.Get("Enum", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Short).Datatype);
+            }
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         System.Xml.Linq.XName IXMetaData.SchemaName {
             get {
@@ -603,6 +624,23 @@ namespace Indicium.Schemas {
             }
             set {
                 this.ContentField.Description = value;
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public virtual System.Nullable<short> @Enum {
+            get {
+                return this.ContentField.@Enum;
+            }
+            set {
+                this.ContentField.@Enum = value;
             }
         }
         
