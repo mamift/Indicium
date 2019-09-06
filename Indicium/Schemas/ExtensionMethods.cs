@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -18,18 +19,25 @@ namespace Indicium.Schemas
         /// not an undefined Lexeme it should be higher than <paramref name="inputIndex"/>.</param>
         /// <param name="matchLength">After extracting a <see cref="Lexeme"/>, save the length of the part of the string that forms it.</param>
         /// <param name="obeyEvalOrder">Obeys a <see cref="Token.EvaluationOrder"/> property.</param>
+        /// <param name="spaceCharacters">Provide custom array of <c>char</c>s to define what is a whitespace character. Defaults to space and tab.
+        /// NOTE: Explicitly passing <c>null</c> will still default to \t and \s; pass an empty array instead to never ignore any whitespace chars.</param>
         /// <returns>The returned <see cref="Lexeme"/> will not include a <see cref="Lexeme.LineNumber"/> value. This value should be set after
         /// the method returns.</returns>
         public static Lexeme ExtractLexeme(this IEnumerable<Token> tokens, string input,
-            int inputIndex, bool ignoreSpaces, out int index, out int matchLength, bool obeyEvalOrder = true)
+            int inputIndex, bool ignoreSpaces, out int index, out int matchLength, bool obeyEvalOrder = true, char[] spaceCharacters = null)
         {
-            index = inputIndex;
-            matchLength = 0;
-            if (index >= input.Length) return default(Lexeme);
+            if (spaceCharacters == null) spaceCharacters = new[] {' ', '\t'};
 
-            while ((input[index] == ' ' || input[index] == '\t') && ignoreSpaces) {
-                index++;
-                if (index >= input.Length) return default(Lexeme);
+            index = inputIndex; // begin at given index of string
+            matchLength = 0; // will reset to zero for each invocation of this method
+            if (index >= input.Length) return default(Lexeme); // then we're at the end of the string, and can return;
+
+            if (spaceCharacters.Any()) {
+                // if ignore spaces is true and there are space chars provided
+                while (input[index].IsOneOf(spaceCharacters) && ignoreSpaces) { 
+                    index++;
+                    if (index >= input.Length) return default(Lexeme);
+                }
             }
 
             var tokenList = obeyEvalOrder
@@ -37,20 +45,7 @@ namespace Indicium.Schemas
                 : tokens.ToList();
 
             foreach (var def in tokenList) {
-                var regex = def.GetMatcher();
-                var match = regex.Match(input, index);
-
-                if (!match.Success || match.Index != index) continue;
-                if (match.Length == 0) continue;
-
-                index += match.Length;
-                matchLength = match.Length;
-
-                return new Lexeme {
-                    Id = def.Id,
-                    TypedValue = match.Value,
-                    LineIndex = index - matchLength
-                };
+                if (GetLexeme(input, ref index, ref matchLength, def, out var lexeme)) return lexeme;
             }
 
             index++;
@@ -59,6 +54,46 @@ namespace Indicium.Schemas
                 TypedValue = input[index - 1].ToString(CultureInfo.InvariantCulture),
                 LineIndex = index - matchLength
             };
+        }
+
+        private static bool GetLexeme(string input, ref int index, ref int matchLength, Token def, out Lexeme lexeme)
+        {
+            var regex = def.GetMatcher();
+            var match = regex.Match(input, index);
+
+            lexeme = Lexeme.Undefined;
+
+            if (!match.Success || match.Index != index) return false;
+            if (match.Length == 0) return false;
+
+            index += match.Length;
+            matchLength = match.Length;
+
+            lexeme = new Lexeme {
+                Id = def.Id,
+                TypedValue = match.Value,
+                LineIndex = index - matchLength
+            };
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if the current <paramref name="thing"/> is equal to at least one of the <paramref name="others"/>.
+        /// <para>Invokes <see cref="object.Equals(object)"/> to conduct comparison.</para>
+        /// </summary>
+        /// <typeparam name="TType"></typeparam>
+        /// <param name="thing"></param>
+        /// <param name="others">An array of other things to compare against.</param>
+        /// <returns></returns>
+        public static bool IsOneOf<TType>(this TType thing, params TType[] others)
+        {
+            if (!others.Any()) return false;
+
+            for (var i = 0; i < others.Length; i++) {
+                if (thing.Equals(others[i])) return true;
+            }
+
+            return false;
         }
     }
 }
