@@ -7,6 +7,17 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence maxOccurs="1">
+                <xs:element maxOccurs="1" minOccurs="0" name="WhitespaceCharacters"
+                    type="RegexString">
+                    <xs:annotation>
+                        <xs:documentation>A custom regex string to recognise whitespace characters. No value defaults to recognising a tab and a space ([\t\s]+).</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element minOccurs="0" name="LineDelimiter" type="RegexString">
+                    <xs:annotation>
+                        <xs:documentation>A custom regex string to recognise a line delimiter. No value defaults to return carraige and newline (\r\n).</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element ref="Token" maxOccurs="unbounded" minOccurs="1"/>
             </xs:sequence>
             <xs:attributeGroup ref="CodeGenAttrs"/>
@@ -62,7 +73,7 @@
                 <xs:attributeGroup ref="IdRefDescription"/>
                 <xs:attribute name="Enum" type="xs:short">
                     <xs:annotation>
-                        <xs:documentation>This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.</xs:documentation>
+                        <xs:documentation>Used for code generation. This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>

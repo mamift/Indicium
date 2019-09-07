@@ -1,5 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
+using CSharpSyntax;
 
 namespace Indicium.Schemas
 {
@@ -35,7 +37,9 @@ namespace Indicium.Schemas
                 ? Regex.Replace(escapeColonInValue, @"\;{1}$", @"\;")
                 : escapeColonInValue;
 
-            return $"{{{Id}:{escapeSemicolonInValue};{LineNumber}:{LineIndex}}}";
+            var str = $"{{{Id}:{escapeSemicolonInValue};{LineNumber}:{LineIndex}}}";
+
+            return str;
         }
 
         /// <summary>
@@ -47,6 +51,25 @@ namespace Indicium.Schemas
         /// <summary>
         /// Represents an undefined <see cref="Lexeme"/>.
         /// </summary>
-        public static Lexeme Undefined => new Lexeme {Id = "Undefined"};
+        public static readonly Lexeme Undefined = new Lexeme {Id = "Undefined"};
+
+        /// <summary>
+        /// Lexemes are equal regardless of their <see cref="TypedValue"/>. Only their <see cref="Id"/>
+        /// is meaningful.
+        /// </summary>
+        /// <param name="one"></param>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public static bool operator ==(Lexeme one, Lexeme other)
+        {
+            if ((object)one == null || (object)other == null) return false;
+
+            return one.Id == other.Id;
+        }
+
+        public static bool operator !=(Lexeme one, Lexeme other)
+        {
+            return !(one == other);
+        }
     }
 }

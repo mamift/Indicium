@@ -2,25 +2,40 @@
 
 namespace Indicium
 {
-    public abstract class LexemeBase<TTokenBase> 
-        where TTokenBase: TokenBase, new()
+    /// <summary>
+    /// Class that serves as a base for all other Lexeme objects.
+    /// </summary>
+    /// <typeparam name="TTokenBase"></typeparam>
+    public class LexemeBase<TTokenBase> 
+        where TTokenBase: TokenBase
     {
-        public abstract TTokenBase Token { get; }
-
-        protected string value;
-
-        public string Value => value;
+        public virtual TTokenBase Token { get; }
+        
+        public string Value { get; set; }
 
         public int LineNumber { get; set; }
         
         public int LineIndex { get; set; }
+
+        public LexemeBase(TTokenBase token)
+        {
+            Token = token;
+        }
+
+        protected LexemeBase() { }
 
         protected LexemeBase(string value)
         {
             if (string.IsNullOrEmpty(value))
                 throw new ArgumentNullException(nameof(value));
 
-            this.value = value;
+            Value = value;
+        }
+
+        protected LexemeBase(string value, int lineNumber, int lineIndex) : this(value)
+        {
+            LineNumber = lineNumber;
+            LineIndex = lineIndex;
         }
     }
 }

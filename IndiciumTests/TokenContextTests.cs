@@ -113,13 +113,13 @@ namespace Indicium.Tests
                 fullTokenList.AddRange(tokens);
             }
 
-            var definedTokens = fullTokenList.Where(t => t.Id != "Undefined").ToList();
-            var undefinedTokens = fullTokenList.Except(definedTokens).ToList();
+            var lexemes = fullTokenList.Where(t => t.Id != "Undefined").ToList();
+            var undefinedLexemes = fullTokenList.Except(lexemes).ToList();
 
             Assert.IsNotEmpty(fullTokenList);
             Assert.IsTrue(fullTokenList.Count == 460);
-            Assert.IsTrue(undefinedTokens.Count == 1);
-            Assert.IsTrue(definedTokens.Count == 459);
+            Assert.IsTrue(undefinedLexemes.Count == 1);
+            Assert.IsTrue(lexemes.Count == 459);
         }
 
         [Test]

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Indicium.Schemas
 {
-    public partial class TokenContext
+    public partial class TokenContext : ITokeniser
     {
         private int _index = 0;
 
@@ -89,7 +91,7 @@ namespace Indicium.Schemas
         /// <returns></returns>
         public Lexeme GetToken()
         {
-            var lexeme = Token.ExtractLexeme(_inputString, _index, IgnoreSpaces, out _index, out var matchLength);
+            var lexeme = ExtractLexeme(_inputString, _index, IgnoreSpaces, out _index, out var matchLength);
             if (lexeme == default(Lexeme)) return null;
 
             lexeme.LineNumber = _lineNumber;
@@ -109,7 +111,7 @@ namespace Indicium.Schemas
             var startIndexCopy = _index;
             var subStr = _inputString.Substring(startIndexCopy);
 
-            var lexeme = Token.ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _, ObeyEvaluationOrder);
+            var lexeme = ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _, ObeyEvaluationOrder);
             
             lexeme.LineNumber = _lineNumber;
 

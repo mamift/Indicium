@@ -7,12 +7,55 @@ namespace Indicium
     /// </summary>
     public abstract class TokenBase
     {
-        public virtual string Id { get; }
+        public abstract string Id { get; }
 
-        public virtual Regex Regex { get; }
+        public abstract Regex Regex { get; }
 
-        public abstract TLexeme GetLexeme<TLexeme, TTokenBase>(string value)
-            where TTokenBase: TokenBase, new()
-            where TLexeme: LexemeBase<TTokenBase>, new();
+        public RegexOptions RegexOptions { get; set; } =
+            RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline;
+
+        public virtual bool GetLexeme<TTokenBase, TLexeme>(string input, ref int index, ref int matchLength, 
+            out TLexeme lexeme, int lineNumber = 0)
+            where TTokenBase: TokenBase
+            where TLexeme: LexemeBase<TTokenBase>, new()
+        {
+            var match = Regex.Match(input, index);
+
+            lexeme = default(TLexeme);
+
+            if (!match.Success || match.Index != index) return false;
+            if (match.Length == 0) return false;
+
+            index += match.Length;
+            matchLength = match.Length;
+
+            lexeme = new TLexeme() {
+                Value = match.Value,
+                LineNumber = 0,
+                LineIndex = index - matchLength
+            };
+            return true;
+        }
+
+        public virtual bool GetLexeme(string input, ref int index, ref int matchLength, 
+            out LexemeBase<TokenBase> lexeme, int lineNumber = 0)
+        {
+            var match = Regex.Match(input, index);
+
+            lexeme = default(LexemeBase<TokenBase>);
+
+            if (!match.Success || match.Index != index) return false;
+            if (match.Length == 0) return false;
+
+            index += match.Length;
+            matchLength = match.Length;
+
+            lexeme = new LexemeBase<TokenBase>(this) {
+                Value = match.Value,
+                LineNumber = 0,
+                LineIndex = index - matchLength
+            };
+            return true;
+        }
     }
 }

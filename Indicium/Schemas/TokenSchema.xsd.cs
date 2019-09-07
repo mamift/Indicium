@@ -22,7 +22,7 @@ namespace Indicium.Schemas {
     
     /// <summary>
     /// <para>
-    /// Regular expression: (Token+)
+    /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
     /// </para>
     /// </summary>
     public partial class TokenContext : XTypedElement, IXMetaData {
@@ -40,12 +40,12 @@ namespace Indicium.Schemas {
         
         static TokenContext() {
             BuildElementDictionary();
-            contentModel = new SequenceContentModelEntity(new NamedContentModelEntity(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium")));
+            contentModel = new SequenceContentModelEntity(new NamedContentModelEntity(System.Xml.Linq.XName.Get("WhitespaceCharacters", "")), new NamedContentModelEntity(System.Xml.Linq.XName.Get("LineDelimiter", "")), new NamedContentModelEntity(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium")));
         }
         
         /// <summary>
         /// <para>
-        /// Regular expression: (Token+)
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
         /// </para>
         /// </summary>
         public TokenContext() {
@@ -53,10 +53,52 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
+        /// A custom regex string to recognise whitespace characters. No value defaults to recognising a tab and a space ([\t\s]+).
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// <para>
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
+        /// </para>
+        /// </summary>
+        public virtual string WhitespaceCharacters {
+            get {
+                XElement x = this.GetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.NormalizedString).Datatype);
+            }
+            set {
+                this.SetElementWithValidation(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""), value, "WhitespaceCharacters", global::Indicium.Schemas.RegexString.TypeDefinition);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// A custom regex string to recognise a line delimiter. No value defaults to return carraige and newline (\r\n).
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// <para>
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
+        /// </para>
+        /// </summary>
+        public virtual string LineDelimiter {
+            get {
+                XElement x = this.GetElement(System.Xml.Linq.XName.Get("LineDelimiter", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.NormalizedString).Datatype);
+            }
+            set {
+                this.SetElementWithValidation(System.Xml.Linq.XName.Get("LineDelimiter", ""), value, "LineDelimiter", global::Indicium.Schemas.RegexString.TypeDefinition);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
         /// Occurrence: required, repeating
         /// </para>
         /// <para>
-        /// Regular expression: (Token+)
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
         /// </para>
         /// </summary>
         public virtual IList<Token> Token {
@@ -213,6 +255,8 @@ namespace Indicium.Schemas {
         }
         
         private static void BuildElementDictionary() {
+            localElementDictionary.Add(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""), typeof(string));
+            localElementDictionary.Add(System.Xml.Linq.XName.Get("LineDelimiter", ""), typeof(string));
             localElementDictionary.Add(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(Token));
         }
         
@@ -455,7 +499,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.
+        /// Used for code generation. This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.
         /// </para>
         /// <para>
         /// Occurrence: optional
@@ -629,7 +673,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.
+        /// Used for code generation. This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.
         /// </para>
         /// <para>
         /// Occurrence: optional
