@@ -52,24 +52,19 @@ namespace Indicium.Schemas
         /// Represents an undefined <see cref="Lexeme"/>.
         /// </summary>
         public static readonly Lexeme Undefined = new Lexeme {Id = "Undefined"};
+        
+        protected bool Equals(Lexeme other) => Id == other?.Id;
 
-        /// <summary>
-        /// Lexemes are equal regardless of their <see cref="TypedValue"/>. Only their <see cref="Id"/>
-        /// is meaningful.
-        /// </summary>
-        /// <param name="one"></param>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public static bool operator ==(Lexeme one, Lexeme other)
+        public override bool Equals(object obj)
         {
-            if ((object)one == null || (object)other == null) return false;
-
-            return one.Id == other.Id;
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Lexeme) obj);
         }
 
-        public static bool operator !=(Lexeme one, Lexeme other)
-        {
-            return !(one == other);
-        }
+        public static bool operator ==(Lexeme one, Lexeme other) => Equals(one, other);
+
+        public static bool operator !=(Lexeme one, Lexeme other) => !Equals(one, other);
     }
 }

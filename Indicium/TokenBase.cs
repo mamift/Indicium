@@ -57,5 +57,23 @@ namespace Indicium
             };
             return true;
         }
+
+        public override string ToString() => $"{Id} - {Regex}";
+
+        public override int GetHashCode() => Id.GetHashCode() ^ Regex.GetHashCode();
+
+        protected bool Equals(TokenBase other) => Id == other.Id && Regex == other.Regex;
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((TokenBase) obj);
+        }
+
+        public static bool operator ==(TokenBase left, TokenBase right) => Equals(left, right);
+
+        public static bool operator !=(TokenBase left, TokenBase right) => !Equals(left, right);
     }
 }
