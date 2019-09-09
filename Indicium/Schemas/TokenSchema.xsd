@@ -7,8 +7,7 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence maxOccurs="1">
-                <xs:element maxOccurs="1" minOccurs="0" name="WhitespaceCharacters"
-                    type="RegexString">
+                <xs:element minOccurs="0" name="WhitespaceCharacters" type="RegexString">
                     <xs:annotation>
                         <xs:documentation>A custom regex string to recognise whitespace characters. No value defaults to recognising a tab and a space ([\t\s]+).</xs:documentation>
                     </xs:annotation>
