@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using CSharpSyntax;
 using Indicium.Schemas;
 using Xml.Schema.Linq.Extensions;

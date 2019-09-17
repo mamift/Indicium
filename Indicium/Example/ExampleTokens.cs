@@ -16,9 +16,9 @@ namespace Indicium.Example
         }
     }
 
-    public class KeywordLexeme : LexemeBase<IdentifierToken>
+    public class IdentifierLexeme : LexemeBase<IdentifierToken>
     {
-        public KeywordLexeme(string value) : base(value) { }
+        public IdentifierLexeme(string value) : base(value) { }
 
         public override IdentifierToken Token { get; } = IdentifierToken.Default;
     }
@@ -33,7 +33,7 @@ namespace Indicium.Example
 
         public WhitespaceToken()
         {
-            Regex = new Regex(@"[\s]", RegexOptions);
+            Regex = new Regex(@"[\s]+", RegexOptions);
         }
     }
 

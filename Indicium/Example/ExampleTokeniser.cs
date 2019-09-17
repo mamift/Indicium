@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Indicium.Schemas;
 
@@ -8,12 +9,13 @@ namespace Indicium.Example
     {
         private string _inputString;
 
-        private List<TokenBase> Tokens { get; } = new List<TokenBase>() {
+        public List<TokenBase> Tokens { get; } = new List<TokenBase>() {
             WhitespaceToken.Default,
             IdentifierToken.Default
         };
 
         public bool IsAtStart => LineIndex == 0;
+        public bool IsAtEnd => LineIndex == _inputString.Length;
 
         public int LineIndex { get; private set; }
 
@@ -23,10 +25,13 @@ namespace Indicium.Example
             set {
                 _inputString = value;
                 LineIndex = 0;
+                LineNumber = 1;
             }
         }
 
-        public int LineNumber { private get; set; }
+        public string RemainingString => _inputString.Substring(LineIndex, _inputString.Length - LineIndex);
+
+        public int LineNumber { get; set; }
 
         public void Reset()
         {
@@ -37,7 +42,9 @@ namespace Indicium.Example
 
         public LexemeBase<TokenBase> ReadToken()
         {
-            var lexeme = Tokens.ExtractLexeme(_inputString, LineIndex, false, out int lineIndex, out var matchLength);
+            var lexeme = Tokens.ExtractLexeme(input: _inputString, startIndex: LineIndex, ignoreSpaces: false,
+                endIndex: out int lineIndex, matchLength: out int matchLength);
+
             LineIndex = lineIndex;
             if (lexeme != null) {
                 lexeme.LineNumber = LineNumber;
@@ -48,7 +55,14 @@ namespace Indicium.Example
 
         public LexemeBase<TokenBase> PeekToken()
         {
-            return null;
+            var startIndexCopy = LineIndex;
+
+            var lexeme = Tokens.ExtractLexeme(input: _inputString, startIndex: startIndexCopy, ignoreSpaces: false,
+                endIndex: out _, matchLength: out _);
+
+            lexeme.LineNumber = LineNumber;
+
+            return lexeme;
         }
 
         public IEnumerable<LexemeBase<TokenBase>> ReadTokens(string line, int lineNumber)
@@ -66,7 +80,7 @@ namespace Indicium.Example
 
         public IEnumerable<LexemeBase<TokenBase>> ReadTokens(TextReader reader)
         {
-            yield break;
+            throw new NotImplementedException();
         }
     }
 }

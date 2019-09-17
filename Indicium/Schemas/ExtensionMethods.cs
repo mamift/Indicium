@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using CSharpSyntax;
 
 namespace Indicium.Schemas
 {
@@ -13,74 +11,74 @@ namespace Indicium.Schemas
         /// </summary>
         /// <param name="tokens"></param>
         /// <param name="input">Extract a <see cref="Lexeme"/> from the given string.</param>
-        /// <param name="inputIndex">The starting index to begin extracting a <see cref="Lexeme"/> from the <paramref name="input"/>.</param>
+        /// <param name="startIndex">The starting index to begin extracting a <see cref="Lexeme"/> from the <paramref name="input"/>.</param>
         /// <param name="ignoreSpaces">Ignores whitespace chars (space and tab) when attempting to extract.</param>
-        /// <param name="index">After extracting a <see cref="Lexeme"/>, save the 0-based index of it from the <see cref="input"/>. If it's
-        /// not an undefined Lexeme it should be higher than <paramref name="inputIndex"/>.</param>
+        /// <param name="endIndex">After extracting a <see cref="Lexeme"/>, save the 0-based index of it from the <see cref="input"/>. If it's
+        /// not an undefined Lexeme it should be higher than <paramref name="startIndex"/>.</param>
         /// <param name="matchLength">After extracting a <see cref="Lexeme"/>, save the length of the part of the string that forms it.</param>
         /// <param name="spaceCharacters">Provide custom array of <c>char</c>s to define what is a whitespace character. Defaults to space and tab.
         /// NOTE: Explicitly passing <c>null</c> will still default to \t and \s - instead pass an empty array to never ignore any whitespace chars.</param>
         /// <returns>The returned <see cref="Lexeme"/> will not include a <see cref="Lexeme.LineNumber"/> value. This value should be set after
         /// the method returns.</returns>
         public static LexemeBase<TTokenBase> ExtractLexeme<TTokenBase, TLexeme>(this IEnumerable<TokenBase> tokens, string input,
-            int inputIndex, bool ignoreSpaces, out int index, out int matchLength, char[] spaceCharacters = null)
+            int startIndex, bool ignoreSpaces, out int endIndex, out int matchLength, char[] spaceCharacters = null)
             where TTokenBase: TokenBase
             where TLexeme: LexemeBase<TTokenBase>, new()
         {
             if (spaceCharacters == null) spaceCharacters = new[] {' ', '\t'};
 
-            index = inputIndex; // begin at given index of string
+            endIndex = startIndex; // begin at given index of string
             matchLength = 0; // will reset to zero for each invocation of this method
-            if (index >= input.Length) return default(TLexeme); // then we're at the end of the string, and can return;
+            if (endIndex >= input.Length) return default(TLexeme); // then we're at the end of the string, and can return;
 
             if (spaceCharacters.Any()) {
                 // if ignore spaces is true and there are space chars provided
-                while (input[index].IsOneOf(spaceCharacters) && ignoreSpaces) {
-                    index++;
-                    if (index >= input.Length) return default(TLexeme);
+                while (input[endIndex].IsOneOf(spaceCharacters) && ignoreSpaces) {
+                    endIndex++;
+                    if (endIndex >= input.Length) return default(TLexeme);
                 }
             }
 
             foreach (var def in tokens) {
-                if (def.GetLexeme<TTokenBase, TLexeme>(input, ref index, ref matchLength, out var lexeme)) {
+                if (def.GetLexeme<TTokenBase, TLexeme>(input, ref endIndex, ref matchLength, out var lexeme)) {
                     return lexeme;
                 }
             }
 
-            index++;
+            endIndex++;
             return new TLexeme {
-                Value = input[index - 1].ToString(CultureInfo.InvariantCulture),
-                LineIndex = index - matchLength
+                Value = input[endIndex - 1].ToString(CultureInfo.InvariantCulture),
+                LineIndex = endIndex - matchLength
             };
         }
         
         public static LexemeBase<TokenBase> ExtractLexeme(this IEnumerable<TokenBase> tokens, string input,
-            int inputIndex, bool ignoreSpaces, out int index, out int matchLength, char[] spaceCharacters = null)
+            int startIndex, bool ignoreSpaces, out int endIndex, out int matchLength, char[] spaceCharacters = null)
         {
             if (spaceCharacters == null) spaceCharacters = new[] {' ', '\t'};
 
-            index = inputIndex; // begin at given index of string
+            endIndex = startIndex; // begin at given index of string
             matchLength = 0; // will reset to zero for each invocation of this method
-            if (index >= input.Length) return default(LexemeBase<TokenBase>); // then we're at the end of the string, and can return;
+            if (endIndex >= input.Length) return default(LexemeBase<TokenBase>); // then we're at the end of the string, and can return;
 
             if (spaceCharacters.Any()) {
                 // if ignore spaces is true and there are space chars provided
-                while (input[index].IsOneOf(spaceCharacters) && ignoreSpaces) {
-                    index++;
-                    if (index >= input.Length) return default(LexemeBase<TokenBase>);
+                while (input[endIndex].IsOneOf(spaceCharacters) && ignoreSpaces) {
+                    endIndex++;
+                    if (endIndex >= input.Length) return default(LexemeBase<TokenBase>);
                 }
             }
 
             foreach (var def in tokens) {
-                if (def.GetLexeme(input, ref index, ref matchLength, out var lexeme)) {
+                if (def.GetLexeme(input, ref endIndex, ref matchLength, out var lexeme)) {
                     return lexeme;
                 }
             }
 
-            index++;
+            endIndex++;
             return new LexemeBase<TokenBase>(UndefinedToken.Default) {
-                Value = input[index - 1].ToString(CultureInfo.InvariantCulture),
-                LineIndex = index - matchLength
+                Value = input[endIndex - 1].ToString(CultureInfo.InvariantCulture),
+                LineIndex = matchLength > 0 ? (endIndex - matchLength) : startIndex
             };
         }
 
@@ -103,6 +101,7 @@ namespace Indicium.Schemas
                 Value = match.Value,
                 LineIndex = index - matchLength
             };
+
             return true;
         }
 
