@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Indicium
+namespace Indicium.CodeGen
 {
     public static class CodeDomExtensionMethods
     {
@@ -99,6 +99,17 @@ namespace Indicium
             var parseOptions = parseOpts ?? CSharpParseOptions.Default;
 
             return CSharpSyntaxTree.ParseText(sourceText, parseOptions);
+        }
+
+        public static void AddMinimumNamespaces(this CodeNamespace cn, bool addIndciumRef = false)
+        {
+            var system = nameof(System);
+            var text = nameof(System.Text);
+            var regularExpressions = nameof(System.Text.RegularExpressions);
+            cn.Imports.Add(new CodeNamespaceImport(system));
+            if (addIndciumRef) cn.Imports.Add(new CodeNamespaceImport(nameof(Indicium)));
+            cn.Imports.Add(new CodeNamespaceImport($"{system}.{text}"));
+            cn.Imports.Add(new CodeNamespaceImport($"{system}.{text}.{regularExpressions}"));
         }
     }
 }

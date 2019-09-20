@@ -1,7 +1,7 @@
 ﻿using System.CodeDom;
 using System.Text.RegularExpressions;
 
-namespace Indicium
+namespace Indicium.CodeGen
 {
     public static class CodeGen
     {

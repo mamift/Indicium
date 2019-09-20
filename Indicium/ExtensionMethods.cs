@@ -1,5 +1,4 @@
-﻿using System.CodeDom;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,28 +7,37 @@ namespace Indicium
 {
     public static class ExtensionMethods
     {
-        public static string ToDelimitedString<TType>(this IEnumerable<TType> lexemes)
+        /// <summary>
+        /// Checks if the current <paramref name="thing"/> is equal to at least one of the <paramref name="others"/>.
+        /// <para>Invokes <see cref="object.Equals(object)"/> to conduct comparison.</para>
+        /// </summary>
+        /// <typeparam name="TType"></typeparam>
+        /// <param name="thing"></param>
+        /// <param name="others">An array of other things to compare against.</param>
+        /// <returns></returns>
+        public static bool IsOneOf<TType>(this TType thing, params TType[] others)
+        {
+            if (!others.Any()) return false;
+
+            for (var i = 0; i < others.Length; i++)
+            {
+                if (thing.Equals(others[i])) return true;
+            }
+
+            return false;
+        }
+
+        public static string ToDelimitedString<TType>(this IEnumerable<TType> things)
         {
             var sb = new StringBuilder();
 
-            var lexemesList = lexemes.ToList();
+            var lexemesList = things.ToList();
             for (var i = 0; i < lexemesList.Count; i++) {
                 var comma = (i == lexemesList.Count - 1) ? string.Empty : ",";
                 sb.Append($"{lexemesList.ElementAt(i)}{comma}");
             }
 
             return sb.ToString();
-        }
-
-        public static void AddMinimumNamespaces(this CodeNamespace cn, bool addIndciumRef = false)
-        {
-            var system = nameof(System);
-            var text = nameof(System.Text);
-            var regularExpressions = nameof(System.Text.RegularExpressions);
-            cn.Imports.Add(new CodeNamespaceImport(system));
-            if (addIndciumRef) cn.Imports.Add(new CodeNamespaceImport(nameof(Indicium)));
-            cn.Imports.Add(new CodeNamespaceImport($"{system}.{text}"));
-            cn.Imports.Add(new CodeNamespaceImport($"{system}.{text}.{regularExpressions}"));
         }
 
         /// <summary>

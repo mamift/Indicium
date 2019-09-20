@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Indicium
+namespace Indicium.CodeGen
 {
     using SF = SyntaxFactory;
 

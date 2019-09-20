@@ -15,13 +15,11 @@ namespace Indicium.Schemas
         /// <param name="index">After extracting a <see cref="Lexeme"/>, save the 0-based index of it from the <see cref="input"/>. If it's
         /// not an undefined Lexeme it should be higher than <paramref name="inputIndex"/>.</param>
         /// <param name="matchLength">After extracting a <see cref="Lexeme"/>, save the length of the part of the string that forms it.</param>
-        /// <param name="obeyEvalOrder">Obeys a <see cref="Indicium.Schemas.Token.EvaluationOrder"/> property.</param>
         /// <param name="spaceCharacters">Provide custom array of <c>char</c>s to define what is a whitespace character. Defaults to space and tab.
         /// NOTE: Explicitly passing <c>null</c> will still default to \t and \s - instead pass an empty array to never ignore any whitespace chars.</param>
         /// <returns>The returned <see cref="Lexeme"/> will not include a <see cref="Lexeme.LineNumber"/> value. This value should be set after
         /// the method returns.</returns>
-        public Lexeme ExtractLexeme(string input,
-            int inputIndex, bool ignoreSpaces, out int index, out int matchLength, bool obeyEvalOrder = true,
+        public Lexeme ExtractLexeme(string input, int inputIndex, bool ignoreSpaces, out int index, out int matchLength,
             char[] spaceCharacters = null)
         {
             if (spaceCharacters == null) spaceCharacters = new[] {' ', '\t'};

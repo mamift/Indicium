@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using CSharpSyntax.Printer;
+using Indicium.CodeGen;
 using NUnit.Framework;
 
 namespace Indicium.Tests

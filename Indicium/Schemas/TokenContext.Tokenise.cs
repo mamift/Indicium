@@ -13,12 +13,6 @@ namespace Indicium.Schemas
         private string _inputString = string.Empty;
 
         /// <summary>
-        /// Not serialised.
-        /// <para>Set to ignore or obey a Token's <see cref="Schemas.Token.EvaluationOrder"/> setting.</para>
-        /// </summary>
-        public bool ObeyEvaluationOrder = true;
-
-        /// <summary>
         /// <para>Default <see cref="System.Text.RegularExpressions.RegexOptions"/> when creating <see cref="Schemas.Token"/>
         /// instances.</para>
         /// <para>This is a static field instance and for now cannot be serialised to XML.</para>
@@ -109,7 +103,7 @@ namespace Indicium.Schemas
             var startIndexCopy = _index;
             var subStr = _inputString.Substring(startIndexCopy);
 
-            var lexeme = ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _, ObeyEvaluationOrder);
+            var lexeme = ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _);
             
             lexeme.LineNumber = _lineNumber;
 

@@ -16,13 +16,13 @@ namespace Indicium.Tests
         {
             Token = new List<Token> {
                 new Token {
-                    Id = "Identifier", TypedValue = @"[\w]+", EvaluationOrder = 1
+                    Id = "Identifier", TypedValue = @"[\w]+", 
                 },
                 new Token {
-                    Id = "Non-Identifier", TypedValue = @"[\W]+", EvaluationOrder = 3
+                    Id = "Non-Identifier", TypedValue = @"[\W]+", 
                 },
                 new Token {
-                    Id = "Whitespace", TypedValue = @"[\s]+", EvaluationOrder = 2
+                    Id = "Whitespace", TypedValue = @"[\s]+", 
                 }
             }
         };
@@ -63,38 +63,6 @@ namespace Indicium.Tests
 
             Assert.IsNotEmpty(tokensFromLyrics);
             Assert.IsTrue(tokensFromLyrics.Count == 736);
-        }
-
-        [Test]
-        public void TestEvaluationOrder1()
-        {
-            var context = GetDefaultContext();
-
-            var tokensFromLyrics = Lyrics.Split("\r\n").SelectMany((line, i) => {
-                context.LineNumber = i;
-                context.InputString = line;
-
-                return context.GetTokens();
-            }).ToList();
-
-            Assert.IsNotEmpty(tokensFromLyrics);
-            Assert.IsTrue(tokensFromLyrics.Count == 736);
-        }
-
-        [Test]
-        public void TestEvaluationOrder2()
-        {
-            var context = GetDefaultContext();
-            context.IgnoreSpaces = false;
-            context.ObeyEvaluationOrder = true;
-
-            var unsorted = context.Token.ToList();
-
-            Assert.IsTrue(unsorted.Last().Id == "Whitespace");
-
-            var sorted = context.Token.OrderBy(t => t.EvaluationOrder).ToList();
-
-            Assert.IsTrue(sorted.Last().Id == "Non-Identifier");
         }
 
         [Test]

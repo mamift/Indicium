@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Indicium.Schemas;
 
-namespace Indicium
+namespace Indicium.CodeGen
 {
     public partial class TokenTypeGenerator
     {
@@ -16,13 +16,13 @@ namespace Indicium
         /// <returns></returns>
         public static CodeTypeDeclaration GenerateTokenContextClass()
         {
-            var type = new CodeTypeDeclaration(CodeGen.TokenContextClassName) {
+            var type = new CodeTypeDeclaration(Indicium.CodeGen.CodeGen.TokenContextClassName) {
                 TypeAttributes = TypeAttributes.Public,
                 IsPartial = true
             };
 
             var codeConstructor = new CodeConstructor {
-                Name = CodeGen.TokenContextClassName,
+                Name = Indicium.CodeGen.CodeGen.TokenContextClassName,
                 Attributes = MemberAttributes.Public
             };
             
@@ -70,7 +70,7 @@ namespace Indicium
         /// <returns></returns>
         public static CodeTypeDeclaration GenerateTokenAbstractBaseClass()
         {
-            var tokenBaseClass = new CodeTypeDeclaration(CodeGen.AbstractTokenBaseClassName) {
+            var tokenBaseClass = new CodeTypeDeclaration(Indicium.CodeGen.CodeGen.AbstractTokenBaseClassName) {
                 TypeAttributes = TypeAttributes.Abstract | TypeAttributes.Public,
                 IsPartial = true
             };
@@ -80,7 +80,7 @@ namespace Indicium
             tokenBaseClass.AddDefaultGetter(nameof(Regex), nameof(Regex), publicAbstract);
 
             var constructor = new CodeConstructor {
-                Name = CodeGen.AbstractLexemeBaseClassName,
+                Name = Indicium.CodeGen.CodeGen.AbstractLexemeBaseClassName,
                 Attributes = MemberAttributes.Family
             };
 
@@ -98,17 +98,17 @@ namespace Indicium
             const string valueVarName = "value";
             var privateValueFieldName = $"_{valueVarName}";
 
-            var genericTTokenType = new CodeTypeParameter(CodeGen.GenericTTokenTypeName) {
+            var genericTTokenType = new CodeTypeParameter(Indicium.CodeGen.CodeGen.GenericTTokenTypeName) {
                 HasConstructorConstraint = true,
-                Constraints = { CodeGen.TokenBaseCodeTypeReference }
+                Constraints = { Indicium.CodeGen.CodeGen.TokenBaseCodeTypeReference }
             };
-            var lexemeBaseClass = new CodeTypeDeclaration(CodeGen.AbstractLexemeBaseClassName) {
+            var lexemeBaseClass = new CodeTypeDeclaration(Indicium.CodeGen.CodeGen.AbstractLexemeBaseClassName) {
                 TypeAttributes = TypeAttributes.Public | TypeAttributes.Abstract,
                 IsPartial = true,
                 TypeParameters = { genericTTokenType }
             };
 
-            lexemeBaseClass.AddDefaultGetter(CodeGen.GenericTTokenTypeName, "Token", MemberAttributes.Public | MemberAttributes.Abstract);
+            lexemeBaseClass.AddDefaultGetter(Indicium.CodeGen.CodeGen.GenericTTokenTypeName, "Token", MemberAttributes.Public | MemberAttributes.Abstract);
 
             var valueField = new CodeMemberField {
                 Name = privateValueFieldName,
@@ -179,7 +179,7 @@ namespace Indicium
                 TypeAttributes = TypeAttributes.Public,
                 IsPartial = true,
                 BaseTypes = {
-                    new CodeTypeReference(new CodeTypeParameter(CodeGen.AbstractLexemeBaseClassName)) {
+                    new CodeTypeReference(new CodeTypeParameter(Indicium.CodeGen.CodeGen.AbstractLexemeBaseClassName)) {
                         TypeArguments = { new CodeTypeReference(tokenType.Name) }
                     }
                 }
@@ -219,7 +219,7 @@ namespace Indicium
             var tokenClass = new CodeTypeDeclaration($"{tokenDef.Id}Token") {
                 TypeAttributes = TypeAttributes.Public,
                 BaseTypes = {
-                    new CodeTypeReference(new CodeTypeParameter(CodeGen.AbstractTokenBaseClassName))
+                    new CodeTypeReference(new CodeTypeParameter(Indicium.CodeGen.CodeGen.AbstractTokenBaseClassName))
                 },
                 IsPartial = true
             };
@@ -238,7 +238,7 @@ namespace Indicium
             var privateRegexField = new CodeMemberField {
                 Attributes = MemberAttributes.Private | MemberAttributes.Static,
                 Name = nameof(Regex).Privatise(),
-                Type = CodeGen.RegexCodeTypeReferenceByName,
+                Type = Indicium.CodeGen.CodeGen.RegexCodeTypeReferenceByName,
                 InitExpression = privateRegexFieldInitialisation
             };
 
@@ -268,7 +268,7 @@ namespace Indicium
                 HasSet = false, HasGet = true,
                 ImplementationTypes = {new CodeTypeReference(typeof(Regex))},
                 GetStatements = {regexPropertyReturnStatement},
-                Type = CodeGen.RegexCodeTypeReferenceByName
+                Type = Indicium.CodeGen.CodeGen.RegexCodeTypeReferenceByName
             };
 
             //default value

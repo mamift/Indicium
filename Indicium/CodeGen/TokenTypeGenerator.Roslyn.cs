@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Indicium
+namespace Indicium.CodeGen
 {
     using SF = SyntaxFactory;
 
@@ -39,7 +39,7 @@ namespace Indicium
 
                 ClassDeclarationSyntax classDeclaration = SF.ClassDeclaration(classId);
                 SimpleBaseTypeSyntax tokenBaseType =
-                    SF.SimpleBaseType(SF.ParseTypeName(nameof(TokenBase)));
+                    SF.SimpleBaseType(SF.ParseTypeName(nameof(Token)));
                 classDeclaration = classDeclaration.AddModifiers(publicKeyword).AddBaseListTypes(tokenBaseType);
 
                 TypeSyntax stringType = SF.ParseTypeName(nameof(System.String));

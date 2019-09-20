@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ExemplarTargetCode\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="lyrics.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

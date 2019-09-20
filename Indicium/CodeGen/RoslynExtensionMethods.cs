@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Indicium
+namespace Indicium.CodeGen
 {
     using SF = SyntaxFactory;
 
@@ -94,8 +94,8 @@ namespace Indicium
 
             const string tokenListVarName = "tokenList";
             ConditionalExpressionSyntax tokenListVarTernaryOperatorInitStmt = SF.ConditionalExpression(
-                SF.ParseExpression($"{obeyEvalOrderVarName}"),
-                SF.ParseExpression($"{tokensVarName}.OrderBy(t => t.EvaluationOrder ?? 0).ToList()"),
+                SF.ParseExpression("true"),
+                SF.ParseExpression($"{tokensVarName}.ToList()"),
                 SF.ParseExpression($"{tokensVarName}.ToList()")
             );
 

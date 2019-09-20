@@ -3,7 +3,7 @@ using CSharpSyntax;
 using Indicium.Schemas;
 using Xml.Schema.Linq.Extensions;
 
-namespace Indicium
+namespace Indicium.CodeGen
 {
     public static class TokenContextTypeGenerator
     {
@@ -36,7 +36,7 @@ namespace Indicium
 
             var equalsValueClauseSyntax = new EqualsValueClauseSyntax {
                 Value = new ObjectCreationExpressionSyntax {
-                    Type = NewGenericTypeName("List", nameof(TokenBase)),
+                    Type = NewGenericTypeName("List", nameof(Token)),
                     ArgumentList = new ArgumentListSyntax()
                 }
             };
@@ -50,7 +50,7 @@ namespace Indicium
                     new FieldDeclarationSyntax {
                         Modifiers = Modifiers.Private,
                         Declaration = new VariableDeclarationSyntax {
-                            Type = NewGenericTypeName("List", nameof(TokenBase)),
+                            Type = NewGenericTypeName("List", nameof(Token)),
                             Variables = {
                                 new VariableDeclaratorSyntax {
                                     Identifier = tokensIdentifier

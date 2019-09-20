@@ -2,6 +2,7 @@
 using System.CodeDom.Compiler;
 using System.IO;
 using System.Text;
+using Indicium.CodeGen;
 using Indicium.Schemas;
 using Microsoft.CodeAnalysis;
 using NUnit.Framework;

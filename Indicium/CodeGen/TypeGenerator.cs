@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Indicium
+namespace Indicium.CodeGen
 {
     using SF = SyntaxFactory;
     
@@ -35,7 +35,7 @@ namespace Indicium
                 SyntaxToken classId = SF.Identifier(className);
 
                 ClassDeclarationSyntax classDeclaration = SF.ClassDeclaration(classId);
-                SimpleBaseTypeSyntax tokenBaseType = SF.SimpleBaseType(SF.ParseTypeName(nameof(TokenBase)));
+                SimpleBaseTypeSyntax tokenBaseType = SF.SimpleBaseType(SF.ParseTypeName(nameof(Token)));
                 classDeclaration = classDeclaration.AddModifiers(publicKeyword).AddBaseListTypes(tokenBaseType);
 
                 TypeSyntax stringType = SF.ParseTypeName(nameof(System.String));
@@ -103,7 +103,7 @@ namespace Indicium
         {
             var tokenClass = new CodeTypeDeclaration($"{tokenDef.Id}Token") {
                 TypeAttributes = TypeAttributes.Public,
-                BaseTypes = {new CodeTypeReference(new CodeTypeParameter(nameof(TokenBase)))}
+                BaseTypes = {new CodeTypeReference(new CodeTypeParameter(nameof(Token)))}
             };
 
             // private member fields
