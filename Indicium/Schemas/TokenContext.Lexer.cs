@@ -37,12 +37,8 @@ namespace Indicium.Schemas
                     if (index >= input.Length) return default(Lexeme);
                 }
             }
-
-            var tokenList = obeyEvalOrder
-                ? Token.OrderBy(t => t.EvaluationOrder ?? 0).ToList()
-                : Token.ToList();
-
-            foreach (var def in tokenList) {
+            
+            foreach (var def in Token) {
                 if (GetLexeme(input, ref index, ref matchLength, def, out var lexeme)) return lexeme;
             }
 
