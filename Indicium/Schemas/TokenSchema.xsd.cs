@@ -424,27 +424,6 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public virtual System.Nullable<int> EvaluationOrder {
-            get {
-                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("EvaluationOrder", ""));
-                if ((x == null)) {
-                    return null;
-                }
-                return XTypedServices.ParseValue<int>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
-            }
-            set {
-                this.SetAttribute(System.Xml.Linq.XName.Get("EvaluationOrder", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
-            }
-        }
-        
-        /// <summary>
-        /// <para>
         /// The unique identifier for this element. This is optional, as a Token element may actually refer to one already defined.
         /// </para>
         /// <para>
@@ -600,23 +579,6 @@ namespace Indicium.Schemas {
             }
             set {
                 this.ContentField.TypedValue = value;
-            }
-        }
-        
-        /// <summary>
-        /// <para>
-        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public virtual System.Nullable<int> EvaluationOrder {
-            get {
-                return this.ContentField.EvaluationOrder;
-            }
-            set {
-                this.ContentField.EvaluationOrder = value;
             }
         }
         
