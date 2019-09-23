@@ -49,7 +49,10 @@ namespace Indicium.Schemas
         /// <summary>
         /// Represents an undefined <see cref="Lexeme"/>.
         /// </summary>
-        public static readonly Lexeme Undefined = new Lexeme {Id = "Undefined"};
+        public static readonly Lexeme Undefined = new Lexeme {
+            Id = "Undefined",
+            TypedValue = string.Empty
+        };
         
         protected bool Equals(Lexeme other) => Id == other?.Id;
 

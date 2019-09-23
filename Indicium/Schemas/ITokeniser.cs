@@ -17,18 +17,18 @@ namespace Indicium.Schemas
         int LineIndex { get; }
 
         /// <summary>
-        /// Not serialised.
         /// <para>Set the input string to extract <see cref="Token"/>s from.</para>
         /// </summary>
         string InputString { set; }
 
         /// <summary>
         /// When processing input strings line by line, set this value to indicate which line number we are
-        /// currently processing, so that tokenised output can refer to it. <para>Because this value is set by API
-        /// callers, the caller should communicate whether tokenised output (<see cref="Lexeme"/> objects)
-        /// have their <see cref="Lexeme.LineNumber"/> set as a 0-based or 1-based value.</para>
-        /// <para>This value is ignored for <see cref="ProcessTokens(TextReader)"/> and for <see cref="ProcessTokens(string,char)"/> methods,
-        /// as the line number is determined by the input.</para>
+        /// currently processing, so that output <see cref="Lexeme"/>s can refer to it.
+        /// <para>Because this value is set by API callers, the caller should communicate whether output <see cref="Lexeme"/> objects
+        /// have their <see cref="Lexeme.LineNumber"/> set as a 0-based or 1-based value. Line numbers should start
+        /// at one, but column indices should start at 0.</para>
+        /// <para>This value is also used by <see cref="ProcessTokens(TextReader)"/> and for <see cref="ProcessTokens(string,char)"/> methods,
+        /// whereby the value of this property .</para>
         /// <para>Defaults to 1.</para>
         /// </summary>
         int LineNumber { set; }

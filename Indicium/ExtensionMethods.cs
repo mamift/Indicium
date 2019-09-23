@@ -19,8 +19,7 @@ namespace Indicium
         {
             if (!others.Any()) return false;
 
-            for (var i = 0; i < others.Length; i++)
-            {
+            for (var i = 0; i < others.Length; i++) {
                 if (thing.Equals(others[i])) return true;
             }
 
