@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Resources;
 using System.Text.RegularExpressions;
 
 namespace Indicium.Schemas
@@ -78,12 +80,25 @@ namespace Indicium.Schemas
         }
 
         /// <summary>
+        /// Converts <see cref="WhitespaceCharacters"/> into a <see cref="char"/> array for use with the <see cref="ExtractLexeme"/>
+        /// method.
+        /// </summary>
+        private char[] CharsToUseAsWhiteSpace
+        {
+            get
+            {
+                var charsToRecogniseAsWhitespace = WhitespaceCharacters?.ToCharArray();
+                return charsToRecogniseAsWhitespace?.Any() ?? false ? charsToRecogniseAsWhitespace : null;
+            }
+        }
+
+        /// <summary>
         /// Get's the next <see cref="Token"/> for the current <see cref="InputString"/>.
         /// </summary>
         /// <returns></returns>
         public Lexeme GetToken()
         {
-            var lexeme = ExtractLexeme(_inputString, _index, IgnoreSpaces, out _index, out var matchLength);
+            var lexeme = ExtractLexeme(_inputString, _index, IgnoreSpaces, out _index, out var matchLength, CharsToUseAsWhiteSpace);
             if (lexeme == default(Lexeme)) return null;
 
             lexeme.LineNumber = _lineNumber;
@@ -103,7 +118,7 @@ namespace Indicium.Schemas
             var startIndexCopy = _index;
             var subStr = _inputString.Substring(startIndexCopy);
 
-            var lexeme = ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _);
+            var lexeme = ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _, CharsToUseAsWhiteSpace);
             
             lexeme.LineNumber = _lineNumber;
 

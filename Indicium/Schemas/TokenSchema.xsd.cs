@@ -53,7 +53,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// A custom regex string to recognise whitespace characters. No value defaults to recognising a tab and a space ([\t\s]+).
+        /// A string literal (NOT regex string) to recognise whitespace characters. Whitespace characters are not collapsed in this element, so adding a return carriage (pressing [ENTER] will be interpreted as valid input). Not specifying this element defaults to a tab and a space ([\t\s]+).
         /// </para>
         /// <para>
         /// Occurrence: optional
@@ -65,16 +65,16 @@ namespace Indicium.Schemas {
         public virtual string WhitespaceCharacters {
             get {
                 XElement x = this.GetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""));
-                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.NormalizedString).Datatype);
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
             set {
-                this.SetElementWithValidation(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""), value, "WhitespaceCharacters", global::Indicium.Schemas.RegexString.TypeDefinition);
+                this.SetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
         /// <summary>
         /// <para>
-        /// A custom regex string to recognise a line delimiter. No value defaults to return carraige and newline (\r\n).
+        /// A custom regex string to recognise a line delimiter. Not specifying this element or giving an empty value to this element will default to the value defined in System.Environment.NewLine.
         /// </para>
         /// <para>
         /// Occurrence: optional
