@@ -1,6 +1,5 @@
-﻿using System.IO;
-using CSharpSyntax.Printer;
-using Indicium.CodeGen;
+﻿using Indicium.CodeGen;
+using Microsoft.CodeAnalysis;
 using NUnit.Framework;
 
 namespace Indicium.Tests
@@ -13,15 +12,10 @@ namespace Indicium.Tests
         {
             var context = TokenContextTests.GetDefaultContext();
 
-            var classDeclaration = TokenContextTypeGenerator.TokenDefinitionClasses(context, "CustomContext");
+            var namespaceDeclaration = TokenContextTypeGenerator.GenerateTokeniserType(context, "TokensNamespace");
+            var codeString = namespaceDeclaration.NormalizeWhitespace().ToFullString();
 
-            var textWriter = new StringWriter();
-            var printer = new SyntaxPrinter(new SyntaxWriter(textWriter));
-            printer.Visit(classDeclaration);
-            
-            var code = textWriter.GetStringBuilder().ToString();
-
-            File.WriteAllText(@".\RoslynCode.cs", code);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(codeString));
         }
     }
 }

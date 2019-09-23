@@ -2,11 +2,39 @@
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Xml.Schema.Linq.Extensions;
 
 namespace Indicium
 {
     public static class ExtensionMethods
     {
+        /// <summary>
+        /// Strips a string of all characters that are not the first 255 characters in UTF-8
+        /// </summary>
+        /// <param name="theString"></param>
+        /// <param name="replacement"></param>
+        /// <returns></returns>
+        public static string StripStringOfAllNonAnsiCharacters(this string theString, char? replacement = null)
+        {
+            return Regex.Replace(theString, @"[^\u0000-\u007F]+", ((replacement == null) ? string.Empty : $"{replacement}"));
+        }
+
+        /// <summary>
+        /// Removes all non alphanumeric characters. Optionally provide a replacement string.
+        /// </summary>
+        /// <param name="theString"></param>
+        /// <param name="replacement"></param>
+        /// <returns></returns>
+        public static string StripOfNonAlphanumericChars(this string theString, string replacement = "")
+        {
+            if (theString.IsEmpty())
+                return replacement;
+
+            var replaceTitleRegex = new Regex("\\W+", RegexOptions.Compiled);
+            return replaceTitleRegex.Replace(theString, replacement);
+        }
+
+
         /// <summary>
         /// Checks if the current <paramref name="thing"/> is equal to at least one of the <paramref name="others"/>.
         /// <para>Invokes <see cref="object.Equals(object)"/> to conduct comparison.</para>
