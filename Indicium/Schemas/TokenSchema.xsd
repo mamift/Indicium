@@ -20,6 +20,11 @@
                 <xs:element ref="Token" maxOccurs="unbounded" minOccurs="1"/>
             </xs:sequence>
             <xs:attributeGroup ref="CodeGenAttrs"/>
+            <xs:attribute default="false" name="IgnoreWhitespace" type="xs:boolean" use="optional">
+                <xs:annotation>
+                    <xs:documentation>Set to True to ignore whitespace characters, as defined by the WhitespaceCharacters element.</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="Token" type="TToken">

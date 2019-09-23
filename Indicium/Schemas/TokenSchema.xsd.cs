@@ -31,6 +31,9 @@ namespace Indicium.Schemas {
         private XTypedList<Token> TokenField;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private static bool IgnoreWhitespaceDefaultValue = System.Xml.XmlConvert.ToBoolean("false");
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private static Dictionary<System.Xml.Linq.XName, System.Type> localElementDictionary = new Dictionary<System.Xml.Linq.XName, System.Type>();
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -195,6 +198,24 @@ namespace Indicium.Schemas {
             }
             set {
                 this.SetAttribute(System.Xml.Linq.XName.Get("Visibility", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Set to True to ignore whitespace characters, as defined by the WhitespaceCharacters element.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public virtual bool IgnoreWhitespace {
+            get {
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("IgnoreWhitespace", ""));
+                return XTypedServices.ParseValue<bool>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Boolean).Datatype, IgnoreWhitespaceDefaultValue);
+            }
+            set {
+                this.SetAttribute(System.Xml.Linq.XName.Get("IgnoreWhitespace", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Boolean).Datatype);
             }
         }
         
