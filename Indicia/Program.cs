@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Reflection;
 using Alba.CsConsoleFormat.Fluent;
@@ -8,14 +7,15 @@ using Indicium.Schemas;
 
 namespace Indicia
 {
-    class Program
+    public class Program
     {
         public static int Main(string[] args)
         {
             if (args.Length != 2)
             {
                 Colors.WriteLine($"Usage: {Path.GetFileName(Assembly.GetExecutingAssembly().Location)} ".White(),
-                    "<tokenSchema.xml> ".OnDarkBlue().White(),
+                    "<tokenSchema.xml>".OnDarkBlue().White(), 
+                    " ",
                     "<inputFileToBeTokenised.txt>".OnDarkRed().White());
                 Colors.WriteLine("Will then output tokenised output to:".White());
                 Colors.WriteLine("<inputFileToBeTokenised.txt>.output".Yellow());

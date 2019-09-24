@@ -7,26 +7,8 @@ using NUnit.Framework;
 
 namespace Indicium.Tests
 {
-    [TestFixture]
     public class TokenContextTests
     {
-        public static readonly string Lyrics = File.ReadAllText("lyrics.txt");
-
-        public static TokenContext GetDefaultContext() => new TokenContext
-        {
-            Token = new List<Token> {
-                new Token {
-                    Id = "Identifier", TypedValue = @"[\w]+", 
-                },
-                new Token {
-                    Id = "Non-Identifier", TypedValue = @"[\W]+", 
-                },
-                new Token {
-                    Id = "Whitespace", TypedValue = @"[\s]+", 
-                }
-            }
-        };
-
         private TokenContext _context; 
 
         [SetUp]
@@ -54,7 +36,7 @@ namespace Indicium.Tests
                 }
             };
 
-            var tokensFromLyrics = Lyrics.Split("\r\n").SelectMany((line, i) => {
+            var tokensFromLyrics = Shared.Lyrics.Split("\r\n").SelectMany((line, i) => {
                 newContext.LineNumber = i;
                 newContext.InputString = line;
 
@@ -70,7 +52,7 @@ namespace Indicium.Tests
         {
             var fullTokenList = new List<Lexeme>();
 
-            var lyricLines = Lyrics.Split("\r\n");
+            var lyricLines = Shared.Lyrics.Split("\r\n");
             for (var lineNumber = 1; lineNumber <= lyricLines.Length; lineNumber++) {
                 _context.LineNumber = lineNumber;
                 _context.IgnoreSpaces = true;
@@ -95,7 +77,7 @@ namespace Indicium.Tests
         {
             var fullTokenList = new List<Lexeme>();
 
-            foreach (var line in Lyrics.Split("\r\n")) {
+            foreach (var line in Shared.Lyrics.Split("\r\n")) {
                 _context.IgnoreSpaces = false;
                 _context.InputString = line;
 

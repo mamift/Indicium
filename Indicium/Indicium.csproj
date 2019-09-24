@@ -19,9 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CSharpSyntax" Version="0.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.CodeDom" Version="4.5.0" />
     <PackageReference Include="XObjectsCore" Version="3.0.0.3" />
   </ItemGroup>

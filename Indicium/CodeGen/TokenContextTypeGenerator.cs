@@ -17,45 +17,58 @@ namespace Indicium.CodeGen
         /// <param name="context"></param>
         /// <param name="namespaceName"></param>
         /// <returns></returns>
-        public static NamespaceDeclarationSyntax GenerateTokeniserType(TokenContext context, string namespaceName)
+        public static NamespaceDeclarationSyntax GenerateTokeniserCode(TokenContext context, string namespaceName)
         {
             var namespaceDecl = SF.NamespaceDeclaration(SF.ParseName(namespaceName));
 
-            namespaceDecl = namespaceDecl.AddUsings(SF.UsingDirective(SF.ParseName($"{nameof(Indicium)}.{nameof(Indicium.Schemas)}")));
-            namespaceDecl = namespaceDecl.AddUsings(SF.UsingDirective(SF.ParseName($"{nameof(Indicium)}.{nameof(Indicium.CodeGen)}")));
+            namespaceDecl = namespaceDecl.AddUsings(
+                SF.UsingDirective(SF.ParseName($"{nameof(System)}")),
+                SF.UsingDirective(SF.ParseName($"{nameof(System)}.{nameof(System.Collections)}.{nameof(System.Collections.Generic)}")),
+                SF.UsingDirective(SF.ParseName($"{nameof(XObjects)}")),
+                SF.UsingDirective(SF.ParseName($"{nameof(Indicium)}")),
+                SF.UsingDirective(SF.ParseName($"{nameof(Indicium)}.{nameof(Indicium.Schemas)}")),
+                SF.UsingDirective(SF.ParseName($"{nameof(Indicium)}.{nameof(Indicium.CodeGen)}"))
+            );
 
             foreach (var token in context.Token) {
-                var tokenType = CreateClassDeclarationSyntax(token);
+                var tokenType = GenerateTokenClassDeclaration(token);
 
                 namespaceDecl = namespaceDecl.AddMembers(tokenType);
             }
 
             var tokeniserTypeName = context.ClassName.IsEmpty() ? "Tokeniser" : context.ClassName;
-            namespaceDecl = namespaceDecl.AddMembers(CreateStaticTokeniser(context, tokeniserTypeName));
+            namespaceDecl = namespaceDecl.AddMembers(GenerateStaticTokeniserClassDeclaration(context, tokeniserTypeName));
 
             return namespaceDecl;
         }
 
-        public static ClassDeclarationSyntax CreateStaticTokeniser(TokenContext context, string tokeniserTypeName)
+        /// <summary>
+        /// Create a static class that can be used to access the Tokeniser instance.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="tokeniserTypeName">Defaults to "Tokeniser"</param>
+        /// <returns></returns>
+        public static ClassDeclarationSyntax GenerateStaticTokeniserClassDeclaration(TokenContext context, string tokeniserTypeName = "Tokeniser")
         {
             var publicStatic = new[]{ SF.Token(SyntaxKind.PublicKeyword), SF.Token(SyntaxKind.StaticKeyword) };
 
-            var tokenContextTypeName = nameof(TokenContext);
+            const string tokenContextTypeName = nameof(TokenContext);
 
             var lineDelimiterAssignment = SF.AssignmentExpression(
                                           SyntaxKind.SimpleAssignmentExpression,
-                                          SF.IdentifierName("LineDelimiter"),
+                                          SF.IdentifierName(nameof(TokenContext.LineDelimiter)),
                                           SF.MemberAccessExpression(
                                                 SyntaxKind.SimpleMemberAccessExpression,
-                                                SF.IdentifierName("Environment"),
-                                                SF.IdentifierName("NewLine"))
+                                                SF.IdentifierName($"{nameof(System)}.{nameof(Environment)}"),
+                                                SF.IdentifierName(nameof(Environment.NewLine)))
                                             .WithOperatorToken(SF.Token(SyntaxKind.DotToken)))
                                             .WithOperatorToken(SF.Token(SyntaxKind.EqualsToken));
 
+            var whitespaceCharacters = !string.IsNullOrEmpty(context.WhitespaceCharacters) ? context.WhitespaceCharacters : " \t";
             var whiteSpaceCharsAssignment = SF.AssignmentExpression(
                                                 SyntaxKind.SimpleAssignmentExpression,
-                                                SF.IdentifierName("WhitespaceCharacters"),
-                                                SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal(" \t")))
+                                                SF.IdentifierName(nameof(TokenContext.WhitespaceCharacters)),
+                                                SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal(whitespaceCharacters)))
                                             .WithOperatorToken(SF.Token(SyntaxKind.EqualsToken));
 
             var defaultInstancesOfTokensList = new List<SyntaxNodeOrToken>(context.Token.Count);
@@ -85,22 +98,6 @@ namespace Indicium.CodeGen
                                                               .WithSemicolonToken(SF.Token(SyntaxKind.SemicolonToken))))
                                                     .WithOpenBraceToken(SF.Token(SyntaxKind.OpenBraceToken))
                                                     .WithCloseBraceToken(SF.Token(SyntaxKind.CloseBraceToken)));
-
-            var ignoreWhitespaceProperty = SF.PropertyDeclaration(
-                                                SF.PredefinedType(SF.Token(SyntaxKind.BoolKeyword)),
-                                                SF.Identifier("IgnoreWhitespace"))
-                                                        .WithModifiers(SF.TokenList(publicStatic))
-                                                        .WithAccessorList(
-                                                            SF.AccessorList(
-                                                                SF.List(
-                                                                    new AccessorDeclarationSyntax[] {
-                                                                        SF.AccessorDeclaration(SyntaxKind.GetAccessorDeclaration)
-                                                                                     .WithSemicolonToken(SF.Token(SyntaxKind.SemicolonToken)),
-                                                                        SF.AccessorDeclaration(SyntaxKind.SetAccessorDeclaration)
-                                                                                     .WithSemicolonToken(SF.Token(SyntaxKind.SemicolonToken))
-                                                                    })))
-                                                        .WithInitializer(SF.EqualsValueClause(SF.LiteralExpression(SyntaxKind.FalseLiteralExpression)))
-                                                        .WithSemicolonToken(SF.Token(SyntaxKind.SemicolonToken));
             
             var constructorBodyBlock = SF.Block(
                 SF.SingletonList<StatementSyntax>(
@@ -158,7 +155,6 @@ namespace Indicium.CodeGen
                     SF.List(
                         new MemberDeclarationSyntax[] {
                             defaultInstanceGetProperty,
-                            ignoreWhitespaceProperty,
                             SF.ConstructorDeclaration(SF.Identifier(tokeniserTypeName))
                             .WithModifiers(SF.TokenList(SF.Token(SyntaxKind.StaticKeyword)))
                             .WithParameterList(
@@ -175,7 +171,12 @@ namespace Indicium.CodeGen
             return staticClassDeclaration;
         }
 
-        public static ClassDeclarationSyntax CreateClassDeclarationSyntax(Token token)
+        /// <summary>
+        /// Creates a class declaration for a given <paramref name="token"/>.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public static ClassDeclarationSyntax GenerateTokenClassDeclaration(Token token)
         {
             if (token.Id == nameof(Token)) throw new Exception("A token cannot have the name 'Token'!");
 
@@ -186,14 +187,12 @@ namespace Indicium.CodeGen
                 new[] {
                     publicModifier,
                     SF.Token(SyntaxKind.SealedKeyword)
-                }
-            );
+                });
 
             var baseTypeList = SF.BaseList(
                 SF.SingletonSeparatedList<BaseTypeSyntax>(
                     SF.SimpleBaseType(SF.IdentifierName(nameof(Token)))
-                )
-            );
+                ));
 
             var idValueAssignment = SF.ExpressionStatement(
                 SF.AssignmentExpression(
@@ -203,22 +202,15 @@ namespace Indicium.CodeGen
                       .WithArgumentList(
                           SF.ArgumentList(
                               SF.SingletonSeparatedList(
-                                  SF.Argument(SF.IdentifierName(className))
-                              )
-                          )
-                      )
-                )
-            );
+                                  SF.Argument(SF.IdentifierName(className)))))));
+
             var regexLiteralAssignment = SF.ExpressionStatement(
                 SF.AssignmentExpression(
                     SyntaxKind.SimpleAssignmentExpression,
                     SF.IdentifierName(nameof(Token.TypedValue)),
                     SF.LiteralExpression(
                         SyntaxKind.StringLiteralExpression,
-                        SF.Literal(token.TypedValue)
-                    )
-                )
-            );
+                        SF.Literal(token.TypedValue))));
             
             var constructorBodyBlock = SF.Block(
                 idValueAssignment,
@@ -232,18 +224,14 @@ namespace Indicium.CodeGen
                         SF.IdentifierName(nameof(Token.Description)),
                         SF.LiteralExpression(
                             SyntaxKind.StringLiteralExpression,
-                            SF.Literal(token.Description)
-                        )
-                    )
-                );
+                            SF.Literal(token.Description))));
+
                 constructorBodyBlock = constructorBodyBlock.AddStatements(tokenDescriptionAssignment);
             }
 
             var constructor = SF.ConstructorDeclaration(SF.Identifier(className))
                                                  .WithModifiers(SF.TokenList(publicModifier))
-                                                 .WithBody(
-                                                     constructorBodyBlock
-                                                 );
+                                                 .WithBody(constructorBodyBlock);
 
             var publicStaticModifier = SF.TokenList(
                 new[] {
@@ -260,13 +248,7 @@ namespace Indicium.CodeGen
                                                             .WithInitializer(
                                                                 SF.EqualsValueClause(
                                                                     SF.ObjectCreationExpression(
-                                                                        SF.IdentifierName(className)).WithArgumentList(SF.ArgumentList()
-                                                                    )
-                                                                )
-                                                            )
-                                                      )
-                                                  )
-                                            )
+                                                                        SF.IdentifierName(className)).WithArgumentList(SF.ArgumentList()))))))
                                             .WithModifiers(publicStaticModifier);
 
             var classDeclaration = SF.ClassDeclaration(className)
@@ -277,9 +259,7 @@ namespace Indicium.CodeGen
                                              new MemberDeclarationSyntax[] {
                                                  constructor,
                                                  defaultStaticMember
-                                             }
-                                         )
-                                     );
+                                             }));
 
             return classDeclaration;
         }

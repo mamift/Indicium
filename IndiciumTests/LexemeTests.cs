@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Indicium.Schemas;
+﻿using Indicium.Schemas;
 using NUnit.Framework;
 
 namespace Indicium.Tests

@@ -5,7 +5,6 @@ using NUnit.Framework;
 
 namespace Indicium.Tests
 {
-    [TestFixture]
     public class ExcipientTokenTests
     {
         [Test]
