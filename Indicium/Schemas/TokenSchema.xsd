@@ -7,9 +7,24 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence maxOccurs="1">
+                <xs:element minOccurs="0" name="WhitespaceCharacters" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>A string literal (NOT regex string) to recognise whitespace characters. Whitespace characters are not collapsed in this element, so adding a return carriage (pressing [ENTER] will be interpreted as valid input). Not specifying this element defaults to a tab and a space ([\t\s]+).</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element minOccurs="0" name="LineDelimiter" type="RegexString">
+                    <xs:annotation>
+                        <xs:documentation>A custom regex string to recognise a line delimiter. Not specifying this element or giving an empty value to this element will default to the value defined in System.Environment.NewLine.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
                 <xs:element ref="Token" maxOccurs="unbounded" minOccurs="1"/>
             </xs:sequence>
             <xs:attributeGroup ref="CodeGenAttrs"/>
+            <xs:attribute default="false" name="IgnoreWhitespace" type="xs:boolean" use="optional">
+                <xs:annotation>
+                    <xs:documentation>Set to True to ignore whitespace characters, as defined by the WhitespaceCharacters element.</xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:element name="Token" type="TToken">
@@ -45,9 +60,9 @@
         </xs:restriction>
     </xs:simpleType>
     <xs:attributeGroup name="TokenAttrs">
-        <xs:attribute name="EvaluationOrder" type="xs:int">
+        <xs:attribute name="Enum" type="xs:short">
             <xs:annotation>
-                <xs:documentation>Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.</xs:documentation>
+                <xs:documentation>Used for code generation. This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>
@@ -58,13 +73,8 @@
         </xs:annotation>
         <xs:simpleContent>
             <xs:extension base="RegexString">
-                <xs:attributeGroup ref="TokenAttrs"/>
                 <xs:attributeGroup ref="IdRefDescription"/>
-                <xs:attribute name="Enum" type="xs:short">
-                    <xs:annotation>
-                        <xs:documentation>This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
+                <xs:attributeGroup ref="TokenAttrs"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

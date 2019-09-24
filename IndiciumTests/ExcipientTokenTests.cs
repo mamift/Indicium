@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Indicium.Schemas;
 using NUnit.Framework;
 
 namespace Indicium.Tests
 {
-    [TestFixture]
     public class ExcipientTokenTests
     {
         [Test]

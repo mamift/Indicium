@@ -1,10 +1,11 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using Indicium.Schemas;
 using NUnit.Framework;
 
 namespace Indicium.Tests
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class XMLinCSharpTests
     {
         [Test]
@@ -28,14 +29,7 @@ namespace Indicium.Tests
         public void Test2()
         {
             var context = TokenContext.Load(@"Schemas\XMLinCSharp.xml");
-
-            var last = context.Token.First();
-
-            context.Token.Clear();
-
-            context.Token.Add(new Token { TypedValue = @"\(\<", Id = "XCSBegin"});
-            context.Token.Add(new Token { TypedValue = @"\>\)", Id = "XCSEnd"});
-
+            
             var cSharpExpression = @"var x = (<Invader>Zim</Invader>);";
 
             var lexemes = context.ProcessTokens(cSharpExpression, default(char));

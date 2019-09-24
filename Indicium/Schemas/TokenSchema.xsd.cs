@@ -22,13 +22,16 @@ namespace Indicium.Schemas {
     
     /// <summary>
     /// <para>
-    /// Regular expression: (Token+)
+    /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
     /// </para>
     /// </summary>
     public partial class TokenContext : XTypedElement, IXMetaData {
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private XTypedList<Token> TokenField;
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private static bool IgnoreWhitespaceDefaultValue = System.Xml.XmlConvert.ToBoolean("false");
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private static Dictionary<System.Xml.Linq.XName, System.Type> localElementDictionary = new Dictionary<System.Xml.Linq.XName, System.Type>();
@@ -40,12 +43,12 @@ namespace Indicium.Schemas {
         
         static TokenContext() {
             BuildElementDictionary();
-            contentModel = new SequenceContentModelEntity(new NamedContentModelEntity(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium")));
+            contentModel = new SequenceContentModelEntity(new NamedContentModelEntity(System.Xml.Linq.XName.Get("WhitespaceCharacters", "")), new NamedContentModelEntity(System.Xml.Linq.XName.Get("LineDelimiter", "")), new NamedContentModelEntity(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium")));
         }
         
         /// <summary>
         /// <para>
-        /// Regular expression: (Token+)
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
         /// </para>
         /// </summary>
         public TokenContext() {
@@ -53,10 +56,52 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
+        /// A string literal (NOT regex string) to recognise whitespace characters. Whitespace characters are not collapsed in this element, so adding a return carriage (pressing [ENTER] will be interpreted as valid input). Not specifying this element defaults to a tab and a space ([\t\s]+).
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// <para>
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
+        /// </para>
+        /// </summary>
+        public virtual string WhitespaceCharacters {
+            get {
+                XElement x = this.GetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+            set {
+                this.SetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// A custom regex string to recognise a line delimiter. Not specifying this element or giving an empty value to this element will default to the value defined in System.Environment.NewLine.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// <para>
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
+        /// </para>
+        /// </summary>
+        public virtual string LineDelimiter {
+            get {
+                XElement x = this.GetElement(System.Xml.Linq.XName.Get("LineDelimiter", ""));
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.NormalizedString).Datatype);
+            }
+            set {
+                this.SetElementWithValidation(System.Xml.Linq.XName.Get("LineDelimiter", ""), value, "LineDelimiter", global::Indicium.Schemas.RegexString.TypeDefinition);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
         /// Occurrence: required, repeating
         /// </para>
         /// <para>
-        /// Regular expression: (Token+)
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
         /// </para>
         /// </summary>
         public virtual IList<Token> Token {
@@ -156,6 +201,24 @@ namespace Indicium.Schemas {
             }
         }
         
+        /// <summary>
+        /// <para>
+        /// Set to True to ignore whitespace characters, as defined by the WhitespaceCharacters element.
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// </summary>
+        public virtual bool IgnoreWhitespace {
+            get {
+                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("IgnoreWhitespace", ""));
+                return XTypedServices.ParseValue<bool>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Boolean).Datatype, IgnoreWhitespaceDefaultValue);
+            }
+            set {
+                this.SetAttribute(System.Xml.Linq.XName.Get("IgnoreWhitespace", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Boolean).Datatype);
+            }
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         Dictionary<System.Xml.Linq.XName, System.Type> IXMetaData.LocalElementsDictionary {
             get {
@@ -213,6 +276,8 @@ namespace Indicium.Schemas {
         }
         
         private static void BuildElementDictionary() {
+            localElementDictionary.Add(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""), typeof(string));
+            localElementDictionary.Add(System.Xml.Linq.XName.Get("LineDelimiter", ""), typeof(string));
             localElementDictionary.Add(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(Token));
         }
         
@@ -380,27 +445,6 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public virtual System.Nullable<int> EvaluationOrder {
-            get {
-                XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("EvaluationOrder", ""));
-                if ((x == null)) {
-                    return null;
-                }
-                return XTypedServices.ParseValue<int>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
-            }
-            set {
-                this.SetAttribute(System.Xml.Linq.XName.Get("EvaluationOrder", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
-            }
-        }
-        
-        /// <summary>
-        /// <para>
         /// The unique identifier for this element. This is optional, as a Token element may actually refer to one already defined.
         /// </para>
         /// <para>
@@ -455,7 +499,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.
+        /// Used for code generation. This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.
         /// </para>
         /// <para>
         /// Occurrence: optional
@@ -561,23 +605,6 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Determines the relative order this Token is evaluated. Higher values imply lower evaluation order.
-        /// </para>
-        /// <para>
-        /// Occurrence: optional
-        /// </para>
-        /// </summary>
-        public virtual System.Nullable<int> EvaluationOrder {
-            get {
-                return this.ContentField.EvaluationOrder;
-            }
-            set {
-                this.ContentField.EvaluationOrder = value;
-            }
-        }
-        
-        /// <summary>
-        /// <para>
         /// The unique identifier for this element. This is optional, as a Token element may actually refer to one already defined.
         /// </para>
         /// <para>
@@ -629,7 +656,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.
+        /// Used for code generation. This is filled by the Indicium library; specifying a value here on your own is meaningless as it will be ignored and then overwritten during code generation.
         /// </para>
         /// <para>
         /// Occurrence: optional

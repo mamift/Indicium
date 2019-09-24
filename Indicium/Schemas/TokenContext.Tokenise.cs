@@ -1,22 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Indicium.Schemas
 {
-    public partial class TokenContext
+    public partial class TokenContext : ITokeniser
     {
         private int _index = 0;
 
         private int _lineNumber = 1;
 
         private string _inputString = string.Empty;
-
-        /// <summary>
-        /// Not serialised.
-        /// <para>Set to ignore or obey a Token's <see cref="Schemas.Token.EvaluationOrder"/> setting.</para>
-        /// </summary>
-        public bool ObeyEvaluationOrder = true;
 
         /// <summary>
         /// <para>Default <see cref="System.Text.RegularExpressions.RegexOptions"/> when creating <see cref="Schemas.Token"/>
@@ -84,12 +79,25 @@ namespace Indicium.Schemas
         }
 
         /// <summary>
+        /// Converts <see cref="WhitespaceCharacters"/> into a <see cref="char"/> array for use with the <see cref="ExtractLexeme"/>
+        /// method.
+        /// </summary>
+        private char[] CharsToUseAsWhiteSpace
+        {
+            get
+            {
+                var charsToRecogniseAsWhitespace = WhitespaceCharacters?.ToCharArray();
+                return charsToRecogniseAsWhitespace?.Any() ?? false ? charsToRecogniseAsWhitespace : null;
+            }
+        }
+
+        /// <summary>
         /// Get's the next <see cref="Token"/> for the current <see cref="InputString"/>.
         /// </summary>
         /// <returns></returns>
         public Lexeme GetToken()
         {
-            var lexeme = Token.ExtractLexeme(_inputString, _index, IgnoreSpaces, out _index, out var matchLength);
+            var lexeme = ExtractLexeme(_inputString, _index, IgnoreSpaces, out _index, out var matchLength, CharsToUseAsWhiteSpace);
             if (lexeme == default(Lexeme)) return null;
 
             lexeme.LineNumber = _lineNumber;
@@ -109,7 +117,7 @@ namespace Indicium.Schemas
             var startIndexCopy = _index;
             var subStr = _inputString.Substring(startIndexCopy);
 
-            var lexeme = Token.ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _, ObeyEvaluationOrder);
+            var lexeme = ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _, CharsToUseAsWhiteSpace);
             
             lexeme.LineNumber = _lineNumber;
 

@@ -21,5 +21,7 @@ namespace Indicium.Schemas
         /// </summary>
         /// <param name="value"></param>
         public static Token GetUndefined(string value) => new Token { Id = "Undefined", TypedValue = value };
+
+        public string GetIdForCodeGen() => $"{Id.StripOfNonAlphanumericChars()}Token";
     }
 }

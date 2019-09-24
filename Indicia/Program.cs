@@ -7,13 +7,15 @@ using Indicium.Schemas;
 
 namespace Indicia
 {
-    public static class Program
+    public class Program
     {
         public static int Main(string[] args)
         {
-            if (args.Length != 2) {
-                Colors.WriteLine($"Usage: {Path.GetFileName(Assembly.GetExecutingAssembly().Location)} ".White(), 
-                    "<tokenSchema.xml> ".OnDarkBlue().White(),
+            if (args.Length != 2)
+            {
+                Colors.WriteLine($"Usage: {Path.GetFileName(Assembly.GetExecutingAssembly().Location)} ".White(),
+                    "<tokenSchema.xml>".OnDarkBlue().White(), 
+                    " ",
                     "<inputFileToBeTokenised.txt>".OnDarkRed().White());
                 Colors.WriteLine("Will then output tokenised output to:".White());
                 Colors.WriteLine("<inputFileToBeTokenised.txt>.output".Yellow());

@@ -35,7 +35,9 @@ namespace Indicium.Schemas
                 ? Regex.Replace(escapeColonInValue, @"\;{1}$", @"\;")
                 : escapeColonInValue;
 
-            return $"{{{Id}:{escapeSemicolonInValue};{LineNumber}:{LineIndex}}}";
+            var str = $"{{{Id}:{escapeSemicolonInValue};{LineNumber}:{LineIndex}}}";
+
+            return str;
         }
 
         /// <summary>
@@ -47,6 +49,23 @@ namespace Indicium.Schemas
         /// <summary>
         /// Represents an undefined <see cref="Lexeme"/>.
         /// </summary>
-        public static Lexeme Undefined => new Lexeme {Id = "Undefined"};
+        public static readonly Lexeme Undefined = new Lexeme {
+            Id = "Undefined",
+            TypedValue = string.Empty
+        };
+        
+        protected bool Equals(Lexeme other) => Id == other?.Id;
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Lexeme) obj);
+        }
+
+        public static bool operator ==(Lexeme one, Lexeme other) => Equals(one, other);
+
+        public static bool operator !=(Lexeme one, Lexeme other) => !Equals(one, other);
     }
 }
