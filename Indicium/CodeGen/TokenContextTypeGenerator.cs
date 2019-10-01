@@ -12,7 +12,9 @@ namespace Indicium.CodeGen
     public static class TokenContextTypeGenerator
     {
         /// <summary>
-        /// Generates the code for a custom namespace containing everything necessary for 
+        /// Generates the code for a custom namespace containing everything necessary for emitting standalone compilable, C#
+        /// code.
+        /// <para>Whitespace is normalised.</para>
         /// </summary>
         /// <param name="context"></param>
         /// <param name="namespaceName"></param>
@@ -39,7 +41,7 @@ namespace Indicium.CodeGen
             var tokeniserTypeName = context.ClassName.IsEmpty() ? "Tokeniser" : context.ClassName;
             namespaceDecl = namespaceDecl.AddMembers(GenerateStaticTokeniserClassDeclaration(context, tokeniserTypeName));
 
-            return namespaceDecl;
+            return namespaceDecl.NormalizeWhitespace();
         }
 
         /// <summary>

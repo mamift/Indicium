@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Indicia": {
+      "commandName": "Project",
+      "commandLineArgs": "codegen .\\Schemas\\Prototype1.xml"
+    }
+  }
+}

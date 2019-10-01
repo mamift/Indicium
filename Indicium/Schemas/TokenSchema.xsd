@@ -98,10 +98,10 @@
     <xs:attributeGroup name="CodeGenAttrs">
         <xs:attribute name="ClassName" type="xs:string">
             <xs:annotation>
-                <xs:documentation>Used only for code generation; specifies the class name.</xs:documentation>
+                <xs:documentation>Used only for code generation; specifies the class name. If not given, then a default name is used.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="NamespaceName" type="xs:string">
+        <xs:attribute name="NamespaceName" type="xs:string" use="required">
             <xs:annotation>
                 <xs:documentation>Used only for code generation; specify a namespace to use when generating code.</xs:documentation>
             </xs:annotation>
@@ -113,7 +113,7 @@
         </xs:attribute>
         <xs:attribute name="Visibility" type="xs:string">
             <xs:annotation>
-                <xs:documentation>Determines the generated types visiblity: public or internal. Unrecognised values default to public.</xs:documentation>
+                <xs:documentation>Determines the generated types visiblity: public or internal. If not given, or an unrecognised value is given, defaults to public.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:attributeGroup>

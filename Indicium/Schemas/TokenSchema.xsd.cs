@@ -65,7 +65,7 @@ namespace Indicium.Schemas {
         /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
         /// </para>
         /// </summary>
-        public virtual string WhitespaceCharacters {
+        public string WhitespaceCharacters {
             get {
                 XElement x = this.GetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
@@ -86,7 +86,7 @@ namespace Indicium.Schemas {
         /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
         /// </para>
         /// </summary>
-        public virtual string LineDelimiter {
+        public string LineDelimiter {
             get {
                 XElement x = this.GetElement(System.Xml.Linq.XName.Get("LineDelimiter", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.NormalizedString).Datatype);
@@ -104,7 +104,7 @@ namespace Indicium.Schemas {
         /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
         /// </para>
         /// </summary>
-        public virtual IList<Token> Token {
+        public IList<Token> Token {
             get {
                 if ((this.TokenField == null)) {
                     this.TokenField = new XTypedList<Token>(this, LinqToXsdTypeManager.Instance, System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"));
@@ -128,13 +128,13 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Used only for code generation; specifies the class name.
+        /// Used only for code generation; specifies the class name. If not given, then a default name is used.
         /// </para>
         /// <para>
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual string ClassName {
+        public string ClassName {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("ClassName", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
@@ -149,10 +149,10 @@ namespace Indicium.Schemas {
         /// Used only for code generation; specify a namespace to use when generating code.
         /// </para>
         /// <para>
-        /// Occurrence: optional
+        /// Occurrence: required
         /// </para>
         /// </summary>
-        public virtual string NamespaceName {
+        public string NamespaceName {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("NamespaceName", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
@@ -170,7 +170,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual System.Nullable<bool> GenerateEnums {
+        public System.Nullable<bool> GenerateEnums {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("GenerateEnums", ""));
                 if ((x == null)) {
@@ -185,13 +185,13 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// Determines the generated types visiblity: public or internal. Unrecognised values default to public.
+        /// Determines the generated types visiblity: public or internal. If not given, or an unrecognised value is given, defaults to public.
         /// </para>
         /// <para>
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual string Visibility {
+        public string Visibility {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Visibility", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
@@ -209,7 +209,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual bool IgnoreWhitespace {
+        public bool IgnoreWhitespace {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("IgnoreWhitespace", ""));
                 return XTypedServices.ParseValue<bool>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Boolean).Datatype, IgnoreWhitespaceDefaultValue);
@@ -293,7 +293,7 @@ namespace Indicium.Schemas {
         public Lexeme() {
         }
         
-        public virtual string TypedValue {
+        public string TypedValue {
             get {
                 XElement x = this.Untyped;
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
@@ -308,7 +308,7 @@ namespace Indicium.Schemas {
         /// Occurrence: required
         /// </para>
         /// </summary>
-        public virtual string Id {
+        public string Id {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Id", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
@@ -323,7 +323,7 @@ namespace Indicium.Schemas {
         /// Occurrence: required
         /// </para>
         /// </summary>
-        public virtual int LineNumber {
+        public int LineNumber {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("LineNumber", ""));
                 return XTypedServices.ParseValue<int>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
@@ -338,7 +338,7 @@ namespace Indicium.Schemas {
         /// Occurrence: required
         /// </para>
         /// </summary>
-        public virtual int LineIndex {
+        public int LineIndex {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("LineIndex", ""));
                 return XTypedServices.ParseValue<int>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Int).Datatype);
@@ -433,7 +433,7 @@ namespace Indicium.Schemas {
         public TToken() {
         }
         
-        public virtual string TypedValue {
+        public string TypedValue {
             get {
                 XElement x = this.Untyped;
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.NormalizedString).Datatype);
@@ -451,7 +451,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual string Id {
+        public string Id {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Id", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Id).Datatype);
@@ -469,7 +469,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual string @Ref {
+        public string @Ref {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Ref", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.Idref).Datatype);
@@ -487,7 +487,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual string Description {
+        public string Description {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Description", ""));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
@@ -505,7 +505,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual System.Nullable<short> @Enum {
+        public System.Nullable<short> @Enum {
             get {
                 XAttribute x = this.Attribute(System.Xml.Linq.XName.Get("Enum", ""));
                 if ((x == null)) {
@@ -588,13 +588,13 @@ namespace Indicium.Schemas {
             }
         }
         
-        public virtual TToken Content {
+        public TToken Content {
             get {
                 return ContentField;
             }
         }
         
-        public virtual string TypedValue {
+        public string TypedValue {
             get {
                 return this.ContentField.TypedValue;
             }
@@ -611,7 +611,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual string Id {
+        public string Id {
             get {
                 return this.ContentField.Id;
             }
@@ -628,7 +628,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual string @Ref {
+        public string @Ref {
             get {
                 return this.ContentField.@Ref;
             }
@@ -645,7 +645,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual string Description {
+        public string Description {
             get {
                 return this.ContentField.Description;
             }
@@ -662,7 +662,7 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// </summary>
-        public virtual System.Nullable<short> @Enum {
+        public System.Nullable<short> @Enum {
             get {
                 return this.ContentField.@Enum;
             }
@@ -855,7 +855,7 @@ namespace Indicium.Schemas {
             this.rootObject = root;
         }
         
-        public virtual XDocument XDocument {
+        public XDocument XDocument {
             get {
                 return doc;
             }
@@ -938,23 +938,23 @@ namespace Indicium.Schemas {
             return root;
         }
         
-        public virtual void Save(string fileName) {
+        public void Save(string fileName) {
             doc.Save(fileName);
         }
         
-        public virtual void Save(TextWriter textWriter) {
+        public void Save(TextWriter textWriter) {
             doc.Save(textWriter);
         }
         
-        public virtual void Save(XmlWriter writer) {
+        public void Save(XmlWriter writer) {
             doc.Save(writer);
         }
         
-        public virtual void Save(TextWriter textWriter, SaveOptions options) {
+        public void Save(TextWriter textWriter, SaveOptions options) {
             doc.Save(textWriter, options);
         }
         
-        public virtual void Save(string fileName, SaveOptions options) {
+        public void Save(string fileName, SaveOptions options) {
             doc.Save(fileName, options);
         }
     }
@@ -992,7 +992,7 @@ namespace Indicium.Schemas {
             this.rootObject = root;
         }
         
-        public virtual XDocument XDocument {
+        public XDocument XDocument {
             get {
                 return doc;
             }
@@ -1075,23 +1075,23 @@ namespace Indicium.Schemas {
             return root;
         }
         
-        public virtual void Save(string fileName) {
+        public void Save(string fileName) {
             doc.Save(fileName);
         }
         
-        public virtual void Save(TextWriter textWriter) {
+        public void Save(TextWriter textWriter) {
             doc.Save(textWriter);
         }
         
-        public virtual void Save(XmlWriter writer) {
+        public void Save(XmlWriter writer) {
             doc.Save(writer);
         }
         
-        public virtual void Save(TextWriter textWriter, SaveOptions options) {
+        public void Save(TextWriter textWriter, SaveOptions options) {
             doc.Save(textWriter, options);
         }
         
-        public virtual void Save(string fileName, SaveOptions options) {
+        public void Save(string fileName, SaveOptions options) {
             doc.Save(fileName, options);
         }
     }

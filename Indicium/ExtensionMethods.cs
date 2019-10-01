@@ -1,13 +1,36 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using Indicium.Schemas;
 using Xml.Schema.Linq.Extensions;
 
 namespace Indicium
 {
     public static class ExtensionMethods
     {
+        /// <summary>
+        /// Serialises a bunch of <see cref="Lexeme"/>s into an XML document.
+        /// </summary>
+        /// <param name="lexemes"></param>
+        /// <param name="inputXmlPath"></param>
+        /// <param name="textFilePath"></param>
+        /// <returns></returns>
+        public static XDocument ToXDocument(this IEnumerable<Lexeme> lexemes, string inputXmlPath = "", string textFilePath = "")
+        {
+            var content = lexemes.Select(l => {
+                l.Untyped.Name = l.Untyped.Name.LocalName; // remove xmlns
+                return l.Untyped;
+            }).ToArray();
+
+            var rootEl = new XElement(XName.Get("Lexemes"), content);
+            if (inputXmlPath.IsNotEmpty()) rootEl.SetAttributeValue(XName.Get("Schema"), Path.GetFullPath(inputXmlPath));
+            if (textFilePath.IsNotEmpty()) rootEl.SetAttributeValue(XName.Get("TextFile"), Path.GetFullPath(textFilePath));
+            return new XDocument(rootEl);
+        }
+
         /// <summary>
         /// Strips a string of all characters that are not the first 255 characters in UTF-8
         /// </summary>
