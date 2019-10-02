@@ -235,10 +235,11 @@ namespace Indicium.CodeGen
                                                  .WithModifiers(SF.TokenList(publicModifier))
                                                  .WithBody(constructorBodyBlock);
 
-            var publicStaticModifier = SF.TokenList(
+            var publicStaticReadonlyModifier = SF.TokenList(
                 new[] {
                     publicModifier,
-                    SF.Token(SyntaxKind.StaticKeyword)
+                    SF.Token(SyntaxKind.StaticKeyword),
+                    SF.Token(SyntaxKind.ReadOnlyKeyword)
                 }
             );
 
@@ -251,7 +252,7 @@ namespace Indicium.CodeGen
                                                                 SF.EqualsValueClause(
                                                                     SF.ObjectCreationExpression(
                                                                         SF.IdentifierName(className)).WithArgumentList(SF.ArgumentList()))))))
-                                            .WithModifiers(publicStaticModifier);
+                                            .WithModifiers(publicStaticReadonlyModifier);
 
             var classDeclaration = SF.ClassDeclaration(className)
                                      .WithModifiers(publicSealedModifiers)

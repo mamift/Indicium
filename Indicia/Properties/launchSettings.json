@@ -2,7 +2,7 @@
   "profiles": {
     "Indicia": {
       "commandName": "Project",
-      "commandLineArgs": "tokenise .\\Schemas\\Prototype1.xml -t lyrics.txt"
+      "commandLineArgs": "codegen .\\Schemas\\Prototype1.xml"
     }
   }
 }

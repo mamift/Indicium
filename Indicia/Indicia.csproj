@@ -6,8 +6,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>Indicia</ToolCommandName>
-    <Authors>Muhammad Miftah</Authors>
-    <Company />
+    <Authors>github.com/mamift</Authors>
+    <Company>github.com/mamift</Company>
     <Description>Command line tool for generating simple lexers/tokenisers. Generated code is dependent on the Indicium nuget package.</Description>
     <Copyright>Copyright (C) 2019 by Muhammad Miftah</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -18,6 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Alba.CsConsoleFormat" Version="1.0.0" />
     <PackageReference Include="CommandLineParser" Version="2.6.0" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -26,17 +27,18 @@ namespace Indicium.Schemas
         /// Before loading a new token definition file, validate it first. Accepts an <see cref="IProgress{T}"/> that will output error messages.
         /// <para>The error messages include line and index numbers.</para>
         /// </summary>
+        /// <returns>Returns any validation events (<see cref="ValidationEventArgs"/>).</returns>
         /// <param name="inputXml"></param>
-        /// <param name="progress"></param>
-        public static void Validate(string inputXml, IProgress<ValidationEventArgs> progress = null)
+        public static List<ValidationEventArgs> Validate(string inputXml)
         {
             var thisAssembly = typeof(TokenContext).Assembly;
             var schemaName = thisAssembly.GetManifestResourceNames().First(n => n == "Indicium.Schemas.TokenSchema.xsd");
             var schemaStream = thisAssembly.GetManifestResourceStream(schemaName);
 
-            if (schemaStream == null) return;
+            if (schemaStream == null) throw new Exception("Cannot read the TokenSchema.xsd schema file.");
 
             using (schemaStream) {
+                // throw exceptions if there are any errors with the XSD itself
                 var schema = XmlSchema.Read(schemaStream, (sender, args) => throw args.Exception);
 
                 var schemaSet = new XmlSchemaSet() {
@@ -57,13 +59,14 @@ namespace Indicium.Schemas
                                       XmlSchemaValidationFlags.ReportValidationWarnings
                 };
 
-                if (progress != null) {
-                    xmlReaderSettings.ValidationEventHandler += (sender, args) => progress.Report(args);
+                var validationErrors = new List<ValidationEventArgs>();
+                xmlReaderSettings.ValidationEventHandler += (sender, args) => validationErrors.Add(args);
+
+                using (var reader = XmlReader.Create(File.OpenRead(inputXml), xmlReaderSettings)) {
+                    while (reader.Read()) { }
                 }
 
-                var reader = XmlReader.Create(File.OpenRead(inputXml), xmlReaderSettings);
-
-                while (reader.Read()) { }
+                return validationErrors;
             }
         }
     }

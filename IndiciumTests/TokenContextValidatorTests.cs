@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Schema;
 using Indicium.Schemas;
@@ -19,9 +18,8 @@ namespace Indicium.Tests
             Assert.IsTrue(resourceNames.First() == "Indicium.Schemas.TokenSchema.xsd", "'Indicium.Schemas.TokenSchema.xsd' needs to be embedded!");
 
             var argsList = new List<ValidationEventArgs>();
-            var progress = new Progress<ValidationEventArgs>(args => argsList.Add(args));
 
-            Assert.DoesNotThrow(() => TokenContext.Validate(@"Schemas\Prototype1.xml", progress));
+            Assert.DoesNotThrow(() => argsList = TokenContext.Validate(@"Schemas\Prototype1.xml"));
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Schema;
+using Alba.CsConsoleFormat.Fluent;
 using CommandLine;
 using Indicium;
 using Indicium.Schemas;
@@ -15,46 +15,51 @@ namespace Indicia
     {
         public static int Main(string[] args)
         {
-            Console.WriteLine($"Indicia - A command line tool for building simple lexers/tokenisers.\n");
-
             var parserResult = Parser.Default.ParseArguments<CommandLineOptions, CodeGenOptions, TokeniseOptions>(args);
 
             parserResult.WithParsed<CodeGenOptions>(GenerateCode);
-
             parserResult.WithParsed<TokeniseOptions>(Tokenise);
-            
+
             return 0;
         }
 
+        /// <summary>
+        /// Validates a given XML token definition file.
+        /// </summary>
+        /// <param name="inputXml"></param>
+        /// <returns></returns>
         public static bool Validate(string inputXml)
         {
-            var validationErrors = new List<ValidationEventArgs>();
-
             if (inputXml.IsEmpty()) {
-                Console.WriteLine("Requires an input XML file!");
+                Colors.WriteLine("Requires an input XML file!".Red());
                 return false;
             }
 
-            Console.WriteLine($"Validating '{inputXml}'...");
+            Colors.WriteLine($"Validating '{inputXml}'...");
+            
+            var validationErrors = TokenContext.Validate(inputXml);
 
-            var progressReporter = new Progress<ValidationEventArgs>(e => {
-                validationErrors.Add(e);
-                var message = $"Line: {e.Exception.LineNumber}, Index: {e.Exception.LinePosition}, Message: {e.Message}\n";
-                if (e.Severity == XmlSeverityType.Warning) Console.WriteLine(message);
-                if (e.Severity == XmlSeverityType.Error) Console.WriteLine(message);
-            });
+            if (!validationErrors.Any()) return true;
 
-            TokenContext.Validate(inputXml, progressReporter);
+            foreach (var error in validationErrors) {
+                var message = $"Line: {error.Exception.LineNumber}, Index: {error.Exception.LinePosition}, Message: {error.Message}\n";
+                if (error.Severity == XmlSeverityType.Warning) Colors.WriteLine($"Warning: {message}".Yellow());
+                else
+                if (error.Severity == XmlSeverityType.Error) Colors.WriteLine($"Error: {message}".Red());
+            }
 
-            return !validationErrors.Any();
+            return false;
         }
 
+        /// <summary>
+        /// Generates code from an input XML file.
+        /// </summary>
+        /// <param name="opts"></param>
         public static void GenerateCode(CodeGenOptions opts)
         {
             var ok = Validate(opts.InputXml);
-            Console.WriteLine("OI!");
             if (!ok) {
-                Console.WriteLine("Validation failed! Exiting...");
+                Colors.WriteLine("Validation failed! Exiting...".Yellow());
                 return;
             }
 
@@ -66,18 +71,22 @@ namespace Indicia
             using (fileStream)
             using (streamReader) {
                 var context = TokenContext.Load(streamReader);
-
+                Colors.WriteLine($"Outputting generated code to: ".White(), opts.Output.Green());
                 var code = context.GenerateCode();
 
                 File.WriteAllText(opts.Output, code, Encoding.UTF8);
             }
         }
 
+        /// <summary>
+        /// Tokenises a text file, using a given XML file.
+        /// </summary>
+        /// <param name="opts"></param>
         public static void Tokenise(TokeniseOptions opts)
         {
-            if (opts.Output.IsEmpty()) opts.Output = $"{Path.GetFileNameWithoutExtension(opts.InputXml)}_tokenised.xml";
+            if (opts.Output.IsEmpty()) opts.Output = $"{Path.GetFileNameWithoutExtension(opts.TextFile)}_tokenised.xml";
             if (opts.TextFile.IsEmpty()) {
-                Console.WriteLine("Input text file is required");
+                Colors.WriteLine("Input text file is required".Red());
                 return;
             }
 
@@ -87,7 +96,7 @@ namespace Indicia
                 var lexemes = context.ProcessTokens(textFileReader);
                 var xDoc = lexemes.ToXDocument();
 
-                Console.WriteLine($"Outputting to: \n\t{opts.Output}");
+                Colors.WriteLine($"Outputting to: \n\t".White(), opts.Output.Green());
 
                 xDoc.Save(File.Create(opts.Output));
             }
