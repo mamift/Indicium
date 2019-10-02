@@ -16,7 +16,7 @@ namespace Indicium.Tests
                     new Token { Id = "CloseBrace", Description = "Closing brace", TypedValue = "}" },
                     new Token { Id = "Identifier", Description = "Identifier text", TypedValue = "[\\w]+" }
                 },
-                IgnoreSpaces = true,
+                IgnoreWhitespace = true,
                 LineNumber = 1
             };
 

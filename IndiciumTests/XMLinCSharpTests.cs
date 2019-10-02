@@ -13,7 +13,7 @@ namespace Indicium.Tests
         {
             var context = TokenContext.Load(@"Schemas\XMLinCSharp.xml");
             
-            context.IgnoreSpaces = true;
+            context.IgnoreWhitespace = true;
 
             Assert.IsTrue(TokenContext.RegexOptions.HasFlag(RegexOptions.Singleline));
 

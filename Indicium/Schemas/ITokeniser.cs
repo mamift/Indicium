@@ -47,7 +47,7 @@ namespace Indicium.Schemas
 
         /// <summary>
         /// Returns the next <see cref="Lexeme"/> that would be next, without incrementing values for
-        /// <see cref="TokenContext.LineIndex"/>. Obeys <see cref="TokenContext.IgnoreSpaces"/>.
+        /// <see cref="TokenContext.LineIndex"/>. Obeys <see cref="TokenContext.IgnoreWhitespace"/>.
         /// <para>Calling this method first, then calling <see cref="TokenContext.GetToken"/> should produce equal, but not identical 
         /// instances of <see cref="Lexeme"/>s (as in they will not be references to the same instance).</para>
         /// </summary>
@@ -74,7 +74,7 @@ namespace Indicium.Schemas
         /// and produce tokenised output. 
         /// <para>This method usually suffices for processing arbitrary text. Finer control can be achieved using a combination of
         /// <see cref="TokenContext.InputString"/>, <see cref="TokenContext.LineNumber"/>, <see cref="TokenContext.LineIndex"/>, <see cref="TokenContext.Reset"/>, <see cref="TokenContext.GetTokens"/> and <see cref="TokenContext.GetToken"/>.</para>
-        /// <para>This method calls <see cref="TokenContext.Reset"/>, but does not reset the value for <see cref="TokenContext.IgnoreSpaces"/>.</para>
+        /// <para>This method calls <see cref="TokenContext.Reset"/>, but does not reset the value for <see cref="TokenContext.IgnoreWhitespace"/>.</para>
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>

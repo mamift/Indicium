@@ -28,7 +28,7 @@ namespace Indicium.Schemas
         /// may result in the lexeme count being much less than expected.</para>
         /// <para>This is always <c>false</c> by default and the setting is not saved.</para>
         /// </summary>
-        public bool IgnoreSpaces;
+        //public bool IgnoreSpaces;
 
         /// <summary>
         /// Determines if the tokeniser is processing at the start of the <see cref="InputString"/> or not.
@@ -97,7 +97,7 @@ namespace Indicium.Schemas
         /// <returns></returns>
         public Lexeme GetToken()
         {
-            var lexeme = ExtractLexeme(_inputString, _index, IgnoreSpaces, out _index, out var matchLength, CharsToUseAsWhiteSpace);
+            var lexeme = ExtractLexeme(_inputString, _index, IgnoreWhitespace, out _index, out var matchLength, CharsToUseAsWhiteSpace);
             if (lexeme == default(Lexeme)) return null;
 
             lexeme.LineNumber = _lineNumber;
@@ -107,7 +107,7 @@ namespace Indicium.Schemas
 
         /// <summary>
         /// Returns the next <see cref="Lexeme"/> that would be next, without incrementing values for
-        /// <see cref="LineIndex"/>. Obeys <see cref="IgnoreSpaces"/>.
+        /// <see cref="LineIndex"/>. Obeys <see cref="IgnoreWhitespace"/>.
         /// <para>Calling this method first, then calling <see cref="GetToken"/> should produce equal, but not identical 
         /// instances of <see cref="Lexeme"/>s (as in they will not be references to the same instance).</para>
         /// </summary>
@@ -117,7 +117,7 @@ namespace Indicium.Schemas
             var startIndexCopy = _index;
             var subStr = _inputString.Substring(startIndexCopy);
 
-            var lexeme = ExtractLexeme(subStr, startIndexCopy, IgnoreSpaces, out _, out _, CharsToUseAsWhiteSpace);
+            var lexeme = ExtractLexeme(subStr, startIndexCopy, IgnoreWhitespace, out _, out _, CharsToUseAsWhiteSpace);
             
             lexeme.LineNumber = _lineNumber;
 
@@ -163,7 +163,7 @@ namespace Indicium.Schemas
         /// and produce tokenised output. 
         /// <para>This method usually suffices for processing arbitrary text. Finer control can be achieved using a combination of
         /// <see cref="InputString"/>, <see cref="LineNumber"/>, <see cref="LineIndex"/>, <see cref="Reset"/>, <see cref="GetTokens"/> and <see cref="GetToken"/>.</para>
-        /// <para>This method calls <see cref="Reset"/>, but does not reset the value for <see cref="IgnoreSpaces"/>.</para>
+        /// <para>This method calls <see cref="Reset"/>, but does not reset the value for <see cref="IgnoreWhitespace"/>.</para>
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>

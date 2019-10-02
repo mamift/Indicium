@@ -55,7 +55,7 @@ namespace Indicium.Tests
             var lyricLines = Shared.Lyrics.Split("\r\n");
             for (var lineNumber = 1; lineNumber <= lyricLines.Length; lineNumber++) {
                 _context.LineNumber = lineNumber;
-                _context.IgnoreSpaces = true;
+                _context.IgnoreWhitespace = true;
                 _context.InputString = lyricLines[lineNumber-1];
 
                 var tokens = _context.GetTokens().ToList();
@@ -78,7 +78,7 @@ namespace Indicium.Tests
             var fullTokenList = new List<Lexeme>();
 
             foreach (var line in Shared.Lyrics.Split("\r\n")) {
-                _context.IgnoreSpaces = false;
+                _context.IgnoreWhitespace = false;
                 _context.InputString = line;
 
                 var tokens = _context.GetTokens().ToList();

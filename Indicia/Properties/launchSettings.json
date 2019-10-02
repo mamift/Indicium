@@ -2,7 +2,7 @@
   "profiles": {
     "Indicia": {
       "commandName": "Project",
-      "commandLineArgs": "codegen .\\Schemas\\Prototype1.xml"
+      "commandLineArgs": "codegen -e sample1"
     }
   }
 }
