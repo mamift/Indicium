@@ -1,64 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Schema;
-using Alba.CsConsoleFormat.Fluent;
+using CommandLine;
 using Indicium;
 using Indicium.Schemas;
-using MicroBatchFramework;
+using Xml.Schema.Linq.Extensions;
 
 namespace Indicia
 {
     public class Program
     {
-        public static async Task<int> Main(string[] args)
+        public static int Main(string[] args)
         {
-            var hostBuilder = BatchHost.CreateDefaultBuilder();
+            Console.WriteLine($"Indicia - A command line tool for building simple lexers/tokenisers.\n");
 
-            Colors.WriteLine($"Indicia - A command line tool for building simple lexers/tokenisers.\n".White());
-            await hostBuilder.RunBatchEngineAsync<IndiciaBatch>(args).ConfigureAwait(false);
+            var parserResult = Parser.Default.ParseArguments<CommandLineOptions, CodeGenOptions, TokeniseOptions>(args);
 
+            parserResult.WithParsed<CodeGenOptions>(GenerateCode);
+
+            parserResult.WithParsed<TokeniseOptions>(Tokenise);
+            
             return 0;
         }
-    }
 
-    [SuppressMessage("ReSharper", "UnusedMember.Global"), SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
-    public class IndiciaBatch : BatchBase
-    {
-        private readonly List<ValidationEventArgs> _validationErrors = new List<ValidationEventArgs>();
-
-        public void Validate(string inputXml)
+        public static bool Validate(string inputXml)
         {
-            Colors.WriteLine($"Validating '{inputXml}'...");
+            var validationErrors = new List<ValidationEventArgs>();
+
+            if (inputXml.IsEmpty()) {
+                Console.WriteLine("Requires an input XML file!");
+                return false;
+            }
+
+            Console.WriteLine($"Validating '{inputXml}'...");
 
             var progressReporter = new Progress<ValidationEventArgs>(e => {
-                _validationErrors.Add(e);
+                validationErrors.Add(e);
                 var message = $"Line: {e.Exception.LineNumber}, Index: {e.Exception.LinePosition}, Message: {e.Message}\n";
-                if (e.Severity == XmlSeverityType.Warning) Colors.WriteLine(message.Yellow());
-                if (e.Severity == XmlSeverityType.Error) Colors.WriteLine(message.Red());
+                if (e.Severity == XmlSeverityType.Warning) Console.WriteLine(message);
+                if (e.Severity == XmlSeverityType.Error) Console.WriteLine(message);
             });
 
             TokenContext.Validate(inputXml, progressReporter);
+
+            return !validationErrors.Any();
         }
 
-        [Command("codegen")]
-        public void GenerateCode(
-            [Option(0, "Input XML file representing token definitions.")] string inputXml,
-            [Option("o", " Optional output .CS file containing generated code.")] string outputCs = null)
+        public static void GenerateCode(CodeGenOptions opts)
         {
-            Validate(inputXml);
-            if (_validationErrors.Any()) {
-                Colors.WriteLine("Validation failed! Exiting...".Yellow());
+            var ok = Validate(opts.InputXml);
+            Console.WriteLine("OI!");
+            if (!ok) {
+                Console.WriteLine("Validation failed! Exiting...");
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(outputCs)) outputCs = $"{Path.GetFileNameWithoutExtension(inputXml)}.cs";
+            if (opts.Output.IsEmpty()) opts.Output = $"{Path.GetFileNameWithoutExtension(opts.InputXml)}.cs";
 
-            var fileStream = File.OpenRead(inputXml);
+            var fileStream = File.OpenRead(opts.InputXml);
             var streamReader = new StreamReader(fileStream);
 
             using (fileStream)
@@ -67,27 +69,27 @@ namespace Indicia
 
                 var code = context.GenerateCode();
 
-                File.WriteAllText(outputCs, code, Encoding.UTF8);
+                File.WriteAllText(opts.Output, code, Encoding.UTF8);
             }
         }
 
-        [Command("tokenise")]
-        public void Tokenise(
-            [Option(0, "Input XML file representing token definitions")] string inputXml,
-            [Option("t", "Input text file containing the string to be tokenised.")] string textFile,
-            [Option("o", " Optional output .XML file containing tokenised output.")] string outputXml = null)
+        public static void Tokenise(TokeniseOptions opts)
         {
-            if (string.IsNullOrWhiteSpace(outputXml)) outputXml = $"{Path.GetFileNameWithoutExtension(inputXml)}_tokenised.xml";
+            if (opts.Output.IsEmpty()) opts.Output = $"{Path.GetFileNameWithoutExtension(opts.InputXml)}_tokenised.xml";
+            if (opts.TextFile.IsEmpty()) {
+                Console.WriteLine("Input text file is required");
+                return;
+            }
 
-            using (var streamReader = new StreamReader(File.OpenRead(inputXml))) 
-            using (var textFileReader = new StreamReader(File.OpenRead(textFile))) {
+            using (var streamReader = new StreamReader(File.OpenRead(opts.InputXml))) 
+            using (var textFileReader = new StreamReader(File.OpenRead(opts.TextFile))) {
                 var context = TokenContext.Load(streamReader);
                 var lexemes = context.ProcessTokens(textFileReader);
                 var xDoc = lexemes.ToXDocument();
 
-                Colors.WriteLine("Outputting to: \n".Green(), $"\t{outputXml}".White());
+                Console.WriteLine($"Outputting to: \n\t{opts.Output}");
 
-                xDoc.Save(File.Create(outputXml));
+                xDoc.Save(File.Create(opts.Output));
             }
         }
     }

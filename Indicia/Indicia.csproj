@@ -3,11 +3,22 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>Indicia</ToolCommandName>
+    <Authors>Muhammad Miftah</Authors>
+    <Company />
+    <Description>Command line tool for generating simple lexers/tokenisers. Generated code is dependent on the Indicium nuget package.</Description>
+    <Copyright>Copyright (C) 2019 by Muhammad Miftah</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/mamift/Indicium</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mamift/Indicium</RepositoryUrl>
+    <PackageTags>tokeniser, lexer</PackageTags>
+    <Version>1.0.0-beta1</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Alba.CsConsoleFormat" Version="1.0.0" />
-    <PackageReference Include="MicroBatchFramework" Version="1.3.0" />
+    <PackageReference Include="CommandLineParser" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
