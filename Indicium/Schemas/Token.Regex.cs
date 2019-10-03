@@ -10,10 +10,11 @@ namespace Indicium.Schemas
         /// Returns the <see cref="Text.Regex"/> instance for this Token. Uses options specified in the
         /// static field: <see cref="TokenContext.RegexOptions"/>.
         /// </summary>
+        /// <param name="opts"><see cref="Text.RegexOptions"/> to use.</param>
         /// <returns></returns>
-        public Text.Regex GetMatcher()
+        public Text.Regex GetMatcher(Text.RegexOptions opts)
         {
-            return _regex ?? (_regex = new Text.Regex(TypedValue.Trim(), TokenContext.RegexOptions));
+            return _regex ?? (_regex = new Text.Regex(TypedValue.Trim(), opts));
         }
 
         /// <summary>

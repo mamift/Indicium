@@ -6,11 +6,44 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Indicium.Schemas;
 using Xml.Schema.Linq.Extensions;
+using RegexOptions = System.Text.RegularExpressions.RegexOptions;
 
 namespace Indicium
 {
     public static class ExtensionMethods
     {
+        /// <summary>
+        /// Converts a string representation of enum values in <see cref="RegexOptions"/> to its integral type.
+        /// <para>Not case sensitive.</para>
+        /// </summary>
+        /// <param name="regexOptString"></param>
+        /// <returns></returns>
+        public static RegexOptions RegexOptionsFromString(this string regexOptString)
+        {
+            // this bit will remove the 'RegexOptions' prefix if it has it.
+            var forComparison = regexOptString.ToLower();
+            var regexOptionsName = $"{nameof(RegexOptions)}.".ToLower();
+
+            if (forComparison.StartsWith(regexOptionsName)) {
+                regexOptString = forComparison.Replace(regexOptionsName, string.Empty);
+            }
+
+            var caseInsensitive = regexOptString.ToLower();
+
+            if (caseInsensitive == nameof(RegexOptions.Compiled).ToLower()) { return RegexOptions.Compiled; }
+            if (caseInsensitive == nameof(RegexOptions.CultureInvariant).ToLower()) { return RegexOptions.CultureInvariant; }
+            if (caseInsensitive == nameof(RegexOptions.ECMAScript).ToLower()) { return RegexOptions.ECMAScript; }
+            if (caseInsensitive == nameof(RegexOptions.ExplicitCapture).ToLower()) { return RegexOptions.ExplicitCapture; }
+            if (caseInsensitive == nameof(RegexOptions.IgnoreCase).ToLower()) { return RegexOptions.IgnoreCase; }
+            if (caseInsensitive == nameof(RegexOptions.IgnorePatternWhitespace).ToLower()) { return RegexOptions.IgnorePatternWhitespace; }
+            if (caseInsensitive == nameof(RegexOptions.Multiline).ToLower()) { return RegexOptions.Multiline; }
+            if (caseInsensitive == nameof(RegexOptions.None).ToLower()) { return RegexOptions.None; }
+            if (caseInsensitive == nameof(RegexOptions.RightToLeft).ToLower()) { return RegexOptions.RightToLeft; }
+            if (caseInsensitive == nameof(RegexOptions.Singleline).ToLower()) { return RegexOptions.Singleline; }
+
+            return RegexOptions.None;
+        }
+
         /// <summary>
         /// Serialises a bunch of <see cref="Lexeme"/>s into an XML document.
         /// </summary>
@@ -25,6 +58,7 @@ namespace Indicium
                 return l.Untyped;
             }).ToArray();
 
+            // ReSharper disable once CoVariantArrayConversion
             var rootEl = new XElement(XName.Get("Lexemes"), content);
             if (inputXmlPath.IsNotEmpty()) rootEl.SetAttributeValue(XName.Get("Schema"), Path.GetFullPath(inputXmlPath));
             if (textFilePath.IsNotEmpty()) rootEl.SetAttributeValue(XName.Get("TextFile"), Path.GetFullPath(textFilePath));

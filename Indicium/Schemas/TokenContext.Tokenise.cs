@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 
 namespace Indicium.Schemas
 {
+    using TextRegexOpts = System.Text.RegularExpressions.RegexOptions;
+
     public partial class TokenContext : ITokeniser
     {
         private int _index = 0;
@@ -14,11 +16,23 @@ namespace Indicium.Schemas
         private string _inputString = string.Empty;
 
         /// <summary>
-        /// <para>Default <see cref="System.Text.RegularExpressions.RegexOptions"/> when creating <see cref="Schemas.Token"/>
-        /// instances.</para>
-        /// <para>This is a static field instance and for now cannot be serialised to XML.</para>
+        /// <para>Default <see cref="TextRegexOpts"/> when creating <see cref="Schemas.Token"/> instances.</para>
+        /// <para>Loaded from <see cref="RegexOptions"/> elements; if not present, defaults to <see cref="TextRegexOpts.Compiled"/>.</para>
         /// </summary>
-        public static RegexOptions RegexOptions = RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline;
+        public TextRegexOpts LoadedRegexOptions
+        {
+            get
+            {
+                if (RegexOptions == null || !RegexOptions.Any())
+                    RegexOptions = new List<string>() { nameof(TextRegexOpts.Compiled) };
+
+                var opts = RegexOptions.Select(s => s.RegexOptionsFromString());
+
+                var finalOpt = opts.Aggregate(default(TextRegexOpts), (current, opt) => current | opt);
+
+                return finalOpt;
+            }
+        }
 
         /// <summary>
         /// Not serialised.

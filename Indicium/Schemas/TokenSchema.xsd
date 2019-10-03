@@ -7,14 +7,20 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence maxOccurs="1">
-                <xs:element minOccurs="0" name="WhitespaceCharacters" type="xs:string">
+                <xs:element minOccurs="0" name="WhitespaceCharacters" type="xs:string"
+                    form="qualified">
                     <xs:annotation>
                         <xs:documentation>A string literal (NOT regex string) to recognise whitespace characters. Whitespace characters are not collapsed in this element, so adding a return carriage (pressing [ENTER] will be interpreted as valid input). Not specifying this element defaults to a tab and a space ([\t\s]+).</xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element minOccurs="0" name="LineDelimiter" type="RegexString">
+                <xs:element minOccurs="0" name="LineDelimiter" type="RegexString" form="qualified">
                     <xs:annotation>
                         <xs:documentation>A custom regex string to recognise a line delimiter. Not specifying this element or giving an empty value to this element will default to the value defined in System.Environment.NewLine.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element minOccurs="0" name="RegexOptions" type="RegexOptions" form="qualified">
+                    <xs:annotation>
+                        <xs:documentation>Defaults to: "Compiled Singleline"</xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element ref="Token" maxOccurs="unbounded" minOccurs="1"/>
@@ -125,4 +131,22 @@
         <xs:attribute name="LineNumber" type="xs:int" use="required"/>
         <xs:attribute name="LineIndex" type="xs:int" use="required"/>
     </xs:attributeGroup>
+    <xs:simpleType name="RegexOptions">
+        <xs:annotation>
+            <xs:documentation>Represents possible (and combinable) regex parsing options. Correponds to the enum "System.Text.RegularExpressions.RegexOptions". Delimit the list using spaces.
+
+Possible values: 
+Compiled
+CultureInvariant
+ECMAScript
+ExplicitCapture
+IgnoreCase
+IgnorePatternWhitespace
+Multiline
+None
+RightToLeft
+Singleline</xs:documentation>
+        </xs:annotation>
+        <xs:list itemType="xs:string"/>
+    </xs:simpleType>
 </xs:schema>

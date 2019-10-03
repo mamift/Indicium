@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace Indicium.Schemas
 {
+    using Text = System.Text.RegularExpressions;
+
     public partial class TokenContext
     {
         /// <summary>
@@ -37,7 +39,7 @@ namespace Indicium.Schemas
             }
             
             foreach (var def in Token) {
-                if (GetLexeme(input, ref index, ref matchLength, def, out var lexeme)) return lexeme;
+                if (GetLexeme(input, ref index, ref matchLength, def, out var lexeme, LoadedRegexOptions)) return lexeme;
             }
 
             index++;
@@ -48,9 +50,22 @@ namespace Indicium.Schemas
             };
         }
 
-        private bool GetLexeme(string input, ref int index, ref int matchLength, Token def, out Lexeme lexeme)
+        /// <summary>
+        /// Extracts a <see cref="Lexeme"/> from the <paramref name="input"/> string, saving the <paramref name="index"/>,
+        /// <paramref name="matchLength"/>, the resultant <paramref name="lexeme"/>, using a given
+        /// <see cref="Indicium.Schemas.Token"/> definition, and optional <see cref="Text.RegexOptions"/>.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="index"></param>
+        /// <param name="matchLength"></param>
+        /// <param name="def"></param>
+        /// <param name="lexeme"></param>
+        /// <param name="opts"></param>
+        /// <returns></returns>
+        private bool GetLexeme(string input, ref int index, ref int matchLength, Token def, out Lexeme lexeme, 
+            Text.RegexOptions opts = Text.RegexOptions.Compiled)
         {
-            var regex = def.GetMatcher();
+            var regex = def.GetMatcher(opts);
             var match = regex.Match(input, index);
 
             lexeme = Lexeme.Undefined;

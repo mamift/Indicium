@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.RegularExpressions;
+using System.IO;
 using Indicium.Schemas;
 using NUnit.Framework;
 
@@ -11,11 +11,12 @@ namespace Indicium.Tests
         [Test]
         public void Test1()
         {
+            var str = File.ReadAllText(@"Schemas\XMLinCSharp.xml");
             var context = TokenContext.Load(@"Schemas\XMLinCSharp.xml");
             
             context.IgnoreWhitespace = true;
 
-            Assert.IsTrue(TokenContext.RegexOptions.HasFlag(RegexOptions.Singleline));
+            Assert.IsTrue(context.LoadedRegexOptions.HasFlag(System.Text.RegularExpressions.RegexOptions.Singleline));
 
             var cSharpCode =
                 "public static void main() {\r\nConsole.WriteLine(\"XML in CSharp test\");\r\n\tvar instance = (<Invaders class=\"Irken\">\r\n\t\t<Zim>I am zim!</Zim></Invaders>);}";

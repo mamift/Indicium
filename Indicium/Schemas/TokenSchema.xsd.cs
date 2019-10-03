@@ -22,7 +22,7 @@ namespace Indicium.Schemas {
     
     /// <summary>
     /// <para>
-    /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
+    /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, RegexOptions?, Token+)
     /// </para>
     /// </summary>
     public partial class TokenContext : XTypedElement, IXMetaData {
@@ -43,12 +43,12 @@ namespace Indicium.Schemas {
         
         static TokenContext() {
             BuildElementDictionary();
-            contentModel = new SequenceContentModelEntity(new NamedContentModelEntity(System.Xml.Linq.XName.Get("WhitespaceCharacters", "")), new NamedContentModelEntity(System.Xml.Linq.XName.Get("LineDelimiter", "")), new NamedContentModelEntity(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium")));
+            contentModel = new SequenceContentModelEntity(new NamedContentModelEntity(System.Xml.Linq.XName.Get("WhitespaceCharacters", "https://github.com/mamift/Indicium")), new NamedContentModelEntity(System.Xml.Linq.XName.Get("LineDelimiter", "https://github.com/mamift/Indicium")), new NamedContentModelEntity(System.Xml.Linq.XName.Get("RegexOptions", "https://github.com/mamift/Indicium")), new NamedContentModelEntity(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium")));
         }
         
         /// <summary>
         /// <para>
-        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, RegexOptions?, Token+)
         /// </para>
         /// </summary>
         public TokenContext() {
@@ -62,16 +62,16 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// <para>
-        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, RegexOptions?, Token+)
         /// </para>
         /// </summary>
         public virtual string WhitespaceCharacters {
             get {
-                XElement x = this.GetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""));
+                XElement x = this.GetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", "https://github.com/mamift/Indicium"));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
             set {
-                this.SetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+                this.SetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", "https://github.com/mamift/Indicium"), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
@@ -83,16 +83,37 @@ namespace Indicium.Schemas {
         /// Occurrence: optional
         /// </para>
         /// <para>
-        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, RegexOptions?, Token+)
         /// </para>
         /// </summary>
         public virtual string LineDelimiter {
             get {
-                XElement x = this.GetElement(System.Xml.Linq.XName.Get("LineDelimiter", ""));
+                XElement x = this.GetElement(System.Xml.Linq.XName.Get("LineDelimiter", "https://github.com/mamift/Indicium"));
                 return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.NormalizedString).Datatype);
             }
             set {
-                this.SetElementWithValidation(System.Xml.Linq.XName.Get("LineDelimiter", ""), value, "LineDelimiter", global::Indicium.Schemas.RegexString.TypeDefinition);
+                this.SetElementWithValidation(System.Xml.Linq.XName.Get("LineDelimiter", "https://github.com/mamift/Indicium"), value, "LineDelimiter", global::Indicium.Schemas.RegexString.TypeDefinition);
+            }
+        }
+        
+        /// <summary>
+        /// <para>
+        /// Defaults to: "Compiled Singleline"
+        /// </para>
+        /// <para>
+        /// Occurrence: optional
+        /// </para>
+        /// <para>
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, RegexOptions?, Token+)
+        /// </para>
+        /// </summary>
+        public virtual IList<string> RegexOptions {
+            get {
+                XElement x = this.GetElement(System.Xml.Linq.XName.Get("RegexOptions", "https://github.com/mamift/Indicium"));
+                return XTypedServices.ParseListValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+            }
+            set {
+                this.SetListElement(System.Xml.Linq.XName.Get("RegexOptions", "https://github.com/mamift/Indicium"), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
             }
         }
         
@@ -101,7 +122,7 @@ namespace Indicium.Schemas {
         /// Occurrence: required, repeating
         /// </para>
         /// <para>
-        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, Token+)
+        /// Regular expression: (WhitespaceCharacters?, LineDelimiter?, RegexOptions?, Token+)
         /// </para>
         /// </summary>
         public virtual IList<Token> Token {
@@ -276,8 +297,9 @@ namespace Indicium.Schemas {
         }
         
         private static void BuildElementDictionary() {
-            localElementDictionary.Add(System.Xml.Linq.XName.Get("WhitespaceCharacters", ""), typeof(string));
-            localElementDictionary.Add(System.Xml.Linq.XName.Get("LineDelimiter", ""), typeof(string));
+            localElementDictionary.Add(System.Xml.Linq.XName.Get("WhitespaceCharacters", "https://github.com/mamift/Indicium"), typeof(string));
+            localElementDictionary.Add(System.Xml.Linq.XName.Get("LineDelimiter", "https://github.com/mamift/Indicium"), typeof(string));
+            localElementDictionary.Add(System.Xml.Linq.XName.Get("RegexOptions", "https://github.com/mamift/Indicium"), typeof(string));
             localElementDictionary.Add(System.Xml.Linq.XName.Get("Token", "https://github.com/mamift/Indicium"), typeof(Token));
         }
         
@@ -545,6 +567,32 @@ namespace Indicium.Schemas {
         
         ContentModelEntity IXMetaData.GetContentModel() {
             return ContentModelEntity.Default;
+        }
+    }
+    
+    /// <summary>
+    /// <para>
+    /// Represents possible (and combinable) regex parsing options. Correponds to the enum "System.Text.RegularExpressions.RegexOptions". Delimit the list using spaces.
+    ///
+    ///Possible values: 
+    ///Compiled
+    ///CultureInvariant
+    ///ECMAScript
+    ///ExplicitCapture
+    ///IgnoreCase
+    ///IgnorePatternWhitespace
+    ///Multiline
+    ///None
+    ///RightToLeft
+    ///Singleline
+    /// </para>
+    /// </summary>
+    public sealed class RegexOptions {
+        
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public static Xml.Schema.Linq.SimpleTypeValidator TypeDefinition = new Xml.Schema.Linq.ListSimpleTypeValidator(XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String), null, new Xml.Schema.Linq.AtomicSimpleTypeValidator(XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String), null));
+        
+        private RegexOptions() {
         }
     }
     
