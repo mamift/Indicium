@@ -16,8 +16,6 @@ namespace Indicium.Schemas
         /// <returns></returns>
         public string GenerateCode()
         {
-            //if (string.IsNullOrWhiteSpace(NamespaceName)) throw new Exception($"There is no @{nameof(NamespaceName)} defined in the token definition XML!");
-
             var ns = TokenContextTypeGenerator.GenerateTokeniserCode(this, NamespaceName);
 
             return ns.ToFullString();
@@ -68,6 +66,51 @@ namespace Indicium.Schemas
 
                 return validationErrors;
             }
+        }
+
+        /// <summary>
+        /// Generates an example <see cref="TokenContext"/>.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static TokenContext GenerateExample(string name)
+        {
+            name = name.StripOfNonAlphanumericChars();
+
+            var example = new TokenContext()
+            {
+                ClassName = $"{name}Tokeniser",
+                GenerateEnums = false,
+                IgnoreWhitespace = false,
+                LineDelimiter = @"\n",
+                NamespaceName = $"{name}Lexer",
+                Visibility = "public",
+                WhitespaceCharacters = "\t ",
+                Token = new List<Token>() {
+                    new Token() {
+                        Id = "OpenBrace",
+                        Description = "An opening curly brace.",
+                        TypedValue = @"\{"
+                    },
+                    new Token() {
+                        Id = "CloseBrace",
+                        Description = "A closing curly brace.",
+                        TypedValue = @"\}"
+                    },
+                    new Token() {
+                        Id = "Colon",
+                        Description = "A colon.",
+                        TypedValue = @"\:"
+                    },
+                    new Token() {
+                        Id = "StringLiteral",
+                        Description = "A string of characters. Note with default regex parsing options, this token definition implies that newlines can be part of the string.",
+                        TypedValue = "\\\".*\\\""
+                    }
+                }
+            };
+
+            return example;
         }
     }
 }

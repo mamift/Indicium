@@ -48,6 +48,17 @@ namespace Indicium.Tests
         }
 
         [Test]
+        public void TestGenerateExample()
+        {
+            var eg = TokenContext.GenerateExample("testing.d");
+
+            Assert.IsNotNull(eg);
+            Assert.IsNotEmpty(eg.Token);
+            Assert.IsFalse(eg.ClassName.Contains("."));
+            Assert.IsFalse(eg.NamespaceName.Contains("."));
+        }
+
+        [Test]
         public void IgnoreWhitespaceTest()
         {
             var fullTokenList = new List<Lexeme>();

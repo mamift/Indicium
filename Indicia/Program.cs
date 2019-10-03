@@ -59,37 +59,7 @@ namespace Indicia
         public static void GenerateCode(CodeGenOptions opts)
         {
             if (opts.Example.IsNotEmpty()) {
-                var example = new TokenContext() {
-                    ClassName = $"{opts.Example}Tokeniser",
-                    GenerateEnums = false,
-                    IgnoreWhitespace = false,
-                    LineDelimiter = @"\n",
-                    NamespaceName = $"{opts.Example}Lexer",
-                    Visibility = "public",
-                    WhitespaceCharacters = "\t ",
-                    Token = new List<Token>() {
-                        new Token() {
-                            Id = "OpenBrace",
-                            Description = "An opening curly brace.",
-                            TypedValue = @"\{"
-                        },
-                        new Token() {
-                            Id = "CloseBrace",
-                            Description = "A closing curly brace.",
-                            TypedValue = @"\}"
-                        },
-                        new Token() {
-                            Id = "Colon",
-                            Description = "A colon.",
-                            TypedValue = @"\:"
-                        },
-                        new Token() {
-                            Id = "StringLiteral",
-                            Description = "A string of characters. Note with default regex parsing options, this token definition implies that newlines can be part of the string.",
-                            TypedValue = "\".*\""
-                        }
-                    }
-                };
+                var example = TokenContext.GenerateExample(opts.Example);
                 var outputFileName = opts.Example.EndsWith(".xml") ? opts.Example : $"{opts.Example}.xml";
                 Colors.WriteLine($"Generating example file. Ignoring other arguments. Saving to: ".DarkYellow(), outputFileName.White());
                 example.Save(outputFileName);
