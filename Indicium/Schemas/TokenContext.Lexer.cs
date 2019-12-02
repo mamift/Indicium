@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Linq;
 
 namespace Indicium.Schemas
 {
@@ -22,17 +21,17 @@ namespace Indicium.Schemas
         /// <returns>The returned <see cref="Lexeme"/> will not include a <see cref="Lexeme.LineNumber"/> value. This value should be set after
         /// the method returns.</returns>
         public Lexeme ExtractLexeme(string input, int inputIndex, bool ignoreSpaces, out int index, out int matchLength,
-            char[] spaceCharacters = null)
+            Text.Regex spaceCharacters = null)
         {
-            if (spaceCharacters == null) spaceCharacters = new[] {' ', '\t'};
+            if (spaceCharacters == null) spaceCharacters = new Text.Regex(@"\t|\s", Text.RegexOptions.Compiled);
 
             index = inputIndex; // begin at given index of string
             matchLength = 0; // will reset to zero for each invocation of this method
             if (index >= input.Length) return default(Lexeme); // then we're at the end of the string, and can return;
 
-            if (spaceCharacters.Any()) {
+            if (ignoreSpaces) {
                 // if ignore spaces is true and there are space chars provided
-                while (input[index].IsOneOf(spaceCharacters) && ignoreSpaces) {
+                while (spaceCharacters.Matches(input[index].ToString()).Count > 0) {
                     index++;
                     if (index >= input.Length) return default(Lexeme);
                 }

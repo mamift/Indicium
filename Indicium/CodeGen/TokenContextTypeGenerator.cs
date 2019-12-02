@@ -66,7 +66,7 @@ namespace Indicium.CodeGen
                                             .WithOperatorToken(SF.Token(SyntaxKind.DotToken)))
                                             .WithOperatorToken(SF.Token(SyntaxKind.EqualsToken));
 
-            var whitespaceCharacters = !string.IsNullOrEmpty(context.WhitespaceCharacters) ? context.WhitespaceCharacters : " \t";
+            var whitespaceCharacters = !string.IsNullOrEmpty(context.WhitespaceCharacters) ? context.WhitespaceCharacters : @"\s|\t";
             var whiteSpaceCharsAssignment = SF.AssignmentExpression(
                                                 SyntaxKind.SimpleAssignmentExpression,
                                                 SF.IdentifierName(nameof(TokenContext.WhitespaceCharacters)),

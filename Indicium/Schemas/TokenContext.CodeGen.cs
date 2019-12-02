@@ -85,7 +85,7 @@ namespace Indicium.Schemas
                 LineDelimiter = @"\n",
                 NamespaceName = $"{name}Lexer",
                 Visibility = "public",
-                WhitespaceCharacters = "\t ",
+                WhitespaceCharacters = "\\t\\s",
                 Token = new List<Token>() {
                     new Token() {
                         Id = "OpenBrace",

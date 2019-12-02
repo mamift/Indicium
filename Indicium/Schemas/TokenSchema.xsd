@@ -7,15 +7,15 @@
         </xs:annotation>
         <xs:complexType>
             <xs:sequence maxOccurs="1">
-                <xs:element minOccurs="0" name="WhitespaceCharacters" type="xs:string"
-                    form="qualified">
+                <xs:element minOccurs="0" name="WhitespaceCharacters" type="RegexString"
+                    form="qualified" default="\s|\t">
                     <xs:annotation>
-                        <xs:documentation>A string literal (NOT regex string) to recognise whitespace characters. Whitespace characters are not collapsed in this element, so adding a return carriage (pressing [ENTER] will be interpreted as valid input). Not specifying this element defaults to a tab and a space ([\t\s]+).</xs:documentation>
+                        <xs:documentation>A regular expression to recognise whitespace characters. Not specifying this element defaults to a tab and a space ([\t\s]+).</xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element minOccurs="0" name="LineDelimiter" type="RegexString" form="qualified">
                     <xs:annotation>
-                        <xs:documentation>A custom regex string to recognise a line delimiter. Not specifying this element or giving an empty value to this element will default to the value defined in System.Environment.NewLine.</xs:documentation>
+                        <xs:documentation>A regular expression to recognise a line delimiter. Not specifying this element or giving an empty value to this element will default to the value defined in System.Environment.NewLine.</xs:documentation>
                     </xs:annotation>
                 </xs:element>
                 <xs:element minOccurs="0" name="RegexOptions" type="RegexOptions" form="qualified">

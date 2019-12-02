@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TokenContext xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://github.com/mamift/Indicium TokenSchema.xsd" xmlns="https://github.com/mamift/Indicium"
   IgnoreWhitespace="false" ClassName="SimpleXCSTokeniser" NamespaceName="XCS" GenerateEnums="true" Visibility="Public">
-	<LineDelimiter>\r\n</LineDelimiter>
-	<WhitespaceCharacters> 	</WhitespaceCharacters>
+	<LineDelimiter>\r\n|\n</LineDelimiter>
+	<WhitespaceCharacters>\s|\t</WhitespaceCharacters>
   <RegexOptions>SingleLine Compiled</RegexOptions>
 	<Token Id="XCSBlock"><![CDATA[(\(\<)(.*)(\>\)\;)]]></Token>
 </TokenContext>

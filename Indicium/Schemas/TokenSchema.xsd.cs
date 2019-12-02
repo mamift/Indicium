@@ -56,7 +56,7 @@ namespace Indicium.Schemas {
         
         /// <summary>
         /// <para>
-        /// A string literal (NOT regex string) to recognise whitespace characters. Whitespace characters are not collapsed in this element, so adding a return carriage (pressing [ENTER] will be interpreted as valid input). Not specifying this element defaults to a tab and a space ([\t\s]+).
+        /// A regular expression to recognise whitespace characters. Not specifying this element defaults to a tab and a space ([\t\s]+).
         /// </para>
         /// <para>
         /// Occurrence: optional
@@ -68,16 +68,16 @@ namespace Indicium.Schemas {
         public virtual string WhitespaceCharacters {
             get {
                 XElement x = this.GetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", "https://github.com/mamift/Indicium"));
-                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+                return XTypedServices.ParseValue<string>(x, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.NormalizedString).Datatype);
             }
             set {
-                this.SetElement(System.Xml.Linq.XName.Get("WhitespaceCharacters", "https://github.com/mamift/Indicium"), value, XmlSchemaType.GetBuiltInSimpleType(XmlTypeCode.String).Datatype);
+                this.SetElementWithValidation(System.Xml.Linq.XName.Get("WhitespaceCharacters", "https://github.com/mamift/Indicium"), value, "WhitespaceCharacters", global::Indicium.Schemas.RegexString.TypeDefinition);
             }
         }
         
         /// <summary>
         /// <para>
-        /// A custom regex string to recognise a line delimiter. Not specifying this element or giving an empty value to this element will default to the value defined in System.Environment.NewLine.
+        /// A regular expression to recognise a line delimiter. Not specifying this element or giving an empty value to this element will default to the value defined in System.Environment.NewLine.
         /// </para>
         /// <para>
         /// Occurrence: optional

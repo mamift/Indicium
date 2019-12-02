@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
+using Xml.Schema.Linq.Extensions;
+using Text = System.Text.RegularExpressions;
 
 namespace Indicium.Schemas
 {
-    using TextRegexOpts = System.Text.RegularExpressions.RegexOptions;
+    using TextRegexOpts = Text.RegexOptions;
 
     public partial class TokenContext : ITokeniser
     {
@@ -14,6 +15,8 @@ namespace Indicium.Schemas
         private int _lineNumber = 1;
 
         private string _inputString = string.Empty;
+
+        private TextRegexOpts _loadedRegexOptions;
 
         /// <summary>
         /// <para>Default <see cref="TextRegexOpts"/> when creating <see cref="Schemas.Token"/> instances.</para>
@@ -28,21 +31,11 @@ namespace Indicium.Schemas
 
                 var opts = RegexOptions.Select(s => s.RegexOptionsFromString());
 
-                var finalOpt = opts.Aggregate(default(TextRegexOpts), (current, opt) => current | opt);
-
-                return finalOpt;
+                return _loadedRegexOptions == default ? 
+                    _loadedRegexOptions = opts.Aggregate(default(TextRegexOpts), (current, opt) => current | opt) : 
+                    _loadedRegexOptions;
             }
         }
-
-        /// <summary>
-        /// Not serialised.
-        /// <para>Setting this to false will result in lots of undefined tokens
-        /// if there is no token definition for whitespace characters.</para>
-        /// <para>Conversely, setting this to true while there are token definitions for whitespace characters
-        /// may result in the lexeme count being much less than expected.</para>
-        /// <para>This is always <c>false</c> by default and the setting is not saved.</para>
-        /// </summary>
-        //public bool IgnoreSpaces;
 
         /// <summary>
         /// Determines if the tokeniser is processing at the start of the <see cref="InputString"/> or not.
@@ -93,17 +86,19 @@ namespace Indicium.Schemas
         }
 
         /// <summary>
-        /// Converts <see cref="WhitespaceCharacters"/> into a <see cref="char"/> array for use with the <see cref="ExtractLexeme"/>
-        /// method.
+        /// Converts <see cref="WhiteSpaceRegex"/> to a compiled <see cref="Text.Regex"/>.
         /// </summary>
-        private char[] CharsToUseAsWhiteSpace
+        private Text.Regex WhiteSpaceRegex
         {
             get
             {
-                var charsToRecogniseAsWhitespace = WhitespaceCharacters?.ToCharArray();
-                return charsToRecogniseAsWhitespace?.Any() ?? false ? charsToRecogniseAsWhitespace : null;
+                if (_regex != null) return _regex;
+                var whiteSpaceCharsRegex = WhitespaceCharacters.IsEmpty() ? @"\s|\t" : WhitespaceCharacters;
+                return _regex = new Text.Regex(whiteSpaceCharsRegex, TextRegexOpts.Compiled);
             }
         }
+
+        private Text.Regex _regex;
 
         /// <summary>
         /// Get's the next <see cref="Token"/> for the current <see cref="InputString"/>.
@@ -111,7 +106,7 @@ namespace Indicium.Schemas
         /// <returns></returns>
         public Lexeme GetToken()
         {
-            var lexeme = ExtractLexeme(_inputString, _index, IgnoreWhitespace, out _index, out var matchLength, CharsToUseAsWhiteSpace);
+            var lexeme = ExtractLexeme(_inputString, _index, IgnoreWhitespace, out _index, out var matchLength, WhiteSpaceRegex);
             if (lexeme == default(Lexeme)) return null;
 
             lexeme.LineNumber = _lineNumber;
@@ -131,7 +126,7 @@ namespace Indicium.Schemas
             var startIndexCopy = _index;
             var subStr = _inputString.Substring(startIndexCopy);
 
-            var lexeme = ExtractLexeme(subStr, startIndexCopy, IgnoreWhitespace, out _, out _, CharsToUseAsWhiteSpace);
+            var lexeme = ExtractLexeme(subStr, startIndexCopy, IgnoreWhitespace, out _, out _, WhiteSpaceRegex);
             
             lexeme.LineNumber = _lineNumber;
 
