@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:simpleType name="Namespace">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="namespace"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Statement">
+        <xs:attribute name="Terminator">
+            <xs:simpleType>
+                <xs:list itemType="xs:token"/>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="TerminatorEvaluation">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="XOR"/>
+                    <xs:enumeration value="AND"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:element name="NamespaceDeclaration">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="Statement">
+                    <xs:sequence>
+                        <xs:element name="NamespaceKeyword" type="Namespace"/>
+                        <xs:element ref="Identifier"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="VariableDeclaration">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="Statement">
+                    <xs:sequence>
+                        <xs:element name="DeclareInMemoryKeyword" type="Dim"/>
+                        <xs:element ref="Identifier"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="StringLiteral" type="String"/>
+    <xs:element name="IntegerLiteral" type="Integer"/>
+    <xs:element name="BinaryOperatorExpression" type="BinaryOperatorExpression"> </xs:element>
+    <xs:complexType name="BinaryOperator">
+        <xs:choice>
+            <xs:element ref="EqualityOperator"/>
+            <xs:element ref="MinusOperator"/>
+            <xs:element ref="PlusOperator"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="Operand">
+        <xs:choice>
+            <xs:element ref="Identifier"/>
+            <xs:element ref="StringLiteral"/>
+            <xs:element ref="NumberLiteral"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="Number">
+        <xs:choice>
+            <xs:element ref="IntegerLiteral"/>
+            <xs:element ref="Float"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:simpleType name="SemiColon">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\;"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Let">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[Ll][Ee][Tt]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Print">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[Pp][Rr][Ii][Nn][Tt]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Cls">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[Cc][Ll][Ss]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Rem">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[Rr][Ee][Mm][^\r\n]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="End">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[Ee][Nn][Dd]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Goto">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[Gg][Oo][Tt][Oo]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="For">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[Ff][Oo][Rr]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Step">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[Ss][Tt][Ee][Pp]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Next">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[Nn][Ee][Xx][Tt]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="To">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[Tt][Oo]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Colon">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\:"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Equals">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="="/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="String">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="^\&quot;(.*)?\&quot;$"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Identifier">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z_][a-zA-Z0-9_]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Whitespace">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[ \t]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Newline">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[\r\n]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Float">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]+\.+[0-9]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Integer">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Comment">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\'.*"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Lparen">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\("/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Rparen">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\)"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Asterisk">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\*"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Slash">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\/"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Plus">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\+"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Minus">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\-"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="Dim">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[Dd][Ii][Mm]"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:element name="OperandValue" type="Operand"/>
+    <xs:element name="Float" type="Float"/>
+    <xs:element name="PlusOperator" type="Plus"/>
+    <xs:element name="MinusOperator" type="Minus"/>
+    <xs:element name="EqualityOperator" type="Equals"/>
+    <xs:element name="NumberLiteral" type="Number"/>
+    <xs:element name="Identifier" type="Identifier"/>
+    <xs:element name="MultiplyOperator" type="Asterisk"/>
+    <xs:element name="Operator" type="BinaryOperator"/>
+    <xs:complexType name="BinaryOperatorExpression">
+        <xs:sequence>
+            <xs:element ref="OperandValue"/>
+            <xs:element ref="Operator"/>
+            <xs:element ref="OperandValue"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

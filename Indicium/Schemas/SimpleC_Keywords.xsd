@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:simpleType name="if">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="if"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="else">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="else"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="while">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="while"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="for">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="for"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="do">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="do"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="break">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="break"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="continue">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="continue"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="return">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="return"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="extern">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="extern"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="static">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="static"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="auto">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="auto"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="signed">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="signed"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="unsigned">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="unsigned"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="int">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="int"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="long">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="long"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="char">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="char"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="float">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="float"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="double">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="double"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="void">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="void"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
