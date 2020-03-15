@@ -31,7 +31,7 @@ namespace Indicium.Schemas
 
                 var opts = RegexOptions.Select(s => s.RegexOptionsFromString());
 
-                return _loadedRegexOptions == default ? 
+                return _loadedRegexOptions == default(TextRegexOpts) ? 
                     _loadedRegexOptions = opts.Aggregate(default(TextRegexOpts), (current, opt) => current | opt) : 
                     _loadedRegexOptions;
             }
