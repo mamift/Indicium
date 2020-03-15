@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Indicium.Schemas;
 using Xml.Schema.Linq.Extensions;
 using RegexOptions = System.Text.RegularExpressions.RegexOptions;
 
@@ -51,12 +50,9 @@ namespace Indicium
         /// <param name="inputXmlPath"></param>
         /// <param name="textFilePath"></param>
         /// <returns></returns>
-        public static XDocument ToXDocument(this IEnumerable<Lexeme> lexemes, string inputXmlPath = "", string textFilePath = "")
+        public static XDocument ToXDocument<T>(this IEnumerable<T> lexemes, string inputXmlPath = "", string textFilePath = "")
         {
-            var content = lexemes.Select(l => {
-                l.Untyped.Name = l.Untyped.Name.LocalName; // remove xmlns
-                return l.Untyped;
-            }).ToArray();
+            var content = lexemes.Select(l => l.ToString()).ToArray();
 
             // ReSharper disable once CoVariantArrayConversion
             var rootEl = new XElement(XName.Get("Lexemes"), content);

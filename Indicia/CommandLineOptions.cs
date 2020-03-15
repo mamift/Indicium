@@ -5,8 +5,8 @@ namespace Indicia
 {
     public class OptionsBase
     {
-        [Value(0, HelpText = "Input XML file representing token definitions.")]
-        public string InputXml { get; set; }
+        [Value(0, HelpText = "Input XSD file.")]
+        public string InputXsd { get; set; }
 
         [Value(1, HelpText = "Optional. Specify an output file.", Required = false)]
         public string Output { get; set; }
@@ -21,10 +21,10 @@ namespace Indicia
     }
 
     [Verb(nameof(CommandLineOptions.codegen), HelpText =
-        "Generate code from an XML file representing token definitions.")]
+        "Generate code from an XML schema definition file (XSD).")]
     public class CodeGenOptions : OptionsBase
     {
-        [Option('e', "example", HelpText = "Optional. Specify a name to generate an example token definition XML file. File extension not necessary. Spaces are replaced by underscores. This option overrides all others (all other arguments are ignored). e.g. indicia codegen -e example")]
+        [Option('e', "example", HelpText = "Optional. Specify a name to generate an example token XSD file. File extension not necessary. Spaces are replaced by underscores. This option overrides all others (all other arguments are ignored). e.g. indicia codegen -e example")]
         public string Example { get; set; }
     }
 

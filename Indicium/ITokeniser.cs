@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Indicium.Schemas
+namespace Indicium
 {
-    public interface ITokeniser
+    public interface ITokeniser<out TToken>
+        where TToken: class, new()
     {
         /// <summary>
         /// Determines if the tokeniser is processing at the start of the <see cref="InputString"/> or not.
@@ -43,7 +44,7 @@ namespace Indicium.Schemas
         /// Get's the next <see cref="TokenContext.Token"/> for the current <see cref="TokenContext.InputString"/>.
         /// </summary>
         /// <returns></returns>
-        Lexeme GetToken();
+        TToken GetToken();
 
         /// <summary>
         /// Returns the next <see cref="Lexeme"/> that would be next, without incrementing values for
@@ -52,13 +53,13 @@ namespace Indicium.Schemas
         /// instances of <see cref="Lexeme"/>s (as in they will not be references to the same instance).</para>
         /// </summary>
         /// <returns></returns>
-        Lexeme PeekToken();
+        TToken PeekToken();
 
         /// <summary>
         /// Get all <see cref="TokenContext.Token"/>s for the current <see cref="TokenContext.InputString"/>.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<Lexeme> GetTokens();
+        IEnumerable<TToken> GetTokens();
 
         /// <summary>
         /// Process a single line of text. If the string contains a return carriage or new line character,
@@ -67,7 +68,7 @@ namespace Indicium.Schemas
         /// <param name="line"></param>
         /// <param name="lineNumber"></param>
         /// <returns></returns>
-        IEnumerable<Lexeme> ProcessLine(string line, int lineNumber);
+        IEnumerable<TToken> ProcessLine(string line, int lineNumber);
 
         /// <summary>
         /// Process the text from a given <see cref="TextReader"/> (<paramref name="reader"/>)
@@ -78,7 +79,7 @@ namespace Indicium.Schemas
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        IEnumerable<Lexeme> ProcessTokens(TextReader reader);
+        IEnumerable<TToken> ProcessTokens(TextReader reader);
 
         /// <summary>
         /// Process the text from a given <see cref="string"/>, with an optional line <paramref name="delimiter"/>
@@ -89,6 +90,6 @@ namespace Indicium.Schemas
         /// <param name="string"></param>
         /// <param name="delimiter">Defaults to new line. To not split the string by anything, pass <c>default(char)</c></param>
         /// <returns></returns>
-        IEnumerable<Lexeme> ProcessTokens(string @string, char delimiter = '\n');
+        IEnumerable<TToken> ProcessTokens(string @string, char delimiter = '\n');
     }
 }

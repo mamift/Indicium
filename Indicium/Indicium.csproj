@@ -14,29 +14,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Schemas\TokenSchema.xsd" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Schemas\TokenSchema.xsd" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.1.0" />
-    <PackageReference Include="XSDLib" Version="1.0.1.17" />
+    <PackageReference Include="XObjectsCore" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Schemas\Prototype1.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Schemas\SensibleSQL_KeywordTypes.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Schemas\SimpleBASIC.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Schemas\SimpleBASIC.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Schemas\SimpleC.xsd">
@@ -48,9 +34,10 @@
     <None Update="Schemas\SimpleC_Operators.xsd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Schemas\XMLinCSharp.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CodeGen\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

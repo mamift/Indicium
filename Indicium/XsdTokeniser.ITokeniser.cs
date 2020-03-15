@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Indicium.Schemas;
 
 namespace Indicium
 {
-    public partial class XsdTokeniser: ITokeniser
+    public partial class XsdTokeniser: ITokeniser<object>
     {
         public bool IsAtStart { get; }
         public int LineIndex { get; private set; }
@@ -20,45 +19,45 @@ namespace Indicium
             LineNumber = 1;
         }
 
-        public Lexeme GetToken()
+        public object GetToken()
         {
             var lexeme = ExtractLexeme(InputString, 0, false, out var index, out var matchLength);
-            if (lexeme == default(Lexeme)) return default;
+            if (lexeme == default(Object)) return default(object);
 
             //lexeme.LineNumber = _lineNumber;
 
-            return (Lexeme)lexeme;
+            return (Object)lexeme;
         }
 
-        public Lexeme PeekToken()
+        public Object PeekToken()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Lexeme> GetTokens()
+        public IEnumerable<Object> GetTokens()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Lexeme> ProcessLine(string line, int lineNumber)
+        public IEnumerable<Object> ProcessLine(string line, int lineNumber)
         {
             InputString = line;
             LineNumber = lineNumber;
             
             var token = GetToken();
-            while (token != default(Lexeme))
+            while (token != default(Object))
             {
                 yield return token;
                 token = GetToken();
             }
         }
 
-        public IEnumerable<Lexeme> ProcessTokens(TextReader reader)
+        public IEnumerable<Object> ProcessTokens(TextReader reader)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Lexeme> ProcessTokens(string @string, char delimiter = '\n')
+        public IEnumerable<Object> ProcessTokens(string @string, char delimiter = '\n')
         {
             throw new NotImplementedException();
         }
