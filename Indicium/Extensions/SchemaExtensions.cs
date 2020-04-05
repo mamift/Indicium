@@ -1,45 +1,36 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Schema;
-using Xml.Schema.Linq.Extensions;
+﻿using System.Linq;
+using W3C.XSD;
 
 namespace Indicium.Extensions
 {
+    /// <summary>
+    /// Extensions to the <see cref="schema"/> type.
+    /// </summary>
     public static class SchemaExtensions
     {
-        /// <summary>
-        /// Resolves the <![CDATA[<xs:include />]]> elements, using a given <see cref="baseDir"/>.
-        /// </summary>
-        /// <param name="schema"></param>
-        /// <param name="baseDir"></param>
-        /// <returns></returns>
-        public static XmlSchemaSet ResolveIncludes(this XmlSchema schema, string baseDir = null)
+        public static schema ResolveElementTypes(this schema schema)
         {
-            if (baseDir.IsEmpty()) baseDir = Environment.CurrentDirectory;
+            var clonedSchema = (schema) schema.Clone();
 
-            var includes = schema.Includes.Cast<XmlSchemaInclude>();
-            var schemaSet = new XmlSchemaSet();
-            schemaSet.Add(schema);
-            foreach (var include in includes) {
-                var fileStream = File.OpenRead(Path.Combine(baseDir, include.SchemaLocation));
-                var includedSchema = XmlSchema.Read(fileStream, (sender, args) => {
-                    if (args.Exception != null) throw args.Exception;
-                });
-                include.Schema = includedSchema;
+            foreach (var el in clonedSchema.element) {
+                if (el.Content.simpleType != null) continue;
+                if (el.Content.complexType != null) continue;
 
-                schemaSet.Add(includedSchema);
+                var correspondingTypeName = el.Content.type.Name;
+
+                var possibleSimpleType = clonedSchema.simpleType.FirstOrDefault(s => s.Content.name == correspondingTypeName);
+                var possibleComplexType = clonedSchema.complexType.FirstOrDefault(s => s.Content.name == correspondingTypeName);
+
+                if (possibleComplexType != null) {
+                    el.Content.complexType = (localComplexType) possibleComplexType.Content.Untyped;
+                }
+
+                if (possibleSimpleType != null) {
+                    el.Content.simpleType = (localSimpleType) possibleSimpleType.Content.Untyped;
+                }
             }
 
-            schemaSet.CompilationSettings = new XmlSchemaCompilationSettings() {
-                EnableUpaCheck = true
-            };
-
-            schemaSet.Compile();
-            
-            return schemaSet;
+            return clonedSchema;
         }
     }
 }

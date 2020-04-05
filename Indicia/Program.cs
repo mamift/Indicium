@@ -74,8 +74,6 @@ namespace Indicia
                 });
 
                 var schemaSet = schema.ResolveIncludes(Path.GetDirectoryName(opts.InputXsd));
-
-
             }
         }
 

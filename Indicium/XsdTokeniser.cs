@@ -5,18 +5,19 @@ using System.Linq;
 using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml.Schema;
+using Indicium.Extensions;
+using W3C.XSD;
 using RegexOptions = System.Text.RegularExpressions.RegexOptions;
 
 namespace Indicium
 {
     public partial class XsdTokeniser
     {
-        private readonly XmlSchema _schema;
+        private readonly schema _schema;
 
-        public XsdTokeniser(XmlSchema schema)
+        public XsdTokeniser(schema schema)
         {
-            _schema = schema;
+            _schema = schema.ResolveElementTypes();
         }
 
         public object ExtractLexeme(string input, int inputIndex, bool ignoreSpaces, out int index, 
@@ -37,12 +38,15 @@ namespace Indicium
             }
             
             // iterate over all the elements
-            foreach (var def in _schema.Elements.Values.Cast<XmlSchemaElement>()) {
-                var defId = def.Id;
-                var type = def.ElementSchemaType;
-
-                var pattern = type;
+            foreach (var el in _schema.element) {
+                var type = el.Content.simpleType;
             }
+            //foreach (var def in _schema.Elements.Values.Cast<XmlSchemaElement>()) {
+            //    var defId = def.Id;
+            //    var type = def.ElementSchemaType;
+
+            //    var pattern = type;
+            //}
 
             index++;
             return new {
