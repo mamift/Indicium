@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="https://edx.miffy-ath.com/" xmlns="https://edx.miffy-ath.com/">
+
+    <xs:element name="SuitabilityStatement">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Criteria">
+                    <xs:complexType>
+                        <xs:all>
+                            <xs:element name="Criterion" type="xs:string"/>
+                            <xs:element name="Statement" type="xs:string"/>
+                        </xs:all>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

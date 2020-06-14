@@ -3,4 +3,88 @@
     targetNamespace="http://github.com/mamift" xmlns="http://github.com/mamift">
     <xs:include schemaLocation="SimpleC_Operators.xsd"/>
     <xs:include schemaLocation="SimpleC_Keywords.xsd"/>
+    <xs:simpleType name="keyword">
+        <xs:union
+            memberTypes="programControlKeyword extern static auto typeModifierKeyword typeKeyword"/>
+    </xs:simpleType>
+    <xs:simpleType name="programControlKeyword">
+        <xs:union memberTypes="if else while for do break continue return"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeModifierKeyword">
+        <xs:union memberTypes="signed unsigned"/>
+    </xs:simpleType>
+    <xs:simpleType name="typeKeyword">
+        <xs:union memberTypes="int long char float double void"/>
+    </xs:simpleType>
+    <xs:simpleType name="plusOrMinus">
+        <xs:union memberTypes="Plus Minus"/>
+    </xs:simpleType>
+    <xs:simpleType name="integerLiteral">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d+"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="dotLiteral">
+        <xs:restriction base="xs:string">
+            <xs:length value="1"/>
+            <xs:pattern value="\."/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="token">
+        <xs:annotation>
+            <xs:documentation>abstract type</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="collapse"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="signedIntegerLiteral">
+        <xs:annotation>
+            <xs:documentation/>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element minOccurs="0" ref="sign"/>
+            <xs:element ref="integer"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="signedDecimalLiteral">
+        <xs:sequence>
+            <xs:element minOccurs="0" ref="sign"/>
+            <xs:element ref="integer"/>
+            <xs:element minOccurs="1" ref="dot"/>
+            <xs:element ref="integer"/>
+            <xs:element minOccurs="0" ref="m"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="decimalLiteral">
+        <xs:sequence>
+            <xs:element minOccurs="0" ref="sign"/>
+            <xs:element ref="integer"/>
+            <xs:element ref="m"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="decimalType">
+        <xs:choice>
+            <xs:element name="withDot" type="signedDecimalLiteral"/>
+            <xs:element name="noDot" type="decimalLiteral"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="numberType">
+        <xs:choice>
+            <xs:element ref="integer"/>
+            <xs:element ref="decimal"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:element name="integer" type="integerLiteral"/>
+    <xs:element name="decimal" type="decimalType"/>
+    <xs:element name="dot" type="dotLiteral"/>
+    <xs:element name="m">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:length value="1"/>
+                <xs:pattern value="m"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+    <xs:element name="sign" type="plusOrMinus"/>
 </xs:schema>

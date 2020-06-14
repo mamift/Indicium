@@ -17,7 +17,7 @@ namespace Indicium
 
         public XsdTokeniser(schema schema)
         {
-            _schema = schema.ResolveElementTypes();
+            _schema = schema.CopyTypeDefinitionsInline();
         }
 
         public object ExtractLexeme(string input, int inputIndex, bool ignoreSpaces, out int index, 

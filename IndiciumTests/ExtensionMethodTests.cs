@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 namespace Indicium.Tests
 {
+    [TestFixture]
     public class ExtensionMethodTests
     {
         [Test]
