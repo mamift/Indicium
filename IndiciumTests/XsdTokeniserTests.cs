@@ -1,9 +1,7 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using Indicium.Extensions;
 using NUnit.Framework;
 using W3C.XSD;
-using Xml.Schema.Linq;
 
 namespace Indicium.Tests
 {
