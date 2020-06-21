@@ -68,9 +68,9 @@ namespace Indicium
             }
             
             // iterate over all the elements
-            foreach (var el in _compiledSchemaSet.element) {
-                var type = el.Content.simpleType;
-            }
+            // foreach (var el in _compiledSchemaSet.G) {
+            //     var type = el.Content.simpleType;
+            // }
             //foreach (var def in _schema.Elements.Values.Cast<XmlSchemaElement>()) {
             //    var defId = def.Id;
             //    var type = def.ElementSchemaType;
