@@ -35,28 +35,28 @@ namespace Indicium
         int LineNumber { set; }
 
         /// <summary>
-        /// Resets the current <see cref="TokenContext.InputString"/> to null, internal line index (column) and line number
+        /// Resets the current <see cref="InputString"/> to null, internal line index (column) and line number
         /// tracking values are also reset.
         /// </summary>
         void Reset();
 
         /// <summary>
-        /// Get's the next <see cref="TokenContext.Token"/> for the current <see cref="TokenContext.InputString"/>.
+        /// Get's the next <see cref="TToken"/> for the current <see cref="InputString"/>.
         /// </summary>
         /// <returns></returns>
         TToken GetToken();
 
         /// <summary>
-        /// Returns the next <see cref="Lexeme"/> that would be next, without incrementing values for
-        /// <see cref="TokenContext.LineIndex"/>. Obeys <see cref="TokenContext.IgnoreWhitespace"/>.
-        /// <para>Calling this method first, then calling <see cref="TokenContext.GetToken"/> should produce equal, but not identical 
-        /// instances of <see cref="Lexeme"/>s (as in they will not be references to the same instance).</para>
+        /// Returns the next <see cref="TToken"/> that would be next, without incrementing values for
+        /// <see cref="LineIndex"/>. Obeys <see cref="IgnoreWhitespace"/>.
+        /// <para>Calling this method first, then calling <see cref="GetToken"/> should produce equal, but not identical 
+        /// instances of <see cref="TToken"/>s (as in they will not be references to the same instance).</para>
         /// </summary>
         /// <returns></returns>
         TToken PeekToken();
 
         /// <summary>
-        /// Get all <see cref="TokenContext.Token"/>s for the current <see cref="TokenContext.InputString"/>.
+        /// Get all <see cref="TToken"/>s for the current <see cref="InputString"/>.
         /// </summary>
         /// <returns></returns>
         IEnumerable<TToken> GetTokens();
@@ -74,8 +74,8 @@ namespace Indicium
         /// Process the text from a given <see cref="TextReader"/> (<paramref name="reader"/>)
         /// and produce tokenised output. 
         /// <para>This method usually suffices for processing arbitrary text. Finer control can be achieved using a combination of
-        /// <see cref="TokenContext.InputString"/>, <see cref="TokenContext.LineNumber"/>, <see cref="TokenContext.LineIndex"/>, <see cref="TokenContext.Reset"/>, <see cref="TokenContext.GetTokens"/> and <see cref="TokenContext.GetToken"/>.</para>
-        /// <para>This method calls <see cref="TokenContext.Reset"/>, but does not reset the value for <see cref="TokenContext.IgnoreWhitespace"/>.</para>
+        /// <see cref="InputString"/>, <see cref="LineNumber"/>, <see cref="LineIndex"/>, <see cref="Reset"/>, <see cref="TokenContext.GetTokens"/> and <see cref="GetToken"/>.</para>
+        /// <para>This method calls <see cref="Reset"/>, but does not reset the value for <see cref="IgnoreWhitespace"/>.</para>
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
-using Xml.Fxt;
 using Xml.Schema.Linq.Extensions;
 
 namespace Indicium.Extensions

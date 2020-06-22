@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
+using Indicium.Extensions;
 using NUnit.Framework;
 
 namespace Indicium.Tests

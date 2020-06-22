@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Xml;
-using Indicium.Extensions;
+﻿using System.Xml;
 using NUnit.Framework;
 using Xml.Schema.Linq.Extensions;
 

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml.Schema;
 using Alba.CsConsoleFormat.Fluent;
 using CommandLine;
-using Indicium;
 using Indicium.Extensions;
 using Xml.Schema.Linq.Extensions;
 

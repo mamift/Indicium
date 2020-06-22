@@ -5,9 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Xml.Schema.Linq.Extensions;
-using RegexOptions = System.Text.RegularExpressions.RegexOptions;
 
-namespace Indicium
+namespace Indicium.Extensions
 {
     public static class ExtensionMethods
     {
