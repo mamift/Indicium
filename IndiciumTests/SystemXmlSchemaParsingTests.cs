@@ -14,7 +14,7 @@ namespace Indicium.Tests
     public class SystemXmlSchemaParsingTests
     {
         [Test]
-        public void T1()
+        public void Test1()
         {
             const string file = @"Schemas\\SimpleC.xsd";
 
@@ -51,10 +51,10 @@ namespace Indicium.Tests
 
                 Assert.IsNotNull(strFacets);
 
-                var patternFacets = strFacets.GetXmlSchemaPatternFacets().ToList();
+                var patternFacets = strFacets.GetXmlSchemaPatternFacets();
                 Assert.IsNotEmpty(patternFacets);
 
-                regexsAndTypes.Add(type.Name, new Regex(patternFacets.First().Value));
+                regexsAndTypes.Add(type.Name, patternFacets.First().ToRegex());
             }
 
             Assert.IsNotEmpty(regexsAndTypes);

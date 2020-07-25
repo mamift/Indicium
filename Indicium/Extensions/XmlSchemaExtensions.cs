@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Schema;
+using Xml.Fxt;
 using Xml.Schema.Linq.Extensions;
 
 namespace Indicium.Extensions
@@ -78,17 +80,29 @@ namespace Indicium.Extensions
             return xsoc.Cast<XmlSchemaObject>().OfType<T>();
         }
 
-        public static IEnumerable<XmlSchemaLengthFacet> GetXmlSchemaLengthFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaLengthFacet>();
-        public static IEnumerable<XmlSchemaMinLengthFacet> GetXmlSchemaMinLengthFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMinLengthFacet>();
-        public static IEnumerable<XmlSchemaMaxLengthFacet> GetXmlSchemaMaxLengthFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMaxLengthFacet>();
-        public static IEnumerable<XmlSchemaPatternFacet> GetXmlSchemaPatternFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaPatternFacet>();
-        public static IEnumerable<XmlSchemaEnumerationFacet> GetXmlSchemaEnumerationFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaEnumerationFacet>();
-        public static IEnumerable<XmlSchemaMaxInclusiveFacet> GetXmlSchemaMaxInclusiveFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMaxInclusiveFacet>();
-        public static IEnumerable<XmlSchemaMaxExclusiveFacet> GetXmlSchemaMaxExclusiveFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMaxExclusiveFacet>();
-        public static IEnumerable<XmlSchemaMinInclusiveFacet> GetXmlSchemaMinInclusiveFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMinInclusiveFacet>();
-        public static IEnumerable<XmlSchemaMinExclusiveFacet> GetXmlSchemaMinExclusiveFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMinExclusiveFacet>();
-        public static IEnumerable<XmlSchemaFractionDigitsFacet> GetXmlSchemaFractionDigitsFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaFractionDigitsFacet>();
-        public static IEnumerable<XmlSchemaTotalDigitsFacet> GetXmlSchemaTotalDigitsFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaTotalDigitsFacet>();
-        public static IEnumerable<XmlSchemaWhiteSpaceFacet> GetXmlSchemaWhiteSpaceFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaWhiteSpaceFacet>();
+        public static XmlSchemaLengthFacet[] GetXmlSchemaLengthFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaLengthFacet>().ToArray();
+        public static XmlSchemaMinLengthFacet[] GetXmlSchemaMinLengthFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMinLengthFacet>().ToArray();
+        public static XmlSchemaMaxLengthFacet[] GetXmlSchemaMaxLengthFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMaxLengthFacet>().ToArray();
+        public static XmlSchemaPatternFacet[] GetXmlSchemaPatternFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaPatternFacet>().ToArray();
+        public static XmlSchemaEnumerationFacet[] GetXmlSchemaEnumerationFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaEnumerationFacet>().ToArray();
+        public static XmlSchemaMaxInclusiveFacet[] GetXmlSchemaMaxInclusiveFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMaxInclusiveFacet>().ToArray();
+        public static XmlSchemaMaxExclusiveFacet[] GetXmlSchemaMaxExclusiveFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMaxExclusiveFacet>().ToArray();
+        public static XmlSchemaMinInclusiveFacet[] GetXmlSchemaMinInclusiveFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMinInclusiveFacet>().ToArray();
+        public static XmlSchemaMinExclusiveFacet[] GetXmlSchemaMinExclusiveFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaMinExclusiveFacet>().ToArray();
+        public static XmlSchemaFractionDigitsFacet[] GetXmlSchemaFractionDigitsFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaFractionDigitsFacet>().ToArray();
+        public static XmlSchemaTotalDigitsFacet[] GetXmlSchemaTotalDigitsFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaTotalDigitsFacet>().ToArray();
+        public static XmlSchemaWhiteSpaceFacet[] GetXmlSchemaWhiteSpaceFacets(this XmlSchemaSimpleTypeRestriction str) => str.Facets.OfType<XmlSchemaWhiteSpaceFacet>().ToArray();
+
+        public static Regex ToRegex(this XmlSchemaPatternFacet patternFacet, RegexOptions regexOptions = RegexOptions.Compiled)
+        {
+            return new Regex(patternFacet.Value, regexOptions);
+        }
+
+        public static IEnumerable<XmlSchemaSimpleType> GetGlobalSimpleTypes(this XmlSchemaSet xmlSchemaSet)
+        {
+            var globalTypes = xmlSchemaSet.GlobalXsdTypes();
+            var simpleTypes = globalTypes.OfType<XmlSchemaSimpleType>();
+            return simpleTypes;
+        }
     }
 }
